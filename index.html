@@ -5,6 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="theme-color" content="#E11414" />
 
+<!--
+  ====================================================================
+  DOMINIO DEL SITIO  ·  CÓMO CAMBIARLO CUANDO TENGAS EL DEFINITIVO
+  --------------------------------------------------------------------
+  Mientras no haya dominio real, se usa el PLACEHOLDER:
+      https://www.mudanzasmetepec.com
+  Cuando contrates tu dominio definitivo, reemplaza TODAS las
+  apariciones de "https://www.mudanzasmetepec.com" por tu dominio real
+  (sin barra final). Aparece en este <head> en:
+      - <link rel="canonical">
+      - og:url  /  og:image
+      - twitter:image
+      - El bloque Schema.org (url, image, logo)
+  Truco: usa "Buscar y reemplazar" en tu editor sobre este archivo.
+  Las rutas internas (assets/, #secciones) son relativas y NO se tocan,
+  así el cambio de dominio no afecta la estructura ni el SEO interno.
+  ====================================================================
+-->
+
 <!-- ============ SEO PRINCIPAL ============ -->
 <title>Mudanzas Metepec | Mudanzas y Fletes en Metepec, Toluca y toda la República</title>
 <meta name="description" content="Mudanzas y fletes en Metepec, Toluca y Estado de México con +25 años de experiencia. Camiones cerrados, emplaye profesional, facturación y pago con tarjeta. Cotiza en 2 minutos por WhatsApp." />
@@ -450,15 +469,63 @@
         <h2 class="section-title">Mudanzas reales, resultados reales</h2>
         <p class="section-sub">Así protegemos y trasladamos lo que más te importa.</p>
       </div>
+      <!--
+        ====================================================================
+        GALERÍA DE FOTOS  ·  CÓMO REEMPLAZAR LOS PLACEHOLDERS
+        --------------------------------------------------------------------
+        Cada bloque <figure> es un espacio para una foto real.
+        Cuando tengas tus fotografías:
+          1) Guarda la imagen en:  assets/img/galeria/
+             (recomendado: 1200x900 px aprox., formato .jpg o .webp)
+          2) En el <figure> correspondiente, ELIMINA el contenido placeholder
+             (el emoji y el <span>) y DESCOMENTA la línea <img> de ese bloque,
+             ajustando el nombre del archivo y el texto alt.
+          3) Conserva el atributo data-label: es el texto que aparece al pasar
+             el cursor sobre la foto.
+        El alt debe describir la foto para SEO y accesibilidad
+        (ej. "Mudanza residencial en Metepec con muebles emplayados").
+        ====================================================================
+      -->
       <div class="gallery__grid">
-        <figure class="gallery__item" data-label="Unidades cerradas y limpias">🚚<span>Unidades cerradas</span></figure>
-        <figure class="gallery__item" data-label="Emplaye y protección">🛡️<span>Emplaye profesional</span></figure>
-        <figure class="gallery__item" data-label="Muebles protegidos">🛋️<span>Muebles protegidos</span></figure>
-        <figure class="gallery__item" data-label="Carga y maniobras">💪<span>Maniobras seguras</span></figure>
-        <figure class="gallery__item" data-label="Transporte especial">🛵<span>Transporte especial</span></figure>
-        <figure class="gallery__item" data-label="Entrega en destino">📦<span>Entrega en orden</span></figure>
+
+        <!-- FOTO 1 · Sugerencia: una de tus unidades/camiones cerrados -->
+        <figure class="gallery__item" data-label="Unidades cerradas y limpias">
+          🚚<span>Unidades cerradas</span>
+          <!-- <img src="assets/img/galeria/01-unidad-cerrada.jpg" alt="Camión cerrado de Mudanzas Metepec listo para una mudanza" loading="lazy" width="1200" height="900"> -->
+        </figure>
+
+        <!-- FOTO 2 · Sugerencia: muebles emplayados / proceso de protección -->
+        <figure class="gallery__item" data-label="Emplaye y protección">
+          🛡️<span>Emplaye profesional</span>
+          <!-- <img src="assets/img/galeria/02-emplaye-profesional.jpg" alt="Muebles emplayados y protegidos por Mudanzas Metepec" loading="lazy" width="1200" height="900"> -->
+        </figure>
+
+        <!-- FOTO 3 · Sugerencia: muebles protegidos dentro del camión -->
+        <figure class="gallery__item" data-label="Muebles protegidos">
+          🛋️<span>Muebles protegidos</span>
+          <!-- <img src="assets/img/galeria/03-muebles-protegidos.jpg" alt="Muebles protegidos y acomodados dentro del camión de mudanza" loading="lazy" width="1200" height="900"> -->
+        </figure>
+
+        <!-- FOTO 4 · Sugerencia: el equipo cargando / maniobras -->
+        <figure class="gallery__item" data-label="Carga y maniobras">
+          💪<span>Maniobras seguras</span>
+          <!-- <img src="assets/img/galeria/04-maniobras.jpg" alt="Personal de Mudanzas Metepec realizando maniobras de carga seguras" loading="lazy" width="1200" height="900"> -->
+        </figure>
+
+        <!-- FOTO 5 · Sugerencia: transporte de moto u objeto especial -->
+        <figure class="gallery__item" data-label="Transporte especial">
+          🛵<span>Transporte especial</span>
+          <!-- <img src="assets/img/galeria/05-transporte-especial.jpg" alt="Transporte especial de motocicleta y objetos delicados" loading="lazy" width="1200" height="900"> -->
+        </figure>
+
+        <!-- FOTO 6 · Sugerencia: entrega/montaje en el destino final -->
+        <figure class="gallery__item" data-label="Entrega en destino">
+          📦<span>Entrega en orden</span>
+          <!-- <img src="assets/img/galeria/06-entrega-destino.jpg" alt="Entrega y montaje de muebles en el destino final de la mudanza" loading="lazy" width="1200" height="900"> -->
+        </figure>
+
       </div>
-      <p class="gallery__note">📷 ¿Listo para sumar tus fotos reales? Reemplaza estos espacios con imágenes de tus servicios para máximo impacto.</p>
+      <p class="gallery__note">📷 Espacios listos para tus fotos reales. Sustituye cada placeholder siguiendo las instrucciones del código (carpeta <code>assets/img/galeria/</code>) para máximo impacto.</p>
     </div>
   </section>
 
@@ -609,7 +676,7 @@
       <h3>Contacto</h3>
       <ul class="footer__contact">
         <li><a href="tel:+527228300083">📞 722 830 0083</a></li>
-        <li><a href="https://wa.me/527228300083" target="_blank" rel="noopener">💬 WhatsApp</a></li>
+        <li><a href="https://wa.me/527228300083?text=Hola%2C%20me%20interesa%20cotizar%20una%20mudanza." target="_blank" rel="noopener">💬 WhatsApp</a></li>
         <li>📍 Metepec, Estado de México</li>
         <li>🕒 Siempre disponibles</li>
       </ul>
