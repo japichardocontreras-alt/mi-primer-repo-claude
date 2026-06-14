@@ -200,6 +200,86 @@
     applyParallax();
   }
 
+  /* ---------- Scroll storytelling: "El viaje de tu mudanza" ---------- */
+  var journey = document.getElementById('viaje');
+  if (journey && !prefersReduced) {
+    journey.classList.add('is-interactive');
+
+    var jTrack   = journey.querySelector('.journey__track');
+    var jView    = journey.querySelector('.journey__viewport');
+    var jTruck   = document.getElementById('jrTruck');
+    var jRoute   = document.getElementById('jrRoute');
+    var jBoxes   = Array.prototype.slice.call(document.querySelectorAll('#jrBoxes .jr-box'));
+    var jCityWin = document.getElementById('jrCityWin');
+    var jDest    = document.getElementById('jrDest');
+    var jArrive  = document.getElementById('jrArrive');
+    var jCaps    = Array.prototype.slice.call(journey.querySelectorAll('.jr-cap'));
+    var jDots    = Array.prototype.slice.call(journey.querySelectorAll('.journey__dots li'));
+
+    var TRUCK_START = 130, TRUCK_END = 880, ROAD_Y = 408;
+    var routeLen = (jRoute && jRoute.getTotalLength) ? jRoute.getTotalLength() : 900;
+    jRoute.style.strokeDasharray = routeLen;
+    jRoute.style.strokeDashoffset = routeLen;
+
+    var jInView = false, jTicking = false;
+
+    function jClamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+    function jSS(a, b, x) { var t = jClamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); }
+
+    function renderJourney() {
+      jTicking = false;
+      var rect = jTrack.getBoundingClientRect();
+      var total = rect.height - window.innerHeight;
+      var p = jClamp((-rect.top) / (total || 1), 0, 1);
+
+      // El camión avanza por la carretera
+      var x = TRUCK_START + (TRUCK_END - TRUCK_START) * p;
+      jTruck.setAttribute('transform', 'translate(' + x.toFixed(1) + ',' + ROAD_Y + ')');
+
+      // La ruta se dibuja sola
+      jRoute.style.strokeDashoffset = (routeLen * (1 - jSS(0.02, 0.9, p))).toFixed(1);
+
+      // Cajas: aparecen y luego "se cargan" (se desvanecen)
+      var appear = jSS(0.04, 0.18, p);
+      var bOp = appear * (1 - jSS(0.20, 0.30, p));
+      for (var i = 0; i < jBoxes.length; i++) {
+        jBoxes[i].style.opacity = bOp.toFixed(2);
+        jBoxes[i].style.transform = 'translateY(' + ((1 - appear) * 12).toFixed(1) + 'px)';
+      }
+
+      // La ciudad enciende sus ventanas
+      jCityWin.style.opacity = jSS(0.40, 0.66, p).toFixed(2);
+      // El destino se ilumina
+      jDest.style.opacity = (0.35 + 0.65 * jSS(0.70, 0.92, p)).toFixed(2);
+      // Llegada: estrellas del cliente satisfecho
+      jArrive.style.opacity = jSS(0.85, 0.99, p).toFixed(2);
+
+      // Leyenda y progreso (6 etapas)
+      var step = jClamp(Math.floor(p * 6), 0, 5);
+      for (var c = 0; c < jCaps.length; c++) jCaps[c].classList.toggle('is-active', c === step);
+      for (var d = 0; d < jDots.length; d++) jDots[d].classList.toggle('is-active', d === step);
+      jView.style.setProperty('--jr-progress', (p * 100).toFixed(1) + '%');
+    }
+    function reqJourney() { if (!jTicking && jInView) { jTicking = true; requestAnimationFrame(renderJourney); } }
+
+    if ('IntersectionObserver' in window) {
+      var jio = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { jInView = e.isIntersecting; if (jInView) reqJourney(); });
+      }, { threshold: 0 });
+      jio.observe(journey);
+    } else {
+      jInView = true;
+    }
+
+    window.addEventListener('scroll', reqJourney, { passive: true });
+    window.addEventListener('resize', function () {
+      routeLen = (jRoute.getTotalLength) ? jRoute.getTotalLength() : routeLen;
+      jRoute.style.strokeDasharray = routeLen;
+      jInView = true; reqJourney();
+    }, { passive: true });
+    renderJourney();
+  }
+
   /* ---------- Año dinámico ---------- */
   var yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
