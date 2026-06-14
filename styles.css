@@ -1263,3 +1263,166 @@ body {
 
 /* Marcador de version (para confirmar que se carga la version correcta) */
 .footer__ver { margin-top: 8px; font-size: 0.78rem; color: var(--amarillo); opacity: 0.85; }
+
+/* =========================================================
+   =========================================================
+   ETAPA 5 · "MUNDO EN MOVIMIENTO" + TEMA OSCURO PREMIUM
+   Animacion continua de fondo ligada al scroll global.
+   La pagina se reviste en glass oscuro para dejar ver el mundo.
+   =========================================================
+   ========================================================= */
+
+/* ---- Base oscura: el body se vuelve transparente para ver el mundo ---- */
+html { background: #0a0d13; }
+body { background: transparent; color: #e7e9ee; }
+:root { --gris-texto: #aab2c0; --gris-borde: rgba(255,255,255,0.10); --gris-bg: rgba(255,255,255,0.05); }
+
+/* =========================================================
+   CAPA DEL MUNDO (fija, detras del contenido)
+   ========================================================= */
+.env { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.env__sky { position: absolute; inset: 0; background: linear-gradient(180deg, #070a12 0%, #0b1320 45%, #14202e 72%, #1b2a38 100%); }
+.env__stars {
+  position: absolute; left: 0; right: 0; top: 0; height: 62vh; opacity: 0.55;
+  background-image:
+    radial-gradient(1.6px 1.6px at 12% 22%, rgba(255,255,255,0.7), transparent),
+    radial-gradient(1.4px 1.4px at 28% 38%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1.6px 1.6px at 52% 16%, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1.3px 1.3px at 68% 30%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1.7px 1.7px at 82% 20%, rgba(255,255,255,0.7), transparent),
+    radial-gradient(1.3px 1.3px at 92% 40%, rgba(255,255,255,0.5), transparent);
+}
+.env__sun {
+  position: absolute; left: 50%; bottom: 22vh; width: 170px; height: 170px; transform: translateX(-50%);
+  border-radius: 50%; filter: blur(2px);
+  background: radial-gradient(circle, rgba(255,196,0,0.75), rgba(255,106,0,0.28) 48%, transparent 70%);
+}
+.env__glow {
+  position: absolute; left: 0; right: 0; bottom: 16vh; height: 44vh;
+  background: radial-gradient(120% 80% at 50% 100%, rgba(255,106,0,0.32), rgba(255,196,0,0.10) 42%, transparent 72%);
+  opacity: calc(0.30 + var(--gp, 0) * 0.55);
+}
+.env__layer { position: absolute; left: 0; will-change: transform; }
+.env__hills { width: 145%; height: 34vh; bottom: 16vh; }
+.env__city  { width: 195%; height: 28vh; bottom: 16vh; }
+.env__road  { position: absolute; left: 0; right: 0; bottom: 0; height: 16vh; background: linear-gradient(180deg, #2a2f37, #181b20); border-top: 2px solid #3a4150; }
+.env__dashes {
+  position: absolute; left: 0; right: 0; top: 48%; height: 6px; opacity: 0.85;
+  background: repeating-linear-gradient(90deg, #FFC400 0 40px, transparent 40px 84px);
+  animation: dash-move 0.7s linear infinite;
+}
+@keyframes dash-move { to { background-position-x: -84px; } }
+.env__props { width: 250%; height: 16vh; position: absolute; left: 0; bottom: 0; }
+.env__truck { position: absolute; left: 7%; bottom: calc(16vh - 24px); width: 224px; height: 140px; animation: truck-bob 2.4s ease-in-out infinite; }
+@keyframes truck-bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+.env__wheel { transform-box: fill-box; transform-origin: center; animation: wheel-spin 0.75s linear infinite; }
+@keyframes wheel-spin { to { transform: rotate(360deg); } }
+
+/* HUD de viaje */
+.env__hud { position: fixed; bottom: 92px; left: 14px; z-index: 600; pointer-events: none; }
+.env__chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(12,15,20,0.72); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.14); color: #fff;
+  font-family: var(--f-cond); font-weight: 600; font-size: 0.84rem; letter-spacing: 0.3px;
+  padding: 8px 14px; border-radius: 999px;
+}
+.env__pulse { width: 9px; height: 9px; border-radius: 50%; background: var(--whatsapp); animation: wa-pulse 2s infinite; }
+
+/* =========================================================
+   RESKIN OSCURO · superficies en glass
+   ========================================================= */
+/* Header / nav */
+.header { background: rgba(11,14,19,0.72); border-bottom-color: rgba(255,255,255,0.08); }
+.header.scrolled { background: rgba(11,14,19,0.9); }
+.brand__name { color: #fff; }
+.nav__link { color: #dfe2e9; }
+.nav-toggle span { background: #fff; }
+
+/* Hero: scrim translucido sobre el mundo */
+.hero { background: linear-gradient(180deg, rgba(8,10,14,0.30), rgba(8,10,14,0.58)); }
+.hero__card { background: rgba(20,24,32,0.82); border-color: rgba(255,255,255,0.10); color: #e7e9ee; }
+.hero__card-note { color: #aab2c0; }
+.quote-steps li { color: #e7e9ee; }
+
+/* Patron de puntos: claro sobre oscuro */
+.services::before, .tailored::before, .coverage::before,
+.gallery::before, .faq::before {
+  background-image: radial-gradient(rgba(255,255,255,0.05) 1.2px, transparent 1.2px);
+}
+
+/* Secciones translucidas (se ve el mundo detras) */
+.badges { background: transparent; }
+.problem { background: rgba(9,11,16,0.55); }
+.services { background: rgba(15,18,24,0.42); }
+.tailored { background: rgba(9,11,16,0.55); }
+.process { background: rgba(15,18,24,0.42); }
+.coverage { background: rgba(9,11,16,0.50); }
+.reviews { background: rgba(15,18,24,0.50); }
+.gallery { background: rgba(9,11,16,0.50); }
+.faq { background: rgba(15,18,24,0.50); }
+.security { background: linear-gradient(180deg, rgba(11,14,19,0.62), rgba(11,14,19,0.74)); }
+.quote { background: linear-gradient(135deg, rgba(168,14,14,0.93), rgba(214,20,20,0.93)); }
+.final-cta { background: linear-gradient(180deg, rgba(9,11,16,0.72), rgba(9,11,16,0.86)); }
+.footer { background: rgba(7,8,11,0.92); }
+
+/* Tarjetas en glass oscuro */
+.badge-item { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.10); color: #e7e9ee; }
+.ps-card { background: rgba(21,25,32,0.72); color: #e7e9ee; }
+.ps-card__good { color: #aab2c0; }
+.service-card {
+  background:
+    linear-gradient(rgba(21,25,32,0.80), rgba(21,25,32,0.80)) padding-box,
+    linear-gradient(135deg, rgba(255,196,0,0.5), rgba(225,20,20,0.35)) border-box;
+  color: #e7e9ee;
+}
+.service-card p { color: #aab2c0; }
+.tailored-card { background: rgba(21,25,32,0.72); border-color: rgba(255,255,255,0.10); color: #e7e9ee; }
+.tailored-card p { color: #aab2c0; }
+.tailored__cta { background: rgba(21,25,32,0.72); border-color: rgba(255,255,255,0.10); }
+.step { background: rgba(21,25,32,0.72); border-color: rgba(255,255,255,0.10); color: #e7e9ee; }
+.step p { color: #aab2c0; }
+.review { background: rgba(21,25,32,0.74); color: #e7e9ee; }
+.review blockquote { color: #dfe2e9; }
+.review__name { color: #fff; }
+.reviews__cta-note { color: #aab2c0; }
+.coverage__chip { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12); color: #e7e9ee; }
+.gallery__note { color: #aab2c0; }
+.faq-item { background: rgba(21,25,32,0.74); border-color: rgba(255,255,255,0.10); }
+.faq-item summary { color: #e7e9ee; }
+.faq-item p { color: #aab2c0; }
+
+/* Formulario de cotizacion en oscuro */
+.quote-form { background: rgba(17,20,26,0.94); }
+.field label { color: #e7e9ee; }
+.field input, .field select, .field textarea {
+  background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.14); color: #fff;
+}
+.field input::placeholder, .field textarea::placeholder { color: #8b93a2; }
+.field select option { color: #111; }
+.quote-form__hint { color: #aab2c0; }
+
+/* Botones fantasma sobre fondo oscuro */
+.btn--ghost { color: #fff; border-color: rgba(255,255,255,0.5); }
+.btn--ghost:hover { background: #fff; color: var(--negro); }
+
+/* Barra movil de contacto en oscuro */
+.mobile-bar { background: rgba(13,16,22,0.96); border-top-color: rgba(255,255,255,0.10); }
+.mobile-bar__btn--call { color: #fff; border-right-color: rgba(255,255,255,0.12); }
+
+/* =========================================================
+   RESPONSIVE · mundo
+   ========================================================= */
+@media (max-width: 760px) {
+  .env__truck { width: 168px; left: 5%; bottom: calc(16vh - 16px); }
+  .env__hud { bottom: 64px; }
+  .env__sun { width: 120px; height: 120px; }
+}
+
+/* =========================================================
+   ACCESIBILIDAD · reduced-motion: mundo estatico
+   ========================================================= */
+@media (prefers-reduced-motion: reduce) {
+  .env__dashes, .env__truck, .env__wheel { animation: none !important; }
+  .env__layer { transform: none !important; }
+}

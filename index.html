@@ -55,7 +55,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
-<link rel="stylesheet" href="styles.css?v=4" />
+<link rel="stylesheet" href="styles.css?v=5" />
 
 <!-- ============ SCHEMA.ORG · LOCAL BUSINESS ============ -->
 <script type="application/ld+json">
@@ -117,6 +117,76 @@
 
 <!-- Barra de progreso de lectura (microinteracción) -->
 <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+<!-- ======================================================================
+     MUNDO EN MOVIMIENTO · animación continua ligada al scroll global.
+     Capa fija de fondo (decorativa). El camión conduce de inicio a fin
+     de la página mientras el paisaje se desplaza en parallax.
+     ====================================================================== -->
+<div class="env" id="env" aria-hidden="true">
+  <div class="env__sky"></div>
+  <div class="env__sun" id="envSun"></div>
+  <div class="env__glow"></div>
+  <div class="env__stars"></div>
+
+  <!-- Colinas lejanas -->
+  <svg class="env__layer env__hills" id="envHills" viewBox="0 0 2600 400" preserveAspectRatio="xMinYMax slice">
+    <path d="M0,400 V250 C300,180 500,300 800,250 S1300,150 1700,240 2100,320 2600,230 V400 Z" fill="#1b2733"/>
+    <path d="M0,400 V300 C400,250 700,340 1100,290 S1800,230 2600,300 V400 Z" fill="#16202a"/>
+  </svg>
+
+  <!-- Silueta de ciudad -->
+  <svg class="env__layer env__city" id="envCity" viewBox="0 0 2600 360" preserveAspectRatio="xMinYMax slice">
+    <g fill="#0f1820">
+      <rect x="120" y="180" width="60" height="180"/><rect x="200" y="120" width="70" height="240"/>
+      <rect x="290" y="200" width="50" height="160"/><rect x="360" y="150" width="74" height="210"/>
+      <rect x="900" y="160" width="64" height="200"/><rect x="980" y="110" width="80" height="250"/>
+      <rect x="1080" y="190" width="54" height="170"/><rect x="1150" y="140" width="76" height="220"/>
+      <rect x="1750" y="170" width="60" height="190"/><rect x="1830" y="120" width="78" height="240"/>
+      <rect x="1930" y="200" width="52" height="160"/><rect x="2010" y="150" width="74" height="210"/>
+    </g>
+    <g fill="#FFC400" opacity="0.55">
+      <rect x="216" y="150" width="9" height="12"/><rect x="236" y="150" width="9" height="12"/>
+      <rect x="996" y="140" width="9" height="12"/><rect x="1016" y="140" width="9" height="12"/>
+      <rect x="1846" y="150" width="9" height="12"/><rect x="1866" y="150" width="9" height="12"/>
+    </g>
+  </svg>
+
+  <!-- Carretera + props cercanos (señales de ciudades, postes) -->
+  <div class="env__road">
+    <div class="env__dashes"></div>
+    <svg class="env__layer env__props" id="envProps" viewBox="0 0 3200 200" preserveAspectRatio="xMinYMax meet">
+      <!-- Señales con ciudades de cobertura -->
+      <g class="env__sign" transform="translate(260,0)"><rect x="-46" y="20" width="92" height="40" rx="5" fill="#0c1d3a" stroke="#FFC400" stroke-width="2"/><text x="0" y="46" text-anchor="middle" font-family="Oswald, sans-serif" font-size="20" fill="#fff">METEPEC</text><rect x="-3" y="60" width="6" height="120" fill="#3a4250"/></g>
+      <g class="env__sign" transform="translate(900,0)"><rect x="-44" y="20" width="88" height="40" rx="5" fill="#0c1d3a" stroke="#FFC400" stroke-width="2"/><text x="0" y="46" text-anchor="middle" font-family="Oswald, sans-serif" font-size="20" fill="#fff">TOLUCA</text><rect x="-3" y="60" width="6" height="120" fill="#3a4250"/></g>
+      <g class="env__sign" transform="translate(1600,0)"><rect x="-40" y="20" width="80" height="40" rx="5" fill="#0c1d3a" stroke="#FF6A00" stroke-width="2"/><text x="0" y="46" text-anchor="middle" font-family="Oswald, sans-serif" font-size="20" fill="#fff">CDMX</text><rect x="-3" y="60" width="6" height="120" fill="#3a4250"/></g>
+      <g class="env__sign" transform="translate(2250,0)"><rect x="-52" y="20" width="104" height="40" rx="5" fill="#0c1d3a" stroke="#FF6A00" stroke-width="2"/><text x="0" y="46" text-anchor="middle" font-family="Oswald, sans-serif" font-size="18" fill="#fff">QUERÉTARO</text><rect x="-3" y="60" width="6" height="120" fill="#3a4250"/></g>
+      <g class="env__sign" transform="translate(2900,0)"><rect x="-58" y="20" width="116" height="40" rx="5" fill="#1d0c0c" stroke="#E11414" stroke-width="2"/><text x="0" y="46" text-anchor="middle" font-family="Oswald, sans-serif" font-size="17" fill="#fff">TU DESTINO</text><rect x="-3" y="60" width="6" height="120" fill="#3a4250"/></g>
+      <!-- Arboles/postes -->
+      <g fill="#16202a"><rect x="560" y="120" width="8" height="60"/><circle cx="564" cy="118" r="20"/></g>
+      <g fill="#16202a"><rect x="1280" y="120" width="8" height="60"/><circle cx="1284" cy="118" r="20"/></g>
+      <g fill="#16202a"><rect x="2000" y="120" width="8" height="60"/><circle cx="2004" cy="118" r="20"/></g>
+    </svg>
+  </div>
+
+  <!-- Camión (conduce en su lugar; el mundo se mueve detrás) -->
+  <svg class="env__truck" id="envTruck" viewBox="0 0 240 150" aria-hidden="true">
+    <g transform="translate(40,96)">
+      <rect x="0" y="-58" width="92" height="52" rx="5" fill="#ffffff" stroke="#0d0f12" stroke-width="3"/>
+      <rect x="0" y="-30" width="92" height="10" fill="#E11414"/>
+      <path d="M92,-58 H120 L140,-32 V-6 H92 Z" fill="#E11414" stroke="#0d0f12" stroke-width="3" stroke-linejoin="round"/>
+      <rect x="96" y="-52" width="20" height="17" rx="2" fill="#bfe3ff" stroke="#0d0f12" stroke-width="2"/>
+      <rect x="0" y="-6" width="140" height="6" fill="#0d0f12"/>
+      <g class="env__wheel"><circle cx="26" cy="6" r="14" fill="#15171b" stroke="#6b7382" stroke-width="3"/><path d="M26,-4 V16 M16,6 H36" stroke="#6b7382" stroke-width="2.5"/></g>
+      <g class="env__wheel env__wheel--2"><circle cx="112" cy="6" r="14" fill="#15171b" stroke="#6b7382" stroke-width="3"/><path d="M112,-4 V16 M102,6 H122" stroke="#6b7382" stroke-width="2.5"/></g>
+    </g>
+  </svg>
+</div>
+
+<!-- Indicador de viaje (waypoint actual) -->
+<div class="env__hud" id="envHud" aria-hidden="true">
+  <span class="env__chip"><span class="env__pulse"></span><span id="envLabel">Saliendo de Metepec</span></span>
+</div>
 
 <!-- ====================== HEADER ====================== -->
 <header class="header" id="header">
@@ -377,121 +447,6 @@
           <svg class="ico-wa" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.05 4.91A9.82 9.82 0 0 0 12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.91-7.02ZM12.04 20.15h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.11.82.83-3.04-.2-.31a8.18 8.18 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.69 8.23-8.23 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"/></svg>
           Quiero mi cotización personalizada
         </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ====================== EL VIAJE DE TU MUDANZA (scroll storytelling) ====================== -->
-  <section class="journey" id="viaje" aria-label="El viaje de tu mudanza, paso a paso">
-    <div class="journey__track">
-      <div class="journey__viewport">
-
-        <div class="journey__head">
-          <span class="kicker kicker--light">El viaje de tu mudanza</span>
-          <h2 class="journey__title">Sigue el recorrido, paso a paso</h2>
-        </div>
-
-        <!-- Escena ilustrada (decorativa: el texto real vive en las leyendas) -->
-        <svg class="journey__scene" viewBox="0 0 1000 520" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-          <!-- Ruta que se dibuja -->
-          <path id="jrRoute" d="M110,360 C300,300 360,190 500,190 S760,300 900,350" fill="none" stroke="url(#jrRouteGrad)" stroke-width="3.5" stroke-linecap="round"/>
-          <defs>
-            <linearGradient id="jrRouteGrad" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0" stop-color="#FFC400"/><stop offset="0.5" stop-color="#FF6A00"/><stop offset="1" stop-color="#E11414"/>
-            </linearGradient>
-          </defs>
-          <g class="jr-pins">
-            <circle cx="110" cy="360" r="6" fill="#FFC400"/>
-            <circle cx="500" cy="190" r="6" fill="#FF6A00"/>
-            <circle cx="900" cy="350" r="6" fill="#E11414"/>
-          </g>
-
-          <!-- Silueta de ciudad -->
-          <g class="jr-city" fill="#2b3039">
-            <rect x="372" y="300" width="40" height="100"/><rect x="420" y="262" width="46" height="138"/>
-            <rect x="474" y="288" width="34" height="112"/><rect x="516" y="246" width="50" height="154"/>
-            <rect x="574" y="300" width="40" height="100"/>
-          </g>
-          <g id="jrCityWin" fill="#FFC400" opacity="0">
-            <rect x="430" y="278" width="7" height="9"/><rect x="444" y="278" width="7" height="9"/>
-            <rect x="430" y="298" width="7" height="9"/><rect x="444" y="298" width="7" height="9"/>
-            <rect x="526" y="262" width="7" height="9"/><rect x="540" y="262" width="7" height="9"/>
-            <rect x="526" y="284" width="7" height="9"/><rect x="540" y="284" width="7" height="9"/>
-            <rect x="382" y="316" width="7" height="9"/><rect x="396" y="316" width="7" height="9"/>
-          </g>
-
-          <!-- Casa origen -->
-          <g class="jr-house" stroke="#5a6270" stroke-width="3" fill="none" stroke-linejoin="round">
-            <path d="M40,400 V338 L82,308 L124,338 V400"/><path d="M70,400 V366 H94 V400"/>
-          </g>
-          <!-- Casa destino -->
-          <g id="jrDest" class="jr-house" stroke="#FFC400" stroke-width="3" fill="none" stroke-linejoin="round" opacity="0.35">
-            <path d="M876,400 V338 L918,308 L960,338 V400"/><path d="M906,400 V366 H930 V400"/>
-          </g>
-
-          <!-- Carretera -->
-          <rect x="0" y="400" width="1000" height="12" fill="#3a3f48"/>
-          <rect x="0" y="412" width="1000" height="64" fill="#23272e"/>
-          <g class="jr-roadline"><rect x="-40" y="440" width="1400" height="5" fill="url(#jrDash)"/></g>
-          <defs>
-            <pattern id="jrDash" width="56" height="5" patternUnits="userSpaceOnUse">
-              <rect width="30" height="5" fill="#FFC400" opacity="0.85"/>
-            </pattern>
-          </defs>
-
-          <!-- Cajas que se cargan -->
-          <g id="jrBoxes" stroke="#8a5a2b" stroke-width="2.5" stroke-linejoin="round">
-            <g class="jr-box"><rect x="168" y="372" width="30" height="28" fill="#cfa15a"/><path d="M168,386 H198 M183,372 V400" stroke-width="2"/></g>
-            <g class="jr-box"><rect x="204" y="374" width="28" height="26" fill="#c2954c"/><path d="M204,387 H232 M218,374 V400" stroke-width="2"/></g>
-            <g class="jr-box"><rect x="186" y="342" width="26" height="26" fill="#d8ad66"/><path d="M186,355 H212 M199,342 V368" stroke-width="2"/></g>
-          </g>
-
-          <!-- Camión (caja blanca + cabina roja) -->
-          <g id="jrTruck" transform="translate(130,408)">
-            <rect x="-118" y="-58" width="86" height="50" rx="4" fill="#ffffff" stroke="#141414" stroke-width="2.5"/>
-            <rect x="-118" y="-32" width="86" height="9" fill="#E11414"/>
-            <path d="M-32,-58 H-8 L8,-38 V-8 H-32 Z" fill="#E11414" stroke="#141414" stroke-width="2.5" stroke-linejoin="round"/>
-            <rect x="-28" y="-52" width="17" height="15" rx="2" fill="#bfe3ff" stroke="#141414" stroke-width="1.5"/>
-            <circle cx="-92" cy="0" r="12" fill="#15171b" stroke="#5a6270" stroke-width="2.5"/>
-            <circle cx="-92" cy="0" r="4" fill="#8a909c"/>
-            <circle cx="-6" cy="0" r="12" fill="#15171b" stroke="#5a6270" stroke-width="2.5"/>
-            <circle cx="-6" cy="0" r="4" fill="#8a909c"/>
-          </g>
-
-          <!-- Llegada: estrellas cliente satisfecho -->
-          <g id="jrArrive" transform="translate(918,250)" opacity="0">
-            <g fill="#FFC400" transform="translate(-60,-6) scale(0.9)">
-              <path d="M0,0 l3,7 7,1 -5,5 1,7 -6,-3 -6,3 1,-7 -5,-5 7,-1 z"/>
-              <path d="M22,0 l3,7 7,1 -5,5 1,7 -6,-3 -6,3 1,-7 -5,-5 7,-1 z"/>
-              <path d="M44,0 l3,7 7,1 -5,5 1,7 -6,-3 -6,3 1,-7 -5,-5 7,-1 z"/>
-              <path d="M66,0 l3,7 7,1 -5,5 1,7 -6,-3 -6,3 1,-7 -5,-5 7,-1 z"/>
-              <path d="M88,0 l3,7 7,1 -5,5 1,7 -6,-3 -6,3 1,-7 -5,-5 7,-1 z"/>
-            </g>
-          </g>
-        </svg>
-
-        <!-- HUD: leyendas + progreso (el contenido real, accesible y SEO) -->
-        <div class="journey__hud">
-          <div class="journey__captions">
-            <article class="jr-cap" data-cap="0"><span class="jr-cap__step">Paso 1 · Inicio</span><h3>Tu mudanza está por comenzar</h3><p>Llega nuestra unidad cerrada y el equipo capacitado, listos para cuidar cada detalle.</p></article>
-            <article class="jr-cap" data-cap="1"><span class="jr-cap__step">Paso 2 · Carga</span><h3>Cargamos con cuidado</h3><p>Emplayamos y protegemos cada mueble. Tus cosas, tratadas como si fueran nuestras.</p></article>
-            <article class="jr-cap" data-cap="2"><span class="jr-cap__step">Paso 3 · En ruta</span><h3>En camino, con seguridad</h3><p>Viajamos en camiones cerrados, con seguimiento constante y cámaras corporales.</p></article>
-            <article class="jr-cap" data-cap="3"><span class="jr-cap__step">Paso 4 · Cobertura</span><h3>Conectamos ciudades</h3><p>De Metepec y Toluca a CDMX, Querétaro, Puebla y toda la República Mexicana.</p></article>
-            <article class="jr-cap" data-cap="4"><span class="jr-cap__step">Paso 5 · Entrega</span><h3>Entrega en destino</h3><p>Descargamos, montamos y acomodamos todo justo donde lo necesitas.</p></article>
-            <article class="jr-cap" data-cap="5"><span class="jr-cap__step">Paso 6 · Destino</span><h3>¡Llegaste a tu nuevo hogar!</h3><p>Mudanza cumplida y cliente satisfecho. Así trabajamos en Mudanzas Metepec.</p></article>
-          </div>
-
-          <div class="journey__bottom">
-            <ol class="journey__dots" aria-hidden="true">
-              <li class="is-active"></li><li></li><li></li><li></li><li></li><li></li>
-            </ol>
-            <a href="https://wa.me/527228300083?text=Hola%2C%20quiero%20iniciar%20mi%20mudanza.%20%C2%BFMe%20ayudan%20a%20cotizar%3F" class="btn btn--whatsapp" target="_blank" rel="noopener">
-              <svg class="ico-wa" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.05 4.91A9.82 9.82 0 0 0 12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.91-7.02ZM12.04 20.15h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.11.82.83-3.04-.2-.31a8.18 8.18 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.69 8.23-8.23 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"/></svg>
-              Inicia tu mudanza hoy
-            </a>
-          </div>
-        </div>
-
       </div>
     </div>
   </section>
@@ -862,7 +817,7 @@
     <div class="container">
       <p>© <span id="year"></span> Mudanzas Metepec · Todos los derechos reservados.</p>
       <p>Mudanzas en Metepec, Toluca, Estado de México, CDMX y toda la República Mexicana.</p>
-      <p class="footer__ver">Versión del sitio: <strong>4.0</strong> · Experiencia de viaje interactivo · build 2026-06-14</p>
+      <p class="footer__ver">Versión del sitio: <strong>5.0</strong> · Mundo en movimiento (animación continua) · build 2026-06-14</p>
     </div>
   </div>
 </footer>
@@ -878,6 +833,6 @@
   <a href="https://wa.me/527228300083?text=Hola%2C%20me%20interesa%20cotizar%20una%20mudanza." class="mobile-bar__btn mobile-bar__btn--wa" target="_blank" rel="noopener">💬 WhatsApp</a>
 </div>
 
-<script src="script.js?v=4"></script>
+<script src="script.js?v=5"></script>
 </body>
 </html>

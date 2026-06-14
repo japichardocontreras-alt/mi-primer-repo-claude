@@ -280,6 +280,56 @@
     renderJourney();
   }
 
+  /* ---------- Mundo en movimiento: animación continua ligada al scroll ---------- */
+  var env = document.getElementById('env');
+  if (env && !prefersReduced) {
+    var wHills = document.getElementById('envHills');
+    var wCity  = document.getElementById('envCity');
+    var wProps = document.getElementById('envProps');
+    var wLabel = document.getElementById('envLabel');
+    var wTick  = false;
+
+    var waypoints = [
+      [0.00, 'Saliendo de Metepec'],
+      [0.16, 'Rumbo a Toluca'],
+      [0.36, 'En carretera, viaje seguro'],
+      [0.58, 'Conectando ciudades'],
+      [0.80, 'Llegando a tu destino'],
+      [0.95, '¡Mudanza entregada!']
+    ];
+
+    function wClamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+    function layerShift(el, gp) {
+      if (!el) return;
+      var range = el.offsetWidth - window.innerWidth;
+      if (range < 0) range = 0;
+      el.style.transform = 'translate3d(' + (-(gp * range)).toFixed(1) + 'px,0,0)';
+    }
+
+    function updateWorld() {
+      wTick = false;
+      var doc = document.documentElement;
+      var max = (doc.scrollHeight - doc.clientHeight) || 1;
+      var gp = wClamp((window.scrollY || window.pageYOffset || 0) / max, 0, 1);
+
+      env.style.setProperty('--gp', gp.toFixed(4));
+      layerShift(wHills, gp);
+      layerShift(wCity, gp);
+      layerShift(wProps, gp);
+
+      if (wLabel) {
+        var name = waypoints[0][1];
+        for (var i = 0; i < waypoints.length; i++) { if (gp >= waypoints[i][0]) name = waypoints[i][1]; }
+        if (wLabel.textContent !== name) wLabel.textContent = name;
+      }
+    }
+    function reqWorld() { if (!wTick) { wTick = true; requestAnimationFrame(updateWorld); } }
+
+    window.addEventListener('scroll', reqWorld, { passive: true });
+    window.addEventListener('resize', reqWorld, { passive: true });
+    updateWorld();
+  }
+
   /* ---------- Año dinámico ---------- */
   var yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
