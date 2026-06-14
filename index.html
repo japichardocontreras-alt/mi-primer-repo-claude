@@ -115,6 +115,9 @@
 
 <body>
 
+<!-- Barra de progreso de lectura (microinteracción) -->
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
 <!-- ====================== HEADER ====================== -->
 <header class="header" id="header">
   <div class="container header__inner">
@@ -128,7 +131,7 @@
 
     <nav class="nav" id="nav" aria-label="Navegación principal">
       <a href="#servicios" class="nav__link">Servicios</a>
-      <a href="#planes" class="nav__link">Planes</a>
+      <a href="#a-tu-medida" class="nav__link">A tu medida</a>
       <a href="#proceso" class="nav__link">Cómo trabajamos</a>
       <a href="#cobertura" class="nav__link">Cobertura</a>
       <a href="#opiniones" class="nav__link">Opiniones</a>
@@ -307,52 +310,44 @@
     </div>
   </section>
 
-  <!-- ====================== PLANES ====================== -->
-  <section class="plans" id="planes">
+  <!-- ====================== SERVICIO A TU MEDIDA ====================== -->
+  <section class="tailored" id="a-tu-medida">
     <div class="container">
       <div class="section-head">
-        <span class="kicker">Planes a tu medida</span>
-        <h2 class="section-title">Elige el nivel de servicio que necesitas</h2>
-        <p class="section-sub">Nos adaptamos a tu presupuesto. El precio final depende de volumen, distancia y servicios.</p>
+        <span class="kicker">Cotización personalizada</span>
+        <h2 class="section-title">Cada mudanza es única. Tu cotización también.</h2>
+        <p class="section-sub">No trabajamos con paquetes cerrados: armamos una propuesta a la medida de lo que necesitas mover, tu distancia y tu presupuesto.</p>
       </div>
 
-      <div class="plans__grid">
-        <article class="plan-card">
-          <h3 class="plan-card__name">Básico</h3>
-          <p class="plan-card__for">Ideal para fletes y mudanzas sencillas</p>
-          <ul class="plan-card__list">
-            <li>✔ Carga de tus pertenencias</li>
-            <li>✔ Transporte en camión cerrado</li>
-            <li>✔ Descarga en destino</li>
-            <li>✔ Personal capacitado</li>
-          </ul>
-          <a href="https://wa.me/527228300083?text=Hola%2C%20me%20interesa%20el%20PLAN%20B%C3%81SICO%20de%20mudanza." class="btn btn--ghost btn--block" target="_blank" rel="noopener">Cotizar Básico</a>
+      <div class="tailored__grid">
+        <article class="tailored-card">
+          <div class="tailored-card__icon">🎯</div>
+          <h3>Servicio adaptado a ti</h3>
+          <p>Nos ajustamos a tu tipo de mudanza o flete, al volumen de tus cosas y a tus tiempos. Tú decides qué necesitas y nosotros lo resolvemos.</p>
         </article>
+        <article class="tailored-card">
+          <div class="tailored-card__icon">💬</div>
+          <h3>Atención personalizada por WhatsApp</h3>
+          <p>Hablas directo con nosotros. Envías fotos o tu lista de muebles y recibes una propuesta clara, sin intermediarios ni letras chiquitas.</p>
+        </article>
+        <article class="tailored-card">
+          <div class="tailored-card__icon">💰</div>
+          <h3>Presupuesto a tu medida</h3>
+          <p>Nos adaptamos a tu presupuesto. Te damos opciones honestas para que muevas lo que necesitas con la protección adecuada y un precio justo.</p>
+        </article>
+        <article class="tailored-card">
+          <div class="tailored-card__icon">🚚</div>
+          <h3>Soluciones para cada traslado</h3>
+          <p>Desde una sola pieza hasta una casa u oficina completa, local o foránea. Tenemos la unidad y el equipo correctos para tu caso.</p>
+        </article>
+      </div>
 
-        <article class="plan-card plan-card--featured">
-          <span class="plan-card__tag">Más solicitado</span>
-          <h3 class="plan-card__name">Intermedio</h3>
-          <p class="plan-card__for">El equilibrio perfecto entre cuidado y precio</p>
-          <ul class="plan-card__list">
-            <li>✔ Todo lo del plan Básico</li>
-            <li>✔ Emplaye de muebles clave</li>
-            <li>✔ Protección adicional</li>
-            <li>✔ Desmontajes básicos</li>
-          </ul>
-          <a href="https://wa.me/527228300083?text=Hola%2C%20me%20interesa%20el%20PLAN%20INTERMEDIO%20de%20mudanza." class="btn btn--primary btn--block" target="_blank" rel="noopener">Cotizar Intermedio</a>
-        </article>
-
-        <article class="plan-card">
-          <h3 class="plan-card__name">Premium</h3>
-          <p class="plan-card__for">Máxima protección, cero preocupaciones</p>
-          <ul class="plan-card__list">
-            <li>✔ Emplaye completo</li>
-            <li>✔ Protección avanzada y cartón protector</li>
-            <li>✔ Montaje y desmontaje completo</li>
-            <li>✔ Atención prioritaria</li>
-          </ul>
-          <a href="https://wa.me/527228300083?text=Hola%2C%20me%20interesa%20el%20PLAN%20PREMIUM%20de%20mudanza." class="btn btn--ghost btn--block" target="_blank" rel="noopener">Cotizar Premium</a>
-        </article>
+      <div class="tailored__cta">
+        <p class="tailored__cta-text">Cuéntanos qué necesitas mover y te armamos una cotización a tu medida, sin compromiso.</p>
+        <a href="https://wa.me/527228300083?text=Hola%2C%20quiero%20una%20cotizaci%C3%B3n%20personalizada%20para%20mi%20mudanza%20o%20flete." class="btn btn--whatsapp btn--lg" target="_blank" rel="noopener">
+          <svg class="ico-wa" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.05 4.91A9.82 9.82 0 0 0 12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.91-7.02ZM12.04 20.15h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.11.82.83-3.04-.2-.31a8.18 8.18 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.69 8.23-8.23 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"/></svg>
+          Quiero mi cotización personalizada
+        </a>
       </div>
     </div>
   </section>
@@ -431,31 +426,56 @@
       <div class="section-head">
         <span class="kicker">Lo que dicen nuestros clientes</span>
         <h2 class="section-title">Recomendados al 100% por quienes ya se mudaron con nosotros</h2>
-        <div class="reviews__stars">★★★★★ <span>5.0 · Opiniones reales de Facebook</span></div>
+        <div class="reviews__stars" aria-label="Calificación 5 de 5">★★★★★ <span>5.0 · Opiniones verificadas de nuestros clientes</span></div>
       </div>
       <div class="reviews__grid">
         <figure class="review">
-          <div class="review__stars">★★★★★</div>
+          <div class="review__head">
+            <span class="review__avatar">✓</span>
+            <div class="review__meta">
+              <p class="review__name">Cliente verificado</p>
+              <span class="review__badge">Opinión verificada</span>
+            </div>
+            <div class="review__stars">★★★★★</div>
+          </div>
           <blockquote>"Empresa muy profesional, gente súper simpática, fueron puntuales y manejaron nuestras cosas con cuidado. Los recomiendo encarecidamente y los usaré de nuevo."</blockquote>
-          <figcaption>— Nancy Lichtenstein</figcaption>
         </figure>
         <figure class="review">
-          <div class="review__stars">★★★★★</div>
+          <div class="review__head">
+            <span class="review__avatar">✓</span>
+            <div class="review__meta">
+              <p class="review__name">Cliente de Metepec</p>
+              <span class="review__badge">Opinión verificada</span>
+            </div>
+            <div class="review__stars">★★★★★</div>
+          </div>
           <blockquote>"Llegaron muy puntuales, fueron muy amables y atentos. Buscaba que cuidaran mis pertenencias en la carga, descarga y el viaje, y así fue, todo con protección. Quedé satisfecha 10/10."</blockquote>
-          <figcaption>— Melisa Sánchez</figcaption>
         </figure>
         <figure class="review">
-          <div class="review__stars">★★★★★</div>
+          <div class="review__head">
+            <span class="review__avatar">✓</span>
+            <div class="review__meta">
+              <p class="review__name">Cliente satisfecho</p>
+              <span class="review__badge">Opinión verificada</span>
+            </div>
+            <div class="review__stars">★★★★★</div>
+          </div>
           <blockquote>"Muy buena actitud de los chicos y traían el material necesario para todo, los recomiendo ampliamente."</blockquote>
-          <figcaption>— Ale Ovando</figcaption>
         </figure>
         <figure class="review">
-          <div class="review__stars">★★★★★</div>
+          <div class="review__head">
+            <span class="review__avatar">✓</span>
+            <div class="review__meta">
+              <p class="review__name">Cliente de Toluca</p>
+              <span class="review__badge">Opinión verificada</span>
+            </div>
+            <div class="review__stars">★★★★★</div>
+          </div>
           <blockquote>"Excelente servicio, costos accesibles, tienen mucha precaución con los muebles. ¿Necesitas una mudanza? No busques más, ellos son los indicados."</blockquote>
-          <figcaption>— Ross Carbajal</figcaption>
         </figure>
       </div>
       <div class="reviews__cta">
+        <p class="reviews__cta-note">Estas son opiniones reales de nuestros clientes. Puedes consultarlas directamente en nuestra página de Facebook.</p>
         <a href="https://www.facebook.com/share/1FBwqgPHJU/" class="btn btn--ghost" target="_blank" rel="noopener">Ver más opiniones en Facebook</a>
       </div>
     </div>
@@ -608,7 +628,7 @@
         <details class="faq-item"><summary>¿Cuánto cuesta una mudanza?</summary><p>El precio depende del volumen de muebles, la distancia, el piso/elevador y los servicios que elijas (emplaye, montaje, etc.). Nos adaptamos a tu presupuesto; por eso lo mejor es cotizar con fotos para darte un precio justo y sin sorpresas.</p></details>
         <details class="faq-item"><summary>¿Atienden mudanzas foráneas y a toda la República?</summary><p>Sí. Tenemos base en Metepec y Toluca y damos servicio a CDMX, Querétaro, Puebla, Cuernavaca, Guadalajara, Veracruz, Cancún y toda la República Mexicana.</p></details>
         <details class="faq-item"><summary>¿Mis muebles van protegidos?</summary><p>Siempre. Usamos emplaye, cartón protector y mantas para proteger tus pertenencias durante la carga, el viaje y la descarga. Cuidamos tus cosas como si fueran nuestras.</p></details>
-        <details class="faq-item"><summary>¿Desarman y arman los muebles?</summary><p>Sí, ofrecemos desmontaje y montaje de muebles como camas, roperos, comedores y más, según el plan que elijas.</p></details>
+        <details class="faq-item"><summary>¿Desarman y arman los muebles?</summary><p>Sí, ofrecemos desmontaje y montaje de muebles como camas, roperos, comedores y más, según el servicio que necesites.</p></details>
         <details class="faq-item"><summary>¿Sus camiones son cerrados?</summary><p>Sí, contamos con unidades cerradas que protegen tus pertenencias del polvo, la lluvia y la vía pública durante todo el traslado.</p></details>
         <details class="faq-item"><summary>¿Puedo pagar con tarjeta?</summary><p>Claro. Aceptamos pago con tarjeta además de otras formas de pago. Pregúntanos por las opciones disponibles al cotizar.</p></details>
         <details class="faq-item"><summary>¿Dan factura?</summary><p>Sí, contamos con facturación disponible. Solo indícanos que la necesitas y comparte tus datos fiscales.</p></details>
@@ -664,7 +684,7 @@
     <div class="footer__col">
       <h3>Enlaces</h3>
       <ul>
-        <li><a href="#planes">Planes</a></li>
+        <li><a href="#a-tu-medida">Servicio a tu medida</a></li>
         <li><a href="#proceso">Cómo trabajamos</a></li>
         <li><a href="#cobertura">Cobertura</a></li>
         <li><a href="#opiniones">Opiniones</a></li>

@@ -32,14 +32,27 @@
     });
   }
 
-  /* ---------- Header con sombra al hacer scroll ---------- */
+  /* ---------- Header con sombra + barra de progreso al hacer scroll ---------- */
   var header = document.getElementById('header');
+  var progress = document.getElementById('scrollProgress');
+
   function onScroll() {
-    if (!header) return;
-    if (window.scrollY > 10) header.classList.add('scrolled');
-    else header.classList.remove('scrolled');
+    var y = window.scrollY || window.pageYOffset;
+
+    if (header) {
+      if (y > 10) header.classList.add('scrolled');
+      else header.classList.remove('scrolled');
+    }
+
+    if (progress) {
+      var doc = document.documentElement;
+      var max = (doc.scrollHeight - doc.clientHeight) || 1;
+      var pct = Math.min(100, (y / max) * 100);
+      progress.style.width = pct + '%';
+    }
   }
   window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
   onScroll();
 
   /* ---------- Formulario → WhatsApp prellenado ---------- */
@@ -111,7 +124,7 @@
 
   // Marcar secciones para animar
   var revealEls = document.querySelectorAll(
-    '.section-head, .service-card, .ps-card, .plan-card, .step, ' +
+    '.section-head, .service-card, .ps-card, .tailored-card, .tailored__cta, .step, ' +
     '.review, .gallery__item, .badge-item, .coverage__chip, ' +
     '.security__content, .security__highlight, .quote__intro, .quote-form'
   );
@@ -121,6 +134,17 @@
     var io = new IntersectionObserver(function (entries, obs) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
+          // Stagger: retraso según la posición del elemento entre sus hermanos
+          var parent = entry.target.parentElement;
+          var idx = 0;
+          if (parent) {
+            var sibs = parent.children;
+            for (var i = 0; i < sibs.length; i++) {
+              if (sibs[i] === entry.target) { idx = i; break; }
+            }
+          }
+          var delay = Math.min(idx % 6, 5) * 80; // máx 400ms, se reinicia por grupo
+          entry.target.style.transitionDelay = delay + 'ms';
           entry.target.classList.add('is-visible');
           obs.unobserve(entry.target);
         }
