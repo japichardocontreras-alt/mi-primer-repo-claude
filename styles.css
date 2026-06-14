@@ -1260,3 +1260,6 @@ body {
 .journey:not(.is-interactive) #jrDest { opacity: 1; }
 .journey:not(.is-interactive) #jrArrive { opacity: 1; }
 .journey:not(.is-interactive) #jrRoute { stroke-dasharray: none !important; stroke-dashoffset: 0 !important; }
+
+/* Marcador de version (para confirmar que se carga la version correcta) */
+.footer__ver { margin-top: 8px; font-size: 0.78rem; color: var(--amarillo); opacity: 0.85; }
