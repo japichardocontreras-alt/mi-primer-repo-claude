@@ -154,10 +154,31 @@
 
   <!-- ====================== HERO ====================== -->
   <section class="hero" id="inicio">
-    <div class="hero__overlay"></div>
+    <!-- Capas visuales de fondo (decorativas) -->
+    <div class="hero__bg" aria-hidden="true" data-parallax-group>
+      <span class="blob blob--amber" data-parallax="0.12"></span>
+      <span class="blob blob--red" data-parallax="0.20"></span>
+      <div class="hero__grid" data-parallax="0.05"></div>
+      <svg class="hero__route" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" data-parallax="0.08">
+        <path class="hero__route-path" d="M-20,440 C160,440 180,250 360,250 S560,90 820,70" fill="none" stroke="url(#routeGrad)" stroke-width="3" stroke-linecap="round" stroke-dasharray="1 16" />
+        <defs>
+          <linearGradient id="routeGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#FFC400" stop-opacity="0.0"/>
+            <stop offset="0.5" stop-color="#FF6A00" stop-opacity="0.9"/>
+            <stop offset="1" stop-color="#E11414" stop-opacity="0.0"/>
+          </linearGradient>
+        </defs>
+        <circle class="hero__route-pin" cx="360" cy="250" r="7" fill="#FFC400"/>
+        <circle class="hero__route-pin hero__route-pin--end" cx="780" cy="80" r="7" fill="#E11414"/>
+      </svg>
+      <span class="float-cube float-cube--1" data-parallax="0.28"></span>
+      <span class="float-cube float-cube--2" data-parallax="0.18"></span>
+      <span class="float-cube float-cube--3" data-parallax="0.34"></span>
+    </div>
+
     <div class="container hero__inner">
       <div class="hero__content">
-        <p class="hero__eyebrow">⭐ Recomendados al 100% · +25 años de experiencia</p>
+        <p class="hero__eyebrow"><span class="hero__eyebrow-stars">★★★★★</span> Recomendados al 100% · +25 años de experiencia</p>
         <h1 class="hero__title">¿Te mudas?<br><span class="hl">Nosotros nos encargamos de todo.</span></h1>
         <p class="hero__subtitle">
           Mudanzas y fletes en <strong>Metepec, Toluca y toda la República Mexicana</strong>.
@@ -176,9 +197,16 @@
             <svg class="ico-wa" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.05 4.91A9.82 9.82 0 0 0 12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.91-7.02ZM12.04 20.15h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.11.82.83-3.04-.2-.31a8.18 8.18 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.69 8.23-8.23 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"/></svg>
             Cotizar por WhatsApp
           </a>
-          <a href="tel:+527228300083" class="btn btn--ghost btn--lg">📞 Llamar ahora</a>
+          <a href="tel:+527228300083" class="btn btn--ghost btn--lg btn--ghost-light">📞 Llamar ahora</a>
         </div>
         <p class="hero__phone">o marca directo: <a href="tel:+527228300083">722 830 0083</a></p>
+
+        <!-- Franja de estadísticas destacadas -->
+        <div class="hero__stats">
+          <div class="hero__stat"><span class="hero__stat-num">+25</span><span class="hero__stat-label">Años de experiencia</span></div>
+          <div class="hero__stat"><span class="hero__stat-num">100%</span><span class="hero__stat-label">Nos recomiendan</span></div>
+          <div class="hero__stat"><span class="hero__stat-num">+10</span><span class="hero__stat-label">Estados de cobertura</span></div>
+        </div>
       </div>
 
       <div class="hero__card">
@@ -196,6 +224,7 @@
         <p class="hero__card-note">Sin compromiso · Nos adaptamos a tu presupuesto</p>
       </div>
     </div>
+    <div class="hero__wave" aria-hidden="true"></div>
   </section>
 
   <!-- ====================== BARRA DE CONFIANZA ====================== -->
@@ -271,37 +300,37 @@
 
       <div class="services__grid">
         <article class="service-card">
-          <div class="service-card__icon">🏠</div>
+          <div class="service-card__icon"><svg class="svg-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5M5 10.2V19h14v-8.8M9.5 19v-5.2h5V19"/></svg></div>
           <h3>Mudanzas residenciales</h3>
           <p>Casas y departamentos completos con embalaje, protección y montaje. Tu hogar llega en orden a su nuevo destino.</p>
           <a href="https://wa.me/527228300083?text=Hola%2C%20quiero%20cotizar%20una%20MUDANZA%20RESIDENCIAL." class="service-card__cta" target="_blank" rel="noopener">Cotizar →</a>
         </article>
         <article class="service-card">
-          <div class="service-card__icon">🌎</div>
+          <div class="service-card__icon"><svg class="svg-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.6 2.6 15.4 0 18M12 3c-2.6 2.6-2.6 15.4 0 18"/></svg></div>
           <h3>Mudanzas foráneas</h3>
           <p>Te cambias de ciudad o estado. Traslados seguros a toda la República en camiones cerrados con seguimiento.</p>
           <a href="https://wa.me/527228300083?text=Hola%2C%20quiero%20cotizar%20una%20MUDANZA%20FOR%C3%81NEA." class="service-card__cta" target="_blank" rel="noopener">Cotizar →</a>
         </article>
         <article class="service-card">
-          <div class="service-card__icon">🏢</div>
+          <div class="service-card__icon"><svg class="svg-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21V5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v16M14 21V9h5a1 1 0 0 1 1 1v11M2 21h20M7.5 8h3M7.5 12h3M7.5 16h3"/></svg></div>
           <h3>Mudanzas corporativas</h3>
           <p>Oficinas y comercios con la menor interrupción posible. Coordinamos para que tu negocio no se detenga.</p>
           <a href="https://wa.me/527228300083?text=Hola%2C%20quiero%20cotizar%20una%20MUDANZA%20CORPORATIVA." class="service-card__cta" target="_blank" rel="noopener">Cotizar →</a>
         </article>
         <article class="service-card">
-          <div class="service-card__icon">⚡</div>
+          <div class="service-card__icon"><svg class="svg-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 7.5h11v8H2zM13 10h4.5l3.5 3.5v2H13M3 12H1M4 9.5H1.5"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17.5" cy="17.5" r="1.8"/></svg></div>
           <h3>Fletes express</h3>
           <p>¿Pocos muebles o una entrega rápida? Fletes locales ágiles y a buen precio cuando lo necesitas.</p>
           <a href="https://wa.me/527228300083?text=Hola%2C%20quiero%20cotizar%20un%20FLETE%20EXPRESS." class="service-card__cta" target="_blank" rel="noopener">Cotizar →</a>
         </article>
         <article class="service-card">
-          <div class="service-card__icon">🛵</div>
+          <div class="service-card__icon"><svg class="svg-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 5 5.6v5.2c0 4.2 3 7 7 8.2 4-1.2 7-4 7-8.2V5.6z"/><path d="m9 11.6 2 2 4-4.2"/></svg></div>
           <h3>Transporte especial</h3>
           <p>Motocicletas, objetos delicados, obras de arte, mobiliario para eventos y equipo comercial con maniobras especiales.</p>
           <a href="https://wa.me/527228300083?text=Hola%2C%20quiero%20cotizar%20un%20TRANSPORTE%20ESPECIAL." class="service-card__cta" target="_blank" rel="noopener">Cotizar →</a>
         </article>
         <article class="service-card">
-          <div class="service-card__icon">📦</div>
+          <div class="service-card__icon"><svg class="svg-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 16V8l-9-5-9 5v8l9 5 9-5zM3.3 7.5 12 12.5l8.7-5M12 12.5V21"/></svg></div>
           <h3>Empaque y protección</h3>
           <p>Emplaye, cartón protector, desmontaje y montaje de muebles. Embalamos para que nada sufra en el camino.</p>
           <a href="https://wa.me/527228300083?text=Hola%2C%20quiero%20cotizar%20EMPAQUE%20Y%20PROTECCI%C3%93N." class="service-card__cta" target="_blank" rel="noopener">Cotizar →</a>
@@ -398,6 +427,14 @@
 
   <!-- ====================== COBERTURA ====================== -->
   <section class="coverage" id="cobertura">
+    <svg class="coverage__map" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <path d="M80,480 C300,480 320,300 540,300 S820,140 1140,120" fill="none" stroke="#FF6A00" stroke-width="2.5" stroke-dasharray="2 14" stroke-linecap="round" opacity="0.5"/>
+      <path d="M120,120 C360,160 420,360 660,360 S940,500 1120,460" fill="none" stroke="#E11414" stroke-width="2" stroke-dasharray="2 16" stroke-linecap="round" opacity="0.35"/>
+      <g fill="#FF6A00" opacity="0.55">
+        <circle cx="540" cy="300" r="6"/><circle cx="80" cy="480" r="5"/><circle cx="1140" cy="120" r="6"/>
+        <circle cx="660" cy="360" r="5"/><circle cx="120" cy="120" r="5"/><circle cx="1120" cy="460" r="5"/>
+      </g>
+    </svg>
     <div class="container">
       <div class="section-head">
         <span class="kicker">Cobertura nacional</span>

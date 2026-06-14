@@ -175,6 +175,31 @@
     });
   }
 
+  /* ---------- Parallax ligero (capas del hero) ---------- */
+  var parallaxEls = Array.prototype.slice.call(document.querySelectorAll('[data-parallax]'));
+  var parallaxActive = parallaxEls.length > 0 && !prefersReduced && window.innerWidth > 760;
+  var ticking = false;
+
+  function applyParallax() {
+    var y = window.scrollY || window.pageYOffset;
+    // Solo vale la pena mientras el hero está a la vista
+    if (y < window.innerHeight) {
+      for (var i = 0; i < parallaxEls.length; i++) {
+        var el = parallaxEls[i];
+        var factor = parseFloat(el.getAttribute('data-parallax')) || 0;
+        el.style.transform = 'translate3d(0,' + (y * factor).toFixed(1) + 'px,0)';
+      }
+    }
+    ticking = false;
+  }
+  function requestParallax() {
+    if (!ticking) { ticking = true; requestAnimationFrame(applyParallax); }
+  }
+  if (parallaxActive) {
+    window.addEventListener('scroll', requestParallax, { passive: true });
+    applyParallax();
+  }
+
   /* ---------- Año dinámico ---------- */
   var yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
