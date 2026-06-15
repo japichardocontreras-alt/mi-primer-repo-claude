@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#0a0d13" />
+
+<!-- Página experimental: no compite en SEO con el sitio principal -->
+<meta name="robots" content="noindex, follow" />
+<link rel="canonical" href="https://www.mudanzasmetepec.com/" />
+
+<title>El Arte de Mudarte · Experiencia Mudanzas Metepec</title>
+<meta name="description" content="Vive una mudanza de principio a fin: el arte de mudarte con Mudanzas Metepec. +25 años moviendo hogares y empresas en Metepec, Toluca y toda la República." />
+
+<link rel="icon" type="image/jpeg" href="assets/img/logo-mudanzas-metepec.jpeg" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="experiencia.css?v=6" />
+
+<!-- Librerías (CDN, con defer; degradación elegante si no cargan) -->
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
+<script defer src="experiencia.js?v=6"></script>
+</head>
+
+<body class="exp">
+
+<a href="#cierre" class="skip-link">Saltar a cotizar</a>
+
+<!-- Progreso del viaje -->
+<div class="exp-progress" aria-hidden="true"><span class="exp-progress__bar" id="expBar"></span></div>
+
+<!-- UI fija -->
+<header class="exp-top">
+  <a href="index.html" class="exp-brand" aria-label="Mudanzas Metepec">
+    <img src="assets/img/logo-mudanzas-metepec.jpeg" alt="Mudanzas Metepec" width="40" height="40" />
+    <span>Mudanzas Metepec</span>
+  </a>
+  <div class="exp-top__right">
+    <a href="index.html" class="exp-link">Ver sitio completo</a>
+    <a href="https://wa.me/527228300083?text=Hola%2C%20me%20interesa%20cotizar%20una%20mudanza." class="exp-cta" target="_blank" rel="noopener">WhatsApp</a>
+  </div>
+</header>
+
+<!-- Indicador de capítulo -->
+<div class="exp-chapter" aria-hidden="true"><span id="expChapter">El arte de mudarte</span></div>
+
+<main class="exp-main">
+
+  <!-- ============ ACTO 0 · PORTADA / HOGAR ============ -->
+  <section class="act act--hero" id="acto-0" data-chapter="El arte de mudarte">
+    <div class="scene">
+      <div class="layer layer--sky" data-depth="0.1"></div>
+      <div class="layer layer--glow" data-depth="0.15"></div>
+      <svg class="layer home" data-depth="0.3" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <rect x="120" y="120" width="760" height="380" rx="10" fill="#121822"/>
+        <rect x="150" y="150" width="300" height="200" rx="6" fill="#0c121b"/>
+        <rect x="150" y="150" width="300" height="200" rx="6" fill="url(#winLight)" opacity="0.5"/>
+        <path d="M150 350 L300 230 L450 350 Z" fill="#0a0f17" opacity="0.6"/>
+        <rect x="520" y="300" width="320" height="120" rx="14" fill="#1b2230"/>
+        <rect x="540" y="270" width="120" height="60" rx="10" fill="#222b3a"/>
+        <rect x="700" y="250" width="40" height="170" fill="#1b2230"/>
+        <circle cx="720" cy="240" r="34" fill="#1f6f4a"/>
+        <defs>
+          <linearGradient id="winLight" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#FFD36b"/><stop offset="1" stop-color="#FF6A00" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="layer dust" data-depth="0.6" aria-hidden="true"></div>
+
+      <div class="scene__copy hero-copy">
+        <p class="eyebrow">Mudanzas Metepec · +25 años</p>
+        <h1>Conoce el arte<br><span class="hl">de mudarte.</span></h1>
+        <p class="lead">No es solo cargar cajas. Es cuidar tu historia y llevarla a su nuevo lugar. Baja y vive una mudanza con nosotros.</p>
+        <div class="hero-copy__actions">
+          <a href="https://wa.me/527228300083?text=Hola%2C%20quiero%20cotizar%20mi%20mudanza." class="exp-cta exp-cta--lg" target="_blank" rel="noopener">Cotiza en 2 minutos</a>
+          <span class="scroll-hint">Desliza para comenzar ↓</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ACTO 1 · EL EMBALAJE ============ -->
+  <section class="act" id="acto-1" data-chapter="El embalaje">
+    <div class="scene">
+      <div class="scene__copy copy--left">
+        <span class="eyebrow">Capítulo 01 · Preparación</span>
+        <h2>Cada cosa, protegida como nuestra</h2>
+        <p>Emplaye profesional, cartón protector y manos expertas. Aquí empieza el arte: que nada sufra en el camino.</p>
+        <ul class="tags">
+          <li>Emplaye profesional</li><li>Empaque y protección</li><li>Desmontaje y montaje</li>
+        </ul>
+      </div>
+      <svg class="scene__art" viewBox="0 0 600 460" aria-hidden="true">
+        <rect x="120" y="250" width="300" height="120" rx="10" fill="#222b3a" data-anim="sofa"/>
+        <rect x="150" y="210" width="110" height="60" rx="10" fill="#2a3445" data-anim="sofa"/>
+        <rect x="100" y="120" width="120" height="120" rx="6" fill="#cfa15a" stroke="#8a5a2b" stroke-width="3" data-anim="box" data-i="0"/>
+        <rect x="240" y="90" width="100" height="100" rx="6" fill="#d8ad66" stroke="#8a5a2b" stroke-width="3" data-anim="box" data-i="1"/>
+        <rect x="360" y="130" width="110" height="110" rx="6" fill="#c2954c" stroke="#8a5a2b" stroke-width="3" data-anim="box" data-i="2"/>
+        <rect x="110" y="240" width="320" height="140" rx="12" fill="#bfe3ff" opacity="0.12" data-anim="wrap"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ============ ACTO 2 · LA CARGA ============ -->
+  <section class="act" id="acto-2" data-chapter="La carga">
+    <div class="scene">
+      <svg class="scene__art" viewBox="0 0 600 460" aria-hidden="true">
+        <rect x="40" y="150" width="260" height="200" rx="10" fill="#ffffff" data-anim="truckbox"/>
+        <rect x="40" y="250" width="260" height="26" fill="#E11414" data-anim="truckbox"/>
+        <path d="M300 150 h70 l50 60 v140 h-120 z" fill="#E11414" data-anim="truckbox"/>
+        <g data-anim="loadbox" data-i="0"><rect x="360" y="300" width="70" height="64" rx="6" fill="#cfa15a" stroke="#8a5a2b" stroke-width="3"/></g>
+        <g data-anim="loadbox" data-i="1"><rect x="450" y="290" width="64" height="74" rx="6" fill="#d8ad66" stroke="#8a5a2b" stroke-width="3"/></g>
+        <g data-anim="loadbox" data-i="2"><rect x="520" y="312" width="58" height="52" rx="6" fill="#c2954c" stroke="#8a5a2b" stroke-width="3"/></g>
+      </svg>
+      <div class="scene__copy copy--right">
+        <span class="eyebrow">Capítulo 02 · Maniobras</span>
+        <h2>Personal capacitado, unidad lista</h2>
+        <p>Llega nuestro equipo identificado y la unidad cerrada. Cargamos y organizamos cada pieza con técnica, no a la suerte.</p>
+        <ul class="tags">
+          <li>Residenciales</li><li>Corporativas</li><li>Fletes express</li><li>Transporte especial</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ACTO 3 · EL PROTAGONISTA (3D) ============ -->
+  <section class="act act--truck" id="acto-3" data-chapter="En ruta">
+    <div class="scene">
+      <div class="three-mount" id="threeMount" aria-hidden="true"></div>
+      <!-- Fallback si Three.js no carga -->
+      <svg class="truck-fallback" id="truckFallback" viewBox="0 0 480 260" aria-hidden="true">
+        <g transform="translate(60,150)">
+          <rect x="0" y="-92" width="170" height="92" rx="8" fill="#ffffff" stroke="#0d0f12" stroke-width="4"/>
+          <rect x="0" y="-46" width="170" height="16" fill="#E11414"/>
+          <path d="M170 -92 h44 l34 44 v48 h-78 z" fill="#E11414" stroke="#0d0f12" stroke-width="4" stroke-linejoin="round"/>
+          <circle cx="44" cy="8" r="22" fill="#15171b" stroke="#6b7382" stroke-width="5"/>
+          <circle cx="196" cy="8" r="22" fill="#15171b" stroke="#6b7382" stroke-width="5"/>
+        </g>
+      </svg>
+      <div class="scene__copy copy--center truck-copy">
+        <span class="eyebrow">Capítulo 03 · La unidad</span>
+        <h2>Tu mudanza, en marcha</h2>
+        <p>Camiones cerrados, seguimiento constante y <strong>cámaras corporales</strong> para total transparencia. Tu confianza, monitoreada de inicio a fin.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ACTO 4 · COBERTURA / MAPA ============ -->
+  <section class="act act--map" id="acto-4" data-chapter="Cobertura nacional">
+    <div class="scene">
+      <div class="scene__copy copy--top">
+        <span class="eyebrow">Capítulo 04 · Cobertura</span>
+        <h2>Conectamos toda la República</h2>
+        <p>De Metepec y Toluca a donde lo necesites. Las rutas se encienden conforme avanzas.</p>
+      </div>
+      <svg class="map" id="expMap" viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <g class="map__routes" fill="none" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round">
+          <path class="route" d="M300,430 L250,300"/>
+          <path class="route" d="M250,300 L470,250"/>
+          <path class="route" d="M470,250 L520,360"/>
+          <path class="route" d="M470,250 L640,210"/>
+          <path class="route" d="M250,300 L150,250"/>
+          <path class="route" d="M470,250 L560,140"/>
+          <path class="route" d="M640,210 L820,300"/>
+          <path class="route" d="M640,210 L900,150"/>
+        </g>
+        <g class="map__nodes">
+          <g class="node" data-i="0" transform="translate(300,430)"><circle r="8"/><text x="14" y="5">Metepec</text></g>
+          <g class="node" data-i="1" transform="translate(250,300)"><circle r="7"/><text x="14" y="5">Toluca</text></g>
+          <g class="node" data-i="2" transform="translate(470,250)"><circle r="8"/><text x="14" y="5">CDMX</text></g>
+          <g class="node" data-i="3" transform="translate(150,250)"><circle r="6"/><text x="14" y="5">Guadalajara</text></g>
+          <g class="node" data-i="4" transform="translate(520,360)"><circle r="6"/><text x="14" y="5">Cuernavaca</text></g>
+          <g class="node" data-i="5" transform="translate(640,210)"><circle r="7"/><text x="14" y="5">Querétaro</text></g>
+          <g class="node" data-i="6" transform="translate(560,140)"><circle r="6"/><text x="14" y="5">Puebla</text></g>
+          <g class="node" data-i="7" transform="translate(820,300)"><circle r="6"/><text x="14" y="5">Veracruz</text></g>
+          <g class="node" data-i="8" transform="translate(900,150)"><circle r="6"/><text x="14" y="5">Cancún</text></g>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ============ ACTO 5 · LA LLEGADA / NUEVO HOGAR ============ -->
+  <section class="act" id="acto-5" data-chapter="El nuevo hogar">
+    <div class="scene">
+      <svg class="scene__art" viewBox="0 0 600 460" aria-hidden="true">
+        <rect x="120" y="120" width="360" height="300" rx="12" fill="#161d28" data-anim="newhome"/>
+        <path d="M120 120 L300 20 L480 120 Z" fill="#1b2230" data-anim="newhome"/>
+        <rect x="270" y="300" width="80" height="120" rx="6" fill="#FF6A00" data-anim="door"/>
+        <rect x="160" y="180" width="90" height="90" rx="6" fill="url(#warm)" data-anim="warm"/>
+        <rect x="350" y="180" width="90" height="90" rx="6" fill="url(#warm)" data-anim="warm"/>
+        <defs>
+          <linearGradient id="warm" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#FFD36b"/><stop offset="1" stop-color="#FF6A00"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="scene__copy copy--right">
+        <span class="eyebrow">Capítulo 05 · Entrega</span>
+        <h2>Bienvenido a tu nuevo hogar</h2>
+        <p>Descargamos, montamos y acomodamos. Tu casa nueva cobra vida, en orden y sin estrés.</p>
+        <ul class="tags"><li>Montaje y desmontaje</li><li>Entrega segura</li><li>Facturación</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CIERRE · CONFIANZA + CTA ============ -->
+  <section class="act act--close" id="cierre" data-chapter="Confianza">
+    <div class="scene scene--close">
+      <div class="close__inner">
+        <div class="stat-row">
+          <div class="stat"><span class="stat__n">+25</span><span class="stat__l">años de experiencia</span></div>
+          <div class="stat"><span class="stat__n">100%</span><span class="stat__l">nos recomiendan</span></div>
+          <div class="stat"><span class="stat__n">+10</span><span class="stat__l">estados de cobertura</span></div>
+        </div>
+
+        <h2 class="close__title">Así trabajamos. Así te mudamos.</h2>
+
+        <div class="quotes">
+          <figure><div class="stars">★★★★★</div><blockquote>"Muy profesionales y puntuales, manejaron todo con cuidado. Los recomiendo."</blockquote><figcaption>Cliente verificado</figcaption></figure>
+          <figure><div class="stars">★★★★★</div><blockquote>"Cuidaron mis pertenencias en carga, viaje y descarga. Quedé 10/10."</blockquote><figcaption>Cliente de Metepec</figcaption></figure>
+        </div>
+
+        <div class="close__cta">
+          <a href="https://wa.me/527228300083?text=Hola%2C%20viv%C3%AD%20la%20experiencia%20y%20quiero%20cotizar%20mi%20mudanza." class="exp-cta exp-cta--lg" target="_blank" rel="noopener">Inicia tu mudanza por WhatsApp</a>
+          <a href="tel:+527228300083" class="exp-cta exp-cta--ghost">📞 722 830 0083</a>
+        </div>
+        <p class="close__note">¿Quieres todos los detalles, planes y formulario? <a href="index.html">Visita el sitio completo →</a></p>
+        <p class="exp-ver">Experiencia v6.0 · El Arte de Mudarte</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<a href="https://wa.me/527228300083?text=Hola%2C%20me%20interesa%20cotizar%20una%20mudanza." class="exp-wa" target="_blank" rel="noopener" aria-label="Cotizar por WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.05 4.91A9.82 9.82 0 0 0 12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.91-7.02ZM12.04 20.15h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.11.82.83-3.04-.2-.31a8.18 8.18 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.69 8.23-8.23 8.23Z"/></svg>
+</a>
+
+</body>
+</html>
