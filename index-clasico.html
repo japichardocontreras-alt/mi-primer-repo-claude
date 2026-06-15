@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#E11414" />
+
+<!--
+  ====================================================================
+  DOMINIO DEL SITIO  ·  CÓMO CAMBIARLO CUANDO TENGAS EL DEFINITIVO
+  --------------------------------------------------------------------
+  Mientras no haya dominio real, se usa el PLACEHOLDER:
+      https://www.mudanzasmetepec.com
+  Cuando contrates tu dominio definitivo, reemplaza TODAS las
+  apariciones de "https://www.mudanzasmetepec.com" por tu dominio real
+  (sin barra final). Aparece en este <head> en:
+      - <link rel="canonical">
+      - og:url  /  og:image
+      - twitter:image
+      - El bloque Schema.org (url, image, logo)
+  Truco: usa "Buscar y reemplazar" en tu editor sobre este archivo.
+  Las rutas internas (assets/, #secciones) son relativas y NO se tocan,
+  así el cambio de dominio no afecta la estructura ni el SEO interno.
+  ====================================================================
+-->
+
+<!-- ============ SEO PRINCIPAL ============ -->
+<title>Mudanzas Metepec | Mudanzas y Fletes en Metepec, Toluca y toda la República</title>
+<meta name="description" content="Mudanzas y fletes en Metepec, Toluca y Estado de México con +25 años de experiencia. Camiones cerrados, emplaye profesional, facturación y pago con tarjeta. Cotiza en 2 minutos por WhatsApp." />
+<meta name="keywords" content="mudanzas en Metepec, mudanzas en Toluca, fletes en Metepec, fletes en Toluca, mudanzas Estado de México, mudanzas CDMX, mudanzas Querétaro, mudanzas Puebla, mudanzas nacionales, mudanzas foráneas" />
+<meta name="author" content="Mudanzas Metepec" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://www.mudanzasmetepec.com/" />
+
+<!-- ============ OPEN GRAPH / REDES ============ -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Mudanzas Metepec" />
+<meta property="og:title" content="Mudanzas Metepec | Conoce el arte de mudarte" />
+<meta property="og:description" content="Mudanzas y fletes con +25 años de experiencia en Metepec, Toluca y toda la República. Cotiza en 2 minutos por WhatsApp. Nos adaptamos a tu presupuesto." />
+<meta property="og:locale" content="es_MX" />
+<meta property="og:url" content="https://www.mudanzasmetepec.com/" />
+<meta property="og:image" content="https://www.mudanzasmetepec.com/assets/img/logo-mudanzas-metepec.jpeg" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Mudanzas Metepec | Conoce el arte de mudarte" />
+<meta name="twitter:description" content="Mudanzas y fletes con +25 años de experiencia. Cotiza en 2 minutos por WhatsApp." />
+<meta name="twitter:image" content="https://www.mudanzasmetepec.com/assets/img/logo-mudanzas-metepec.jpeg" />
+
+<!-- ============ FAVICON ============ -->
+<link rel="icon" type="image/jpeg" href="assets/img/logo-mudanzas-metepec.jpeg" />
+<link rel="apple-touch-icon" href="assets/img/logo-mudanzas-metepec.jpeg" />
+
+<!-- ============ FUENTES ============ -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="styles.css?v=5" />
+
+<!-- ============ SCHEMA.ORG · LOCAL BUSINESS ============ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MovingCompany",
+  "name": "Mudanzas Metepec",
+  "image": "https://www.mudanzasmetepec.com/assets/img/logo-mudanzas-metepec.jpeg",
+  "logo": "https://www.mudanzasmetepec.com/assets/img/logo-mudanzas-metepec.jpeg",
+  "url": "https://www.mudanzasmetepec.com/",
+  "telephone": "+527228300083",
+  "slogan": "Conoce el arte de mudarte",
+  "priceRange": "$$",
+  "description": "Empresa de mudanzas, fletes y transporte con más de 25 años de experiencia en Metepec, Toluca, Estado de México y toda la República Mexicana.",
+  "foundingDate": "1999",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Metepec",
+    "addressRegion": "Estado de México",
+    "addressCountry": "MX"
+  },
+  "areaServed": [
+    "Metepec", "Toluca", "Estado de México", "Ciudad de México",
+    "Querétaro", "Puebla", "Cuernavaca", "Guadalajara", "Veracruz", "Cancún"
+  ],
+  "openingHoursSpecification": {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+    "opens": "00:00",
+    "closes": "23:59"
+  },
+  "sameAs": [
+    "https://www.facebook.com/share/1FBwqgPHJU/",
+    "https://www.tiktok.com/@mudanzas.metepec"
+  ],
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "5",
+    "reviewCount": "11",
+    "bestRating": "5"
+  },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Servicios de mudanza y transporte",
+    "itemListElement": [
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Mudanzas residenciales" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Mudanzas corporativas" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Mudanzas foráneas" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Fletes express" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Transporte especial" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Empaque y protección" } }
+    ]
+  }
+}
+</script>
+</head>
+
+<body>
+
+<!-- Barra de progreso de lectura (microinteracción) -->
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+<!-- ======================================================================
+     MUNDO EN MOVIMIENTO · animación continua ligada al scroll global.
+     Capa fija de fondo (decorativa). El camión conduce de inicio a fin
+     de la página mientras el paisaje se desplaza en parallax.
+     ====================================================================== -->
+<div class="env" id="env" aria-hidden="true">
+  <div class="env__sky"></div>
+  <div class="env__sun" id="envSun"></div>
+  <div class="env__glow"></div>
+  <div class="env__stars"></div>
+
+  <!-- Colinas lejanas -->
+  <svg class="env__layer env__hills" id="envHills" viewBox="0 0 2600 400" preserveAspectRatio="xMinYMax slice">
+    <path d="M0,400 V250 C300,180 500,300 800,250 S1300,150 1700,240 2100,320 2600,230 V400 Z" fill="#1b2733"/>
+    <path d="M0,400 V300 C400,250 700,340 1100,290 S1800,230 2600,300 V400 Z" fill="#16202a"/>
+  </svg>
+
+  <!-- Silueta de ciudad -->
+  <svg class="env__layer env__city" id="envCity" viewBox="0 0 2600 360" preserveAspectRatio="xMinYMax slice">
+    <g fill="#0f1820">
+      <rect x="120" y="180" width="60" height="180"/><rect x="200" y="120" width="70" height="240"/>
+      <rect x="290" y="200" width="50" height="160"/><rect x="360" y="150" width="74" height="210"/>
+      <rect x="900" y="160" width="64" height="200"/><rect x="980" y="110" width="80" height="250"/>
+      <rect x="1080" y="190" width="54" height="170"/><rect x="1150" y="140" width="76" height="220"/>
+      <rect x="1750" y="170" width="60" height="190"/><rect x="1830" y="120" width="78" height="240"/>
+      <rect x="1930" y="200" width="52" height="160"/><rect x="2010" y="150" width="74" height="210"/>
+    </g>
+    <g fill="#FFC400" opacity="0.55">
+      <rect x="216" y="150" width="9" height="12"/><rect x="236" y="150" width="9" height="12"/>
+      <rect x="996" y="140" width="9" height="12"/><rect x="1016" y="140" width="9" height="12"/>
+      <rect x="1846" y="150" width="9" height="12"/><rect x="1866" y="150" width="9" height="12"/>
+    </g>
+  </svg>
+
+  <!-- Carretera + props cercanos (señales de ciudades, postes) -->
+  <div class="env__road">
+    <div class="env__dashes"></div>
+    <svg class="env__layer env__props" id="envProps" viewBox="0 0 3200 200" preserveAspectRatio="xMinYMax meet">
+      <!-- Señales con ciudades de cobertura -->
+      <g class="env__sign" transform="translate(260,0)"><rect x="-46" y="20" width="92" height="40" rx="5" fill="#0c1d3a" stroke="#FFC400" stroke-width="2"/><text x="0" y="46" text-anchor="middle" font-family="Oswald, sans-serif" font-size="20" fill="#fff">METEPEC</text><rect x="-3" y="60" width="6" height="120" fill="#3a4250"/></g>
+      <g class="env__sign" transform="translate(900,0)"><rect x="-44" y="20" width="88" height="40" rx="5" fill="#0c1d3a" stroke="#FFC400" stroke-width="2"/><text x="0" y="46" text-anchor="middle" font-family="Oswald, sans-serif" font-size="20" fill="#fff">TOLUCA</text><rect x="-3" y="60" width="6" height="120" fill="#3a4250"/></g>
+      <g class="env__sign" transform="translate(1600,0)"><rect x="-40" y="20" width="80" height="40" rx="5" fill="#0c1d3a" stroke="#FF6A00" stroke-width="2"/><text x="0" y="46" text-anchor="middle" font-family="Oswald, sans-serif" font-size="20" fill="#fff">CDMX</text><rect x="-3" y="60" width="6" height="120" fill="#3a4250"/></g>
+      <g class="env__sign" transform="translate(2250,0)"><rect x="-52" y="20" width="104" height="40" rx="5" fill="#0c1d3a" stroke="#FF6A00" stroke-width="2"/><text x="0" y="46" text-anchor="middle" font-family="Oswald, sans-serif" font-size="18" fill="#fff">QUERÉTARO</text><rect x="-3" y="60" width="6" height="120" fill="#3a4250"/></g>
+      <g class="env__sign" transform="translate(2900,0)"><rect x="-58" y="20" width="116" height="40" rx="5" fill="#1d0c0c" stroke="#E11414" stroke-width="2"/><text x="0" y="46" text-anchor="middle" font-family="Oswald, sans-serif" font-size="17" fill="#fff">TU DESTINO</text><rect x="-3" y="60" width="6" height="120" fill="#3a4250"/></g>
+      <!-- Arboles/postes -->
+      <g fill="#16202a"><rect x="560" y="120" width="8" height="60"/><circle cx="564" cy="118" r="20"/></g>
+      <g fill="#16202a"><rect x="1280" y="120" width="8" height="60"/><circle cx="1284" cy="118" r="20"/></g>
+      <g fill="#16202a"><rect x="2000" y="120" width="8" height="60"/><circle cx="2004" cy="118" r="20"/></g>
+    </svg>
+  </div>
+
+  <!-- Camión (conduce en su lugar; el mundo se mueve detrás) -->
+  <svg class="env__truck" id="envTruck" viewBox="0 0 240 150" aria-hidden="true">
+    <g transform="translate(40,96)">
+      <rect x="0" y="-58" width="92" height="52" rx="5" fill="#ffffff" stroke="#0d0f12" stroke-width="3"/>
+      <rect x="0" y="-30" width="92" height="10" fill="#E11414"/>
+      <path d="M92,-58 H120 L140,-32 V-6 H92 Z" fill="#E11414" stroke="#0d0f12" stroke-width="3" stroke-linejoin="round"/>
+      <rect x="96" y="-52" width="20" height="17" rx="2" fill="#bfe3ff" stroke="#0d0f12" stroke-width="2"/>
+      <rect x="0" y="-6" width="140" height="6" fill="#0d0f12"/>
+      <g class="env__wheel"><circle cx="26" cy="6" r="14" fill="#15171b" stroke="#6b7382" stroke-width="3"/><path d="M26,-4 V16 M16,6 H36" stroke="#6b7382" stroke-width="2.5"/></g>
+      <g class="env__wheel env__wheel--2"><circle cx="112" cy="6" r="14" fill="#15171b" stroke="#6b7382" stroke-width="3"/><path d="M112,-4 V16 M102,6 H122" stroke="#6b7382" stroke-width="2.5"/></g>
+    </g>
+  </svg>
+</div>
+
+<!-- Indicador de viaje (waypoint actual) -->
+<div class="env__hud" id="envHud" aria-hidden="true">
+  <span class="env__chip"><span class="env__pulse"></span><span id="envLabel">Saliendo de Metepec</span></span>
+</div>
+
+<!-- ====================== HEADER ====================== -->
+<header class="header" id="header">
+  <div class="container header__inner">
+    <a href="#inicio" class="brand" aria-label="Mudanzas Metepec - Inicio">
+      <img src="assets/img/logo-mudanzas-metepec.jpeg" alt="Logo de Mudanzas Metepec" class="brand__logo" width="48" height="48" />
+      <span class="brand__text">
+        <span class="brand__name">Mudanzas Metepec</span>
+        <span class="brand__slogan">Conoce el arte de mudarte</span>
+      </span>
+    </a>
+
+    <nav class="nav" id="nav" aria-label="Navegación principal">
+      <a href="#servicios" class="nav__link">Servicios</a>
+      <a href="#a-tu-medida" class="nav__link">A tu medida</a>
+      <a href="#proceso" class="nav__link">Cómo trabajamos</a>
+      <a href="#cobertura" class="nav__link">Cobertura</a>
+      <a href="#opiniones" class="nav__link">Opiniones</a>
+      <a href="#faq" class="nav__link">Preguntas</a>
+      <a href="#cotizar" class="nav__link nav__link--cta">Cotizar</a>
+    </nav>
+
+    <a href="https://wa.me/527228300083?text=Hola%2C%20me%20interesa%20cotizar%20una%20mudanza." class="btn btn--whatsapp header__wa" target="_blank" rel="noopener" aria-label="Cotizar por WhatsApp">
+      <svg class="ico-wa" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.05 4.91A9.82 9.82 0 0 0 12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.91-7.02ZM12.04 20.15h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.11.82.83-3.04-.2-.31a8.18 8.18 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.69 8.23-8.23 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"/></svg>
+      <span>WhatsApp</span>
+    </a>
+
+    <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main>
+
+  <!-- ====================== HERO ====================== -->
+  <section class="hero" id="inicio">
+    <!-- Capas visuales de fondo (decorativas) -->
+    <div class="hero__bg" aria-hidden="true" data-parallax-group>
+      <span class="blob blob--amber" data-parallax="0.12"></span>
+      <span class="blob blob--red" data-parallax="0.20"></span>
+      <div class="hero__grid" data-parallax="0.05"></div>
+      <svg class="hero__route" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" data-parallax="0.08">
+        <path class="hero__route-path" d="M-20,440 C160,440 180,250 360,250 S560,90 820,70" fill="none" stroke="url(#routeGrad)" stroke-width="3" stroke-linecap="round" stroke-dasharray="1 16" />
+        <defs>
+          <linearGradient id="routeGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#FFC400" stop-opacity="0.0"/>
+            <stop offset="0.5" stop-color="#FF6A00" stop-opacity="0.9"/>
+            <stop offset="1" stop-color="#E11414" stop-opacity="0.0"/>
+          </linearGradient>
+        </defs>
+        <circle class="hero__route-pin" cx="360" cy="250" r="7" fill="#FFC400"/>
+        <circle class="hero__route-pin hero__route-pin--end" cx="780" cy="80" r="7" fill="#E11414"/>
+      </svg>
+      <span class="float-cube float-cube--1" data-parallax="0.28"></span>
+      <span class="float-cube float-cube--2" data-parallax="0.18"></span>
+      <span class="float-cube float-cube--3" data-parallax="0.34"></span>
+    </div>
+
+    <div class="container hero__inner">
+      <div class="hero__content">
+        <p class="hero__eyebrow"><span class="hero__eyebrow-stars">★★★★★</span> Recomendados al 100% · +25 años de experiencia</p>
+        <h1 class="hero__title">¿Te mudas?<br><span class="hl">Nosotros nos encargamos de todo.</span></h1>
+        <p class="hero__subtitle">
+          Mudanzas y fletes en <strong>Metepec, Toluca y toda la República Mexicana</strong>.
+          Camiones cerrados, personal capacitado y tus muebles protegidos como si fueran nuestros.
+        </p>
+
+        <ul class="hero__benefits">
+          <li>📸 Cotiza con fotos por WhatsApp</li>
+          <li>🛡️ Emplaye y protección profesional</li>
+          <li>🎥 Seguridad con cámaras corporales</li>
+          <li>🧾 Facturación y pago con tarjeta</li>
+        </ul>
+
+        <div class="hero__actions">
+          <a href="https://wa.me/527228300083?text=Hola%2C%20me%20interesa%20cotizar%20una%20mudanza.%20%C2%BFMe%20pueden%20ayudar%3F" class="btn btn--whatsapp btn--lg" target="_blank" rel="noopener">
+            <svg class="ico-wa" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.05 4.91A9.82 9.82 0 0 0 12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.91-7.02ZM12.04 20.15h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.11.82.83-3.04-.2-.31a8.18 8.18 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.69 8.23-8.23 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"/></svg>
+            Cotizar por WhatsApp
+          </a>
+          <a href="tel:+527228300083" class="btn btn--ghost btn--lg btn--ghost-light">📞 Llamar ahora</a>
+        </div>
+        <p class="hero__phone">o marca directo: <a href="tel:+527228300083">722 830 0083</a></p>
+
+        <!-- Franja de estadísticas destacadas -->
+        <div class="hero__stats">
+          <div class="hero__stat"><span class="hero__stat-num">+25</span><span class="hero__stat-label">Años de experiencia</span></div>
+          <div class="hero__stat"><span class="hero__stat-num">100%</span><span class="hero__stat-label">Nos recomiendan</span></div>
+          <div class="hero__stat"><span class="hero__stat-num">+10</span><span class="hero__stat-label">Estados de cobertura</span></div>
+        </div>
+      </div>
+
+      <div class="hero__card">
+        <div class="quote-badge">
+          <span class="quote-badge__top">Cotiza en</span>
+          <span class="quote-badge__big">2 min</span>
+          <span class="quote-badge__bot">¡Así de fácil!</span>
+        </div>
+        <ol class="quote-steps">
+          <li><span>1</span> Envía fotos o tu lista de muebles</li>
+          <li><span>2</span> Recibe tu precio al instante</li>
+          <li><span>3</span> Agendamos y nos encargamos de todo</li>
+        </ol>
+        <a href="#cotizar" class="btn btn--primary btn--block">Quiero mi cotización</a>
+        <p class="hero__card-note">Sin compromiso · Nos adaptamos a tu presupuesto</p>
+      </div>
+    </div>
+    <div class="hero__wave" aria-hidden="true"></div>
+  </section>
+
+  <!-- ====================== BARRA DE CONFIANZA ====================== -->
+  <section class="trustbar" aria-label="Indicadores de confianza">
+    <div class="container trustbar__inner">
+      <div class="trust"><span class="trust__num" data-count="25">25</span><span class="trust__suffix">+</span><span class="trust__label">Años de experiencia</span></div>
+      <div class="trust"><span class="trust__num" data-count="100">100</span><span class="trust__suffix">%</span><span class="trust__label">Clientes nos recomiendan</span></div>
+      <div class="trust"><span class="trust__num" data-count="10">10</span><span class="trust__suffix">+</span><span class="trust__label">Estados con cobertura</span></div>
+      <div class="trust"><span class="trust__num">24/7</span><span class="trust__label">Siempre disponibles</span></div>
+    </div>
+  </section>
+
+  <!-- ====================== BADGES DIFERENCIADORES ====================== -->
+  <section class="badges" aria-label="Por qué elegirnos">
+    <div class="container">
+      <div class="badges__grid">
+        <div class="badge-item">🚚<span>Camiones cerrados</span></div>
+        <div class="badge-item">🛡️<span>Emplaye profesional</span></div>
+        <div class="badge-item">💳<span>Pago con tarjeta</span></div>
+        <div class="badge-item">🧾<span>Facturación disponible</span></div>
+        <div class="badge-item">🎥<span>Cámaras corporales</span></div>
+        <div class="badge-item">🇲🇽<span>A toda la República</span></div>
+        <div class="badge-item">🔧<span>Montaje y desmontaje</span></div>
+        <div class="badge-item">👷<span>Personal capacitado</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== PROBLEMA / SOLUCIÓN ====================== -->
+  <section class="problem" id="por-que">
+    <div class="container">
+      <div class="section-head">
+        <span class="kicker">Una mudanza no tiene por qué ser un dolor de cabeza</span>
+        <h2 class="section-title">Sabemos lo que te preocupa. Por eso lo resolvemos.</h2>
+      </div>
+      <div class="problem__grid">
+        <article class="ps-card">
+          <h3 class="ps-card__bad">😟 Miedo a que dañen tus muebles</h3>
+          <p class="ps-card__good">✅ Emplayamos, protegemos con cartón y manejamos cada pieza con cuidado. "Cuidamos tus cosas como si fueran nuestras."</p>
+        </article>
+        <article class="ps-card">
+          <h3 class="ps-card__bad">😟 Retrasos y falta de puntualidad</h3>
+          <p class="ps-card__good">✅ Llegamos a tiempo y cumplimos lo acordado. Nuestros clientes lo confirman: "fueron muy puntuales".</p>
+        </article>
+        <article class="ps-card">
+          <h3 class="ps-card__bad">😟 Personal poco confiable</h3>
+          <p class="ps-card__good">✅ Personal identificado y capacitado, supervisado con cámaras corporales para tu total tranquilidad.</p>
+        </article>
+        <article class="ps-card">
+          <h3 class="ps-card__bad">😟 Falta de comunicación</h3>
+          <p class="ps-card__good">✅ Atención personalizada desde la cotización hasta la entrega. Siempre sabes con quién hablas.</p>
+        </article>
+        <article class="ps-card">
+          <h3 class="ps-card__bad">😟 Precios poco claros</h3>
+          <p class="ps-card__good">✅ Cotización clara en minutos y sin sorpresas. Nos adaptamos a tu presupuesto.</p>
+        </article>
+        <article class="ps-card">
+          <h3 class="ps-card__bad">😟 El estrés de organizar todo</h3>
+          <p class="ps-card__good">✅ Nosotros nos encargamos de todo: carga, traslado, descarga, montaje y desmontaje.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== SERVICIOS ====================== -->
+  <section class="services" id="servicios">
+    <div class="container">
+      <div class="section-head">
+        <span class="kicker">Nuestros servicios</span>
+        <h2 class="section-title">Soluciones de mudanza y transporte para todo</h2>
+        <p class="section-sub">Desde una sola pieza hasta una casa u oficina completa, local o foránea.</p>
+      </div>
+
+      <div class="services__grid">
+        <article class="service-card">
+          <div class="service-card__icon"><svg class="svg-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5M5 10.2V19h14v-8.8M9.5 19v-5.2h5V19"/></svg></div>
+          <h3>Mudanzas residenciales</h3>
+          <p>Casas y departamentos completos con embalaje, protección y montaje. Tu hogar llega en orden a su nuevo destino.</p>
+          <a href="https://wa.me/527228300083?text=Hola%2C%20quiero%20cotizar%20una%20MUDANZA%20RESIDENCIAL." class="service-card__cta" target="_blank" rel="noopener">Cotizar →</a>
+        </article>
+        <article class="service-card">
+          <div class="service-card__icon"><svg class="svg-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.6 2.6 15.4 0 18M12 3c-2.6 2.6-2.6 15.4 0 18"/></svg></div>
+          <h3>Mudanzas foráneas</h3>
+          <p>Te cambias de ciudad o estado. Traslados seguros a toda la República en camiones cerrados con seguimiento.</p>
+          <a href="https://wa.me/527228300083?text=Hola%2C%20quiero%20cotizar%20una%20MUDANZA%20FOR%C3%81NEA." class="service-card__cta" target="_blank" rel="noopener">Cotizar →</a>
+        </article>
+        <article class="service-card">
+          <div class="service-card__icon"><svg class="svg-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21V5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v16M14 21V9h5a1 1 0 0 1 1 1v11M2 21h20M7.5 8h3M7.5 12h3M7.5 16h3"/></svg></div>
+          <h3>Mudanzas corporativas</h3>
+          <p>Oficinas y comercios con la menor interrupción posible. Coordinamos para que tu negocio no se detenga.</p>
+          <a href="https://wa.me/527228300083?text=Hola%2C%20quiero%20cotizar%20una%20MUDANZA%20CORPORATIVA." class="service-card__cta" target="_blank" rel="noopener">Cotizar →</a>
+        </article>
+        <article class="service-card">
+          <div class="service-card__icon"><svg class="svg-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 7.5h11v8H2zM13 10h4.5l3.5 3.5v2H13M3 12H1M4 9.5H1.5"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17.5" cy="17.5" r="1.8"/></svg></div>
+          <h3>Fletes express</h3>
+          <p>¿Pocos muebles o una entrega rápida? Fletes locales ágiles y a buen precio cuando lo necesitas.</p>
+          <a href="https://wa.me/527228300083?text=Hola%2C%20quiero%20cotizar%20un%20FLETE%20EXPRESS." class="service-card__cta" target="_blank" rel="noopener">Cotizar →</a>
+        </article>
+        <article class="service-card">
+          <div class="service-card__icon"><svg class="svg-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 5 5.6v5.2c0 4.2 3 7 7 8.2 4-1.2 7-4 7-8.2V5.6z"/><path d="m9 11.6 2 2 4-4.2"/></svg></div>
+          <h3>Transporte especial</h3>
+          <p>Motocicletas, objetos delicados, obras de arte, mobiliario para eventos y equipo comercial con maniobras especiales.</p>
+          <a href="https://wa.me/527228300083?text=Hola%2C%20quiero%20cotizar%20un%20TRANSPORTE%20ESPECIAL." class="service-card__cta" target="_blank" rel="noopener">Cotizar →</a>
+        </article>
+        <article class="service-card">
+          <div class="service-card__icon"><svg class="svg-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 16V8l-9-5-9 5v8l9 5 9-5zM3.3 7.5 12 12.5l8.7-5M12 12.5V21"/></svg></div>
+          <h3>Empaque y protección</h3>
+          <p>Emplaye, cartón protector, desmontaje y montaje de muebles. Embalamos para que nada sufra en el camino.</p>
+          <a href="https://wa.me/527228300083?text=Hola%2C%20quiero%20cotizar%20EMPAQUE%20Y%20PROTECCI%C3%93N." class="service-card__cta" target="_blank" rel="noopener">Cotizar →</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== SERVICIO A TU MEDIDA ====================== -->
+  <section class="tailored" id="a-tu-medida">
+    <div class="container">
+      <div class="section-head">
+        <span class="kicker">Cotización personalizada</span>
+        <h2 class="section-title">Cada mudanza es única. Tu cotización también.</h2>
+        <p class="section-sub">No trabajamos con paquetes cerrados: armamos una propuesta a la medida de lo que necesitas mover, tu distancia y tu presupuesto.</p>
+      </div>
+
+      <div class="tailored__grid">
+        <article class="tailored-card">
+          <div class="tailored-card__icon">🎯</div>
+          <h3>Servicio adaptado a ti</h3>
+          <p>Nos ajustamos a tu tipo de mudanza o flete, al volumen de tus cosas y a tus tiempos. Tú decides qué necesitas y nosotros lo resolvemos.</p>
+        </article>
+        <article class="tailored-card">
+          <div class="tailored-card__icon">💬</div>
+          <h3>Atención personalizada por WhatsApp</h3>
+          <p>Hablas directo con nosotros. Envías fotos o tu lista de muebles y recibes una propuesta clara, sin intermediarios ni letras chiquitas.</p>
+        </article>
+        <article class="tailored-card">
+          <div class="tailored-card__icon">💰</div>
+          <h3>Presupuesto a tu medida</h3>
+          <p>Nos adaptamos a tu presupuesto. Te damos opciones honestas para que muevas lo que necesitas con la protección adecuada y un precio justo.</p>
+        </article>
+        <article class="tailored-card">
+          <div class="tailored-card__icon">🚚</div>
+          <h3>Soluciones para cada traslado</h3>
+          <p>Desde una sola pieza hasta una casa u oficina completa, local o foránea. Tenemos la unidad y el equipo correctos para tu caso.</p>
+        </article>
+      </div>
+
+      <div class="tailored__cta">
+        <p class="tailored__cta-text">Cuéntanos qué necesitas mover y te armamos una cotización a tu medida, sin compromiso.</p>
+        <a href="https://wa.me/527228300083?text=Hola%2C%20quiero%20una%20cotizaci%C3%B3n%20personalizada%20para%20mi%20mudanza%20o%20flete." class="btn btn--whatsapp btn--lg" target="_blank" rel="noopener">
+          <svg class="ico-wa" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.05 4.91A9.82 9.82 0 0 0 12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.91-7.02ZM12.04 20.15h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.11.82.83-3.04-.2-.31a8.18 8.18 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.69 8.23-8.23 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"/></svg>
+          Quiero mi cotización personalizada
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== PROCESO ====================== -->
+  <section class="process" id="proceso">
+    <div class="container">
+      <div class="section-head">
+        <span class="kicker">Cómo trabajamos</span>
+        <h2 class="section-title">Tu mudanza en 6 pasos simples</h2>
+      </div>
+      <ol class="process__list">
+        <li class="step"><span class="step__num">1</span><h3>Solicita tu cotización</h3><p>Escríbenos por WhatsApp o llena el formulario.</p></li>
+        <li class="step"><span class="step__num">2</span><h3>Comparte fotos o lista</h3><p>Envía fotos o tu lista de muebles para cotizar exacto.</p></li>
+        <li class="step"><span class="step__num">3</span><h3>Te recomendamos</h3><p>Te proponemos la mejor opción según tu presupuesto.</p></li>
+        <li class="step"><span class="step__num">4</span><h3>Confirmamos detalles</h3><p>Agendamos fecha, hora y servicios incluidos.</p></li>
+        <li class="step"><span class="step__num">5</span><h3>Realizamos el servicio</h3><p>Cargamos, protegemos y trasladamos con cuidado.</p></li>
+        <li class="step"><span class="step__num">6</span><h3>Entregamos seguro</h3><p>Montamos y entregamos todo en orden en tu destino.</p></li>
+      </ol>
+      <div class="process__cta">
+        <a href="#cotizar" class="btn btn--primary btn--lg">Empezar mi cotización</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== SEGURIDAD Y TRANSPARENCIA ====================== -->
+  <section class="security" id="seguridad">
+    <div class="container security__inner">
+      <div class="security__content">
+        <span class="kicker kicker--light">Seguridad y transparencia</span>
+        <h2 class="section-title section-title--light">Tu confianza, monitoreada y protegida</h2>
+        <p class="security__lead">A diferencia de otros, en Mudanzas Metepec cada servicio es transparente de principio a fin.</p>
+        <ul class="security__list">
+          <li><strong>🎥 Cámaras corporales:</strong> nuestro personal graba el servicio para tu seguridad y total transparencia.</li>
+          <li><strong>🪪 Personal identificado:</strong> equipo capacitado, uniformado y de confianza.</li>
+          <li><strong>📲 Comunicación constante:</strong> te mantenemos informado en cada etapa.</li>
+          <li><strong>👀 Supervisión del servicio:</strong> coordinación y control de calidad en cada maniobra.</li>
+          <li><strong>📸 Evidencia del servicio:</strong> registro del antes, durante y después.</li>
+        </ul>
+      </div>
+      <div class="security__highlight">
+        <div class="security__badge">🎥</div>
+        <p class="security__quote">"Cuidamos tus cosas como si fueran nuestras."</p>
+        <p class="security__quote-sub">Seguridad y confianza en cada mudanza.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== COBERTURA ====================== -->
+  <section class="coverage" id="cobertura">
+    <svg class="coverage__map" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <path d="M80,480 C300,480 320,300 540,300 S820,140 1140,120" fill="none" stroke="#FF6A00" stroke-width="2.5" stroke-dasharray="2 14" stroke-linecap="round" opacity="0.5"/>
+      <path d="M120,120 C360,160 420,360 660,360 S940,500 1120,460" fill="none" stroke="#E11414" stroke-width="2" stroke-dasharray="2 16" stroke-linecap="round" opacity="0.35"/>
+      <g fill="#FF6A00" opacity="0.55">
+        <circle cx="540" cy="300" r="6"/><circle cx="80" cy="480" r="5"/><circle cx="1140" cy="120" r="6"/>
+        <circle cx="660" cy="360" r="5"/><circle cx="120" cy="120" r="5"/><circle cx="1120" cy="460" r="5"/>
+      </g>
+    </svg>
+    <div class="container">
+      <div class="section-head">
+        <span class="kicker">Cobertura nacional</span>
+        <h2 class="section-title">De Metepec a donde lo necesites</h2>
+        <p class="section-sub">Nuestra base está en Metepec y Toluca, pero llegamos a toda la República Mexicana.</p>
+      </div>
+      <div class="coverage__grid">
+        <span class="coverage__chip coverage__chip--home">📍 Metepec</span>
+        <span class="coverage__chip coverage__chip--home">📍 Toluca</span>
+        <span class="coverage__chip">Estado de México</span>
+        <span class="coverage__chip">Ciudad de México</span>
+        <span class="coverage__chip">Querétaro</span>
+        <span class="coverage__chip">Puebla</span>
+        <span class="coverage__chip">Cuernavaca</span>
+        <span class="coverage__chip">Guadalajara</span>
+        <span class="coverage__chip">Veracruz</span>
+        <span class="coverage__chip">Cancún</span>
+        <span class="coverage__chip coverage__chip--all">🇲🇽 Toda la República</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== OPINIONES ====================== -->
+  <section class="reviews" id="opiniones">
+    <div class="container">
+      <div class="section-head">
+        <span class="kicker">Lo que dicen nuestros clientes</span>
+        <h2 class="section-title">Recomendados al 100% por quienes ya se mudaron con nosotros</h2>
+        <div class="reviews__stars" aria-label="Calificación 5 de 5">★★★★★ <span>5.0 · Opiniones verificadas de nuestros clientes</span></div>
+      </div>
+      <div class="reviews__grid">
+        <figure class="review">
+          <div class="review__head">
+            <span class="review__avatar">✓</span>
+            <div class="review__meta">
+              <p class="review__name">Cliente verificado</p>
+              <span class="review__badge">Opinión verificada</span>
+            </div>
+            <div class="review__stars">★★★★★</div>
+          </div>
+          <blockquote>"Empresa muy profesional, gente súper simpática, fueron puntuales y manejaron nuestras cosas con cuidado. Los recomiendo encarecidamente y los usaré de nuevo."</blockquote>
+        </figure>
+        <figure class="review">
+          <div class="review__head">
+            <span class="review__avatar">✓</span>
+            <div class="review__meta">
+              <p class="review__name">Cliente de Metepec</p>
+              <span class="review__badge">Opinión verificada</span>
+            </div>
+            <div class="review__stars">★★★★★</div>
+          </div>
+          <blockquote>"Llegaron muy puntuales, fueron muy amables y atentos. Buscaba que cuidaran mis pertenencias en la carga, descarga y el viaje, y así fue, todo con protección. Quedé satisfecha 10/10."</blockquote>
+        </figure>
+        <figure class="review">
+          <div class="review__head">
+            <span class="review__avatar">✓</span>
+            <div class="review__meta">
+              <p class="review__name">Cliente satisfecho</p>
+              <span class="review__badge">Opinión verificada</span>
+            </div>
+            <div class="review__stars">★★★★★</div>
+          </div>
+          <blockquote>"Muy buena actitud de los chicos y traían el material necesario para todo, los recomiendo ampliamente."</blockquote>
+        </figure>
+        <figure class="review">
+          <div class="review__head">
+            <span class="review__avatar">✓</span>
+            <div class="review__meta">
+              <p class="review__name">Cliente de Toluca</p>
+              <span class="review__badge">Opinión verificada</span>
+            </div>
+            <div class="review__stars">★★★★★</div>
+          </div>
+          <blockquote>"Excelente servicio, costos accesibles, tienen mucha precaución con los muebles. ¿Necesitas una mudanza? No busques más, ellos son los indicados."</blockquote>
+        </figure>
+      </div>
+      <div class="reviews__cta">
+        <p class="reviews__cta-note">Estas son opiniones reales de nuestros clientes. Puedes consultarlas directamente en nuestra página de Facebook.</p>
+        <a href="https://www.facebook.com/share/1FBwqgPHJU/" class="btn btn--ghost" target="_blank" rel="noopener">Ver más opiniones en Facebook</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== GALERÍA ====================== -->
+  <section class="gallery" id="galeria">
+    <div class="container">
+      <div class="section-head">
+        <span class="kicker">Nuestro trabajo</span>
+        <h2 class="section-title">Mudanzas reales, resultados reales</h2>
+        <p class="section-sub">Así protegemos y trasladamos lo que más te importa.</p>
+      </div>
+      <!--
+        ====================================================================
+        GALERÍA DE FOTOS  ·  CÓMO REEMPLAZAR LOS PLACEHOLDERS
+        --------------------------------------------------------------------
+        Cada bloque <figure> es un espacio para una foto real.
+        Cuando tengas tus fotografías:
+          1) Guarda la imagen en:  assets/img/galeria/
+             (recomendado: 1200x900 px aprox., formato .jpg o .webp)
+          2) En el <figure> correspondiente, ELIMINA el contenido placeholder
+             (el emoji y el <span>) y DESCOMENTA la línea <img> de ese bloque,
+             ajustando el nombre del archivo y el texto alt.
+          3) Conserva el atributo data-label: es el texto que aparece al pasar
+             el cursor sobre la foto.
+        El alt debe describir la foto para SEO y accesibilidad
+        (ej. "Mudanza residencial en Metepec con muebles emplayados").
+        ====================================================================
+      -->
+      <div class="gallery__grid">
+
+        <!-- FOTO 1 · Sugerencia: una de tus unidades/camiones cerrados -->
+        <figure class="gallery__item" data-label="Unidades cerradas y limpias">
+          🚚<span>Unidades cerradas</span>
+          <!-- <img src="assets/img/galeria/01-unidad-cerrada.jpg" alt="Camión cerrado de Mudanzas Metepec listo para una mudanza" loading="lazy" width="1200" height="900"> -->
+        </figure>
+
+        <!-- FOTO 2 · Sugerencia: muebles emplayados / proceso de protección -->
+        <figure class="gallery__item" data-label="Emplaye y protección">
+          🛡️<span>Emplaye profesional</span>
+          <!-- <img src="assets/img/galeria/02-emplaye-profesional.jpg" alt="Muebles emplayados y protegidos por Mudanzas Metepec" loading="lazy" width="1200" height="900"> -->
+        </figure>
+
+        <!-- FOTO 3 · Sugerencia: muebles protegidos dentro del camión -->
+        <figure class="gallery__item" data-label="Muebles protegidos">
+          🛋️<span>Muebles protegidos</span>
+          <!-- <img src="assets/img/galeria/03-muebles-protegidos.jpg" alt="Muebles protegidos y acomodados dentro del camión de mudanza" loading="lazy" width="1200" height="900"> -->
+        </figure>
+
+        <!-- FOTO 4 · Sugerencia: el equipo cargando / maniobras -->
+        <figure class="gallery__item" data-label="Carga y maniobras">
+          💪<span>Maniobras seguras</span>
+          <!-- <img src="assets/img/galeria/04-maniobras.jpg" alt="Personal de Mudanzas Metepec realizando maniobras de carga seguras" loading="lazy" width="1200" height="900"> -->
+        </figure>
+
+        <!-- FOTO 5 · Sugerencia: transporte de moto u objeto especial -->
+        <figure class="gallery__item" data-label="Transporte especial">
+          🛵<span>Transporte especial</span>
+          <!-- <img src="assets/img/galeria/05-transporte-especial.jpg" alt="Transporte especial de motocicleta y objetos delicados" loading="lazy" width="1200" height="900"> -->
+        </figure>
+
+        <!-- FOTO 6 · Sugerencia: entrega/montaje en el destino final -->
+        <figure class="gallery__item" data-label="Entrega en destino">
+          📦<span>Entrega en orden</span>
+          <!-- <img src="assets/img/galeria/06-entrega-destino.jpg" alt="Entrega y montaje de muebles en el destino final de la mudanza" loading="lazy" width="1200" height="900"> -->
+        </figure>
+
+      </div>
+      <p class="gallery__note">📷 Espacios listos para tus fotos reales. Sustituye cada placeholder siguiendo las instrucciones del código (carpeta <code>assets/img/galeria/</code>) para máximo impacto.</p>
+    </div>
+  </section>
+
+  <!-- ====================== COTIZADOR ====================== -->
+  <section class="quote" id="cotizar">
+    <div class="container quote__inner">
+      <div class="quote__intro">
+        <span class="kicker kicker--light">Cotiza en 2 minutos</span>
+        <h2 class="section-title section-title--light">Solicita tu cotización gratis</h2>
+        <p class="quote__lead">Llena el formulario y al enviarlo se abrirá WhatsApp con tu mensaje listo. Te respondemos rápido y sin compromiso.</p>
+        <ul class="quote__perks">
+          <li>✅ Respuesta rápida</li>
+          <li>✅ Sin compromiso</li>
+          <li>✅ Nos adaptamos a tu presupuesto</li>
+        </ul>
+        <div class="quote__alt">
+          <p>¿Prefieres hablar directo?</p>
+          <a href="tel:+527228300083" class="btn btn--ghost btn--light">📞 722 830 0083</a>
+        </div>
+      </div>
+
+      <form class="quote-form" id="quoteForm" novalidate>
+        <div class="field">
+          <label for="nombre">Nombre*</label>
+          <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required />
+        </div>
+        <div class="field">
+          <label for="telefono">Teléfono / WhatsApp*</label>
+          <input type="tel" id="telefono" name="telefono" placeholder="Ej. 722 123 4567" required />
+        </div>
+        <div class="field">
+          <label for="origen">Origen*</label>
+          <input type="text" id="origen" name="origen" placeholder="¿Desde dónde te mudas?" required />
+        </div>
+        <div class="field">
+          <label for="destino">Destino*</label>
+          <input type="text" id="destino" name="destino" placeholder="¿A dónde te mudas?" required />
+        </div>
+        <div class="field">
+          <label for="fecha">Fecha tentativa</label>
+          <input type="date" id="fecha" name="fecha" />
+        </div>
+        <div class="field">
+          <label for="servicio">Tipo de servicio*</label>
+          <select id="servicio" name="servicio" required>
+            <option value="" disabled selected>Selecciona una opción</option>
+            <option>Mudanza residencial</option>
+            <option>Mudanza foránea</option>
+            <option>Mudanza corporativa</option>
+            <option>Flete express</option>
+            <option>Transporte especial</option>
+            <option>Empaque y protección</option>
+            <option>Aún no estoy seguro</option>
+          </select>
+        </div>
+        <div class="field field--full">
+          <label for="descripcion">Cuéntanos qué necesitas mover</label>
+          <textarea id="descripcion" name="descripcion" rows="3" placeholder="Ej. Departamento de 2 recámaras, refrigerador, sala, 2° piso sin elevador..."></textarea>
+        </div>
+        <div class="field field--full">
+          <button type="submit" class="btn btn--whatsapp btn--lg btn--block">
+            <svg class="ico-wa" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.05 4.91A9.82 9.82 0 0 0 12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.91-7.02ZM12.04 20.15h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.11.82.83-3.04-.2-.31a8.18 8.18 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.69 8.23-8.23 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"/></svg>
+            Enviar y cotizar por WhatsApp
+          </button>
+          <p class="quote-form__hint">Al enviar se abrirá WhatsApp con tus datos listos para mandar.</p>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ====================== FAQ ====================== -->
+  <section class="faq" id="faq">
+    <div class="container">
+      <div class="section-head">
+        <span class="kicker">Preguntas frecuentes</span>
+        <h2 class="section-title">Resolvemos tus dudas antes de mudarte</h2>
+      </div>
+      <div class="faq__list" id="faqList">
+        <details class="faq-item"><summary>¿Cómo solicito una cotización?</summary><p>Es muy fácil: escríbenos por WhatsApp al 722 830 0083 o llena el formulario de esta página. Puedes enviarnos fotos o una lista de tus muebles y te damos tu precio en minutos.</p></details>
+        <details class="faq-item"><summary>¿Cuánto cuesta una mudanza?</summary><p>El precio depende del volumen de muebles, la distancia, el piso/elevador y los servicios que elijas (emplaye, montaje, etc.). Nos adaptamos a tu presupuesto; por eso lo mejor es cotizar con fotos para darte un precio justo y sin sorpresas.</p></details>
+        <details class="faq-item"><summary>¿Atienden mudanzas foráneas y a toda la República?</summary><p>Sí. Tenemos base en Metepec y Toluca y damos servicio a CDMX, Querétaro, Puebla, Cuernavaca, Guadalajara, Veracruz, Cancún y toda la República Mexicana.</p></details>
+        <details class="faq-item"><summary>¿Mis muebles van protegidos?</summary><p>Siempre. Usamos emplaye, cartón protector y mantas para proteger tus pertenencias durante la carga, el viaje y la descarga. Cuidamos tus cosas como si fueran nuestras.</p></details>
+        <details class="faq-item"><summary>¿Desarman y arman los muebles?</summary><p>Sí, ofrecemos desmontaje y montaje de muebles como camas, roperos, comedores y más, según el servicio que necesites.</p></details>
+        <details class="faq-item"><summary>¿Sus camiones son cerrados?</summary><p>Sí, contamos con unidades cerradas que protegen tus pertenencias del polvo, la lluvia y la vía pública durante todo el traslado.</p></details>
+        <details class="faq-item"><summary>¿Puedo pagar con tarjeta?</summary><p>Claro. Aceptamos pago con tarjeta además de otras formas de pago. Pregúntanos por las opciones disponibles al cotizar.</p></details>
+        <details class="faq-item"><summary>¿Dan factura?</summary><p>Sí, contamos con facturación disponible. Solo indícanos que la necesitas y comparte tus datos fiscales.</p></details>
+        <details class="faq-item"><summary>¿Qué son las cámaras corporales?</summary><p>Es una medida de seguridad y transparencia: nuestro personal puede grabar el servicio para que tengas evidencia del cuidado con que manejamos tus pertenencias. Tu tranquilidad es lo primero.</p></details>
+        <details class="faq-item"><summary>¿Con cuánta anticipación debo agendar?</summary><p>Recomendamos agendar con al menos 1 día de anticipación a la fecha que necesitas, aunque también atendemos servicios urgentes según disponibilidad.</p></details>
+        <details class="faq-item"><summary>¿Hacen mudanzas de oficinas y comercios?</summary><p>Sí, realizamos mudanzas corporativas coordinando los tiempos para afectar lo menos posible la operación de tu negocio.</p></details>
+        <details class="faq-item"><summary>¿Transportan motos u objetos delicados?</summary><p>Sí. Transportamos motocicletas, objetos delicados, obras de arte, mobiliario para eventos y equipo comercial con maniobras especiales.</p></details>
+        <details class="faq-item"><summary>¿Hacen fletes pequeños de pocos muebles?</summary><p>Por supuesto. Tenemos fletes express ideales cuando solo necesitas mover una o pocas piezas, a buen precio y rápido.</p></details>
+        <details class="faq-item"><summary>¿Cuántos años de experiencia tienen?</summary><p>Más de 25 años moviendo familias y empresas. Esa trayectoria respalda cada servicio que realizamos.</p></details>
+        <details class="faq-item"><summary>¿El personal es de confianza?</summary><p>Sí. Trabajamos con personal capacitado e identificado, y supervisamos el servicio para garantizar profesionalismo y seguridad en todo momento.</p></details>
+        <details class="faq-item"><summary>¿Trabajan fines de semana?</summary><p>Sí, tenemos disponibilidad todos los días. Escríbenos y agendamos según la fecha que mejor te convenga.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== CTA FINAL ====================== -->
+  <section class="final-cta">
+    <div class="container final-cta__inner">
+      <h2>¿Listo para una mudanza sin estrés?</h2>
+      <p>Manda mensaje ahora y recibe tu cotización en minutos. Nos adaptamos a tu presupuesto.</p>
+      <div class="final-cta__actions">
+        <a href="https://wa.me/527228300083?text=Hola%2C%20quiero%20cotizar%20mi%20mudanza%20ahora." class="btn btn--whatsapp btn--lg" target="_blank" rel="noopener">
+          <svg class="ico-wa" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.05 4.91A9.82 9.82 0 0 0 12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.91-7.02ZM12.04 20.15h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.11.82.83-3.04-.2-.31a8.18 8.18 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.69 8.23-8.23 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"/></svg>
+          Mandar mensaje ahora
+        </a>
+        <a href="tel:+527228300083" class="btn btn--ghost btn--light btn--lg">📞 Llamar 722 830 0083</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ====================== FOOTER ====================== -->
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__col footer__brand">
+      <img src="assets/img/logo-mudanzas-metepec.jpeg" alt="Logo Mudanzas Metepec" class="footer__logo" width="56" height="56" />
+      <p class="footer__name">Mudanzas Metepec</p>
+      <p class="footer__slogan">Conoce el arte de mudarte</p>
+      <p class="footer__desc">Mudanzas, fletes y transporte con más de 25 años de experiencia en Metepec, Toluca y toda la República Mexicana.</p>
+    </div>
+    <div class="footer__col">
+      <h3>Servicios</h3>
+      <ul>
+        <li><a href="#servicios">Mudanzas residenciales</a></li>
+        <li><a href="#servicios">Mudanzas foráneas</a></li>
+        <li><a href="#servicios">Mudanzas corporativas</a></li>
+        <li><a href="#servicios">Fletes express</a></li>
+        <li><a href="#servicios">Transporte especial</a></li>
+        <li><a href="#servicios">Empaque y protección</a></li>
+      </ul>
+    </div>
+    <div class="footer__col">
+      <h3>Enlaces</h3>
+      <ul>
+        <li><a href="#a-tu-medida">Servicio a tu medida</a></li>
+        <li><a href="#proceso">Cómo trabajamos</a></li>
+        <li><a href="#cobertura">Cobertura</a></li>
+        <li><a href="#opiniones">Opiniones</a></li>
+        <li><a href="#faq">Preguntas frecuentes</a></li>
+        <li><a href="#cotizar">Cotizar</a></li>
+      </ul>
+    </div>
+    <div class="footer__col">
+      <h3>Contacto</h3>
+      <ul class="footer__contact">
+        <li><a href="tel:+527228300083">📞 722 830 0083</a></li>
+        <li><a href="https://wa.me/527228300083?text=Hola%2C%20me%20interesa%20cotizar%20una%20mudanza." target="_blank" rel="noopener">💬 WhatsApp</a></li>
+        <li>📍 Metepec, Estado de México</li>
+        <li>🕒 Siempre disponibles</li>
+      </ul>
+      <div class="footer__social">
+        <a href="https://www.facebook.com/share/1FBwqgPHJU/" target="_blank" rel="noopener" aria-label="Facebook">Facebook</a>
+        <a href="https://www.tiktok.com/@mudanzas.metepec" target="_blank" rel="noopener" aria-label="TikTok">TikTok</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <div class="container">
+      <p>© <span id="year"></span> Mudanzas Metepec · Todos los derechos reservados.</p>
+      <p>Mudanzas en Metepec, Toluca, Estado de México, CDMX y toda la República Mexicana.</p>
+      <p class="footer__ver">Versión del sitio: <strong>5.0</strong> · Mundo en movimiento (animación continua) · build 2026-06-14</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ====================== BOTÓN FLOTANTE WHATSAPP ====================== -->
+<a href="https://wa.me/527228300083?text=Hola%2C%20me%20interesa%20cotizar%20una%20mudanza." class="wa-float" target="_blank" rel="noopener" aria-label="Cotizar por WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.05 4.91A9.82 9.82 0 0 0 12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.91-7.02ZM12.04 20.15h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.11.82.83-3.04-.2-.31a8.18 8.18 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.69 8.23-8.23 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"/></svg>
+</a>
+
+<!-- ====================== BARRA MÓVIL DE CONTACTO ====================== -->
+<div class="mobile-bar">
+  <a href="tel:+527228300083" class="mobile-bar__btn mobile-bar__btn--call">📞 Llamar</a>
+  <a href="https://wa.me/527228300083?text=Hola%2C%20me%20interesa%20cotizar%20una%20mudanza." class="mobile-bar__btn mobile-bar__btn--wa" target="_blank" rel="noopener">💬 WhatsApp</a>
+</div>
+
+<script src="script.js?v=5"></script>
+</body>
+</html>
