@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="mudanzas.css?v=10" />
+<link rel="stylesheet" href="mudanzas.css?v=11" />
 
 <script type="application/ld+json">
 {
@@ -37,7 +37,7 @@
 
 <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-<script defer src="mudanzas.js?v=10"></script>
+<script defer src="mudanzas.js?v=11"></script>
 </head>
 
 <body>
@@ -45,103 +45,91 @@
 <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
 
 <header class="topbar" id="topbar">
-  <a href="#acto1" class="topbar__brand" aria-label="Mudanzas Metepec">
+  <a href="#hero" class="topbar__brand" aria-label="Mudanzas Metepec">
     <img src="assets/img/logo-mudanzas-metepec.jpeg" alt="Mudanzas Metepec" width="32" height="32" />
     <span>Mudanzas Metepec</span>
   </a>
   <a href="https://wa.me/527228300083?text=Hola%2C%20me%20interesa%20cotizar%20una%20mudanza." class="topbar__wa" target="_blank" rel="noopener">WhatsApp</a>
 </header>
 
-<main>
+<main id="scroller">
 
-  <!-- ============ ACTO 1 · IMPACTO ============ -->
-  <section class="act act1" id="acto1">
+  <!-- ===== ESCENA 1 · HERO (pinned) ===== -->
+  <section class="scene scene--hero" id="hero">
     <!-- [VIDEO REAL HERO] -> sustituir .media__layer por:
          <video class="media__el" autoplay muted loop playsinline poster="assets/video/hero.jpg">
            <source src="assets/video/hero.mp4" type="video/mp4"></video> -->
-    <div class="media media--hero" data-parallax="0.18">
-      <div class="media__layer is-live"></div>
-      <div class="media__frame"></div>
-      <span class="media__tag"><i></i>Video real hero</span>
-    </div>
-    <div class="act1__veil"></div>
-    <div class="act1__content">
-      <p class="act1__eyebrow" data-mask>Mudanzas Metepec</p>
-      <h1 class="display" data-mask>Conoce el arte<br>de mudarte</h1>
-      <p class="act1__sub" data-mask>+25 años cuidando hogares, empresas e historias.</p>
+    <div class="media media--hero"><div class="media__layer is-live"></div><div class="media__frame"></div><span class="media__tag"><i></i>Video real hero</span></div>
+    <div class="veil"></div>
+    <div class="scene__inner hero__inner">
+      <p class="hero__eyebrow" data-mask>Mudanzas Metepec</p>
+      <h1 class="hero__title display" data-mask>Conoce el arte<br>de mudarte</h1>
+      <p class="hero__sub" data-mask>+25 años cuidando hogares, empresas e historias.</p>
       <a href="https://wa.me/527228300083?text=Hola%2C%20me%20interesa%20cotizar%20una%20mudanza." class="cta" target="_blank" rel="noopener" data-mask><span>Cotizar por WhatsApp</span></a>
     </div>
     <span class="scroll-hint" aria-hidden="true"><i></i></span>
   </section>
 
-  <!-- ============ ACTO 2 · CONFIANZA ============ -->
-  <section class="act act2" id="confianza">
-    <div class="media media--team" data-parallax="0.14">
-      <div class="media__layer is-live"></div>
-      <div class="media__frame"></div>
-      <span class="media__tag"><i></i>Foto real equipo</span>
-    </div>
-    <div class="act2__veil"></div>
-    <div class="act2__stage">
-      <p class="act-label">En quién estás confiando</p>
+  <!-- ===== ESCENA 2 · CONFIANZA (pinned, datos uno por uno) ===== -->
+  <section class="scene scene--trust" id="confianza">
+    <div class="media media--team"><div class="media__layer is-live"></div><div class="media__frame"></div><span class="media__tag"><i></i>Foto real equipo</span></div>
+    <div class="veil"></div>
+    <p class="label trust__label">En quién estás confiando</p>
+    <div class="scene__inner">
       <div class="statements">
-        <span class="statement" data-i="0"><span class="statement__idx">01</span><span class="statement__big">+25 años</span><span class="statement__sub">de experiencia real</span></span>
-        <span class="statement" data-i="1"><span class="statement__idx">02</span><span class="statement__big">Camiones cerrados</span><span class="statement__sub">tus cosas, protegidas</span></span>
-        <span class="statement" data-i="2"><span class="statement__idx">03</span><span class="statement__big">Cámaras corporales</span><span class="statement__sub">transparencia total</span></span>
-        <span class="statement" data-i="3"><span class="statement__idx">04</span><span class="statement__big">Pago con tarjeta</span><span class="statement__sub">como debe ser</span></span>
-        <span class="statement" data-i="4"><span class="statement__idx">05</span><span class="statement__big">Facturación</span><span class="statement__sub">empresa formal</span></span>
+        <span class="statement"><span class="statement__idx">01</span><span class="statement__big display">+25 años</span><span class="statement__sub">de experiencia real</span></span>
+        <span class="statement"><span class="statement__idx">02</span><span class="statement__big display">Camiones cerrados</span><span class="statement__sub">tus cosas, protegidas</span></span>
+        <span class="statement"><span class="statement__idx">03</span><span class="statement__big display">Cámaras corporales</span><span class="statement__sub">transparencia total</span></span>
+        <span class="statement"><span class="statement__idx">04</span><span class="statement__big display">Pago con tarjeta</span><span class="statement__sub">como debe ser</span></span>
+        <span class="statement"><span class="statement__idx">05</span><span class="statement__big display">Facturación</span><span class="statement__sub">empresa formal</span></span>
       </div>
     </div>
   </section>
 
-  <!-- ============ ACTO 3 · CUIDADO (pin) ============ -->
-  <section class="act act3" id="cuidado">
-    <div class="care__media">
-      <!-- [FOTO REAL EMPAQUE] una imagen por paso -->
-      <div class="care__slide is-active" data-slide="0"><div class="media__layer"></div><span class="media__tag"><i></i>Foto real · Cobijas</span></div>
-      <div class="care__slide" data-slide="1"><div class="media__layer"></div><span class="media__tag"><i></i>Foto real · Emplaye</span></div>
-      <div class="care__slide" data-slide="2"><div class="media__layer"></div><span class="media__tag"><i></i>Foto real · Burbuja</span></div>
-      <div class="care__slide" data-slide="3"><div class="media__layer"></div><span class="media__tag"><i></i>Foto real · Desarmado</span></div>
-      <div class="care__slide" data-slide="4"><div class="media__layer"></div><span class="media__tag"><i></i>Foto real · Armado</span></div>
-      <div class="care__slide" data-slide="5"><div class="media__layer"></div><span class="media__tag"><i></i>Foto real · Protección</span></div>
-      <div class="care__veil"></div>
-      <div class="care__hud"><span class="care__count" id="careCount">01</span><span class="care__total">/ 06</span><div class="care__bar"><i id="careBar"></i></div></div>
+  <!-- ===== ESCENA 3 · CUIDADO (pinned: imagen fija + texto que cambia) ===== -->
+  <section class="scene scene--care" id="cuidado">
+    <!-- [FOTO REAL EMPAQUE] una toma por paso -->
+    <div class="care__shots">
+      <div class="care__shot"><div class="media__layer"></div></div>
+      <div class="care__shot"><div class="media__layer"></div></div>
+      <div class="care__shot"><div class="media__layer"></div></div>
+      <div class="care__shot"><div class="media__layer"></div></div>
+      <div class="care__shot"><div class="media__layer"></div></div>
+      <div class="care__shot"><div class="media__layer"></div></div>
+      <span class="media__tag"><i></i>Foto real empaque</span>
     </div>
+    <div class="veil"></div>
     <div class="care__steps">
-      <p class="act-label care__label">Cómo cuidamos cada cosa</p>
-      <div class="care__step" data-step="0"><span class="care__word">Cobijas</span><p>Una primera capa que abraza cada mueble.</p></div>
-      <div class="care__step" data-step="1"><span class="care__word">Emplaye</span><p>Sellamos y fijamos para que nada se abra.</p></div>
-      <div class="care__step" data-step="2"><span class="care__word">Burbuja</span><p>Vidrios y frágiles, pieza por pieza.</p></div>
-      <div class="care__step" data-step="3"><span class="care__word">Desarmado</span><p>Camas, roperos y comedores, con técnica.</p></div>
-      <div class="care__step" data-step="4"><span class="care__word">Armado</span><p>Todo vuelve a su lugar en destino.</p></div>
-      <div class="care__step" data-step="5"><span class="care__word">Protección</span><p>El arte está en el detalle.</p></div>
+      <div class="care__step"><span class="care__num">01 — Cómo cuidamos</span><span class="care__word display">Cobijas</span><p class="care__desc">Una primera capa que abraza cada mueble.</p></div>
+      <div class="care__step"><span class="care__num">02 — Cómo cuidamos</span><span class="care__word display">Emplaye</span><p class="care__desc">Sellamos y fijamos para que nada se abra.</p></div>
+      <div class="care__step"><span class="care__num">03 — Cómo cuidamos</span><span class="care__word display">Burbuja</span><p class="care__desc">Vidrios y frágiles, pieza por pieza.</p></div>
+      <div class="care__step"><span class="care__num">04 — Cómo cuidamos</span><span class="care__word display">Desarmado</span><p class="care__desc">Camas, roperos y comedores, con técnica.</p></div>
+      <div class="care__step"><span class="care__num">05 — Cómo cuidamos</span><span class="care__word display">Armado</span><p class="care__desc">Todo vuelve a su lugar en destino.</p></div>
+      <div class="care__step"><span class="care__num">06 — Cómo cuidamos</span><span class="care__word display">Protección</span><p class="care__desc">El arte está en el detalle.</p></div>
     </div>
+    <div class="care__hud"><span class="care__count" id="careCount">01</span><span class="care__total">/ 06</span><div class="care__bar"><i id="careBar"></i></div></div>
   </section>
 
-  <!-- ============ ACTO 4 · SEGURIDAD ============ -->
-  <section class="act act4" id="seguridad">
-    <div class="media media--safety" data-parallax="0.18">
-      <div class="media__layer is-live"></div>
-      <div class="media__frame"></div>
-      <span class="media__tag"><i></i>Foto real cámara corporal</span>
-    </div>
-    <div class="act4__veil"></div>
-    <div class="act4__content">
-      <p class="act-label" data-mask>Seguridad y transparencia</p>
-      <h2 class="display" data-mask>No es una mudanza<br>cualquiera.</h2>
-      <div class="act4__lines">
-        <p data-mask><b>Cámaras corporales</b> — verás cómo cuidamos cada cosa.</p>
-        <p data-mask><b>Unidades cerradas</b> — protegidas en todo el trayecto.</p>
-        <p data-mask><b>Carga profesional</b> — equipo capacitado e identificado.</p>
+  <!-- ===== ESCENA 4 · SEGURIDAD (pinned, líneas una por una) ===== -->
+  <section class="scene scene--safety" id="seguridad">
+    <div class="media media--safety"><div class="media__layer is-live"></div><div class="media__frame"></div><span class="media__tag"><i></i>Foto real cámara corporal</span></div>
+    <div class="veil"></div>
+    <div class="scene__inner safety__inner">
+      <p class="label safety__label">Seguridad y transparencia</p>
+      <h2 class="safety__title display">No es una mudanza<br>cualquiera.</h2>
+      <div class="safety__lines">
+        <p class="safety__line"><b>Cámaras corporales</b> — verás cómo cuidamos cada cosa.</p>
+        <p class="safety__line"><b>Unidades cerradas</b> — protegidas en todo el trayecto.</p>
+        <p class="safety__line"><b>Carga profesional</b> — equipo capacitado e identificado.</p>
       </div>
-      <a href="https://wa.me/527228300083?text=Hola%2C%20quiero%20una%20mudanza%20segura." class="cta cta--light" target="_blank" rel="noopener" data-mask><span>Quiero una mudanza segura</span></a>
+      <a href="https://wa.me/527228300083?text=Hola%2C%20quiero%20una%20mudanza%20segura." class="cta cta--light safety__cta" target="_blank" rel="noopener"><span>Quiero una mudanza segura</span></a>
     </div>
   </section>
 
-  <!-- ============ ACTO 5 · COBERTURA ============ -->
-  <section class="act act5" id="cobertura">
-    <div class="act5__head">
-      <p class="act-label" data-mask>Cobertura nacional</p>
+  <!-- ===== ESCENA 5 · COBERTURA (pinned, mapa con líneas animadas) ===== -->
+  <section class="scene scene--map" id="cobertura">
+    <div class="scene__inner map__head">
+      <p class="label" data-mask>Cobertura nacional</p>
       <h2 class="display" data-mask>De Metepec y Toluca,<br>a todo México.</h2>
     </div>
     <svg class="map" id="map" viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
@@ -162,47 +150,30 @@
     </svg>
   </section>
 
-  <!-- ============ ACTO 6 · PRUEBA SOCIAL ============ -->
-  <section class="act act6" id="opiniones">
-    <div class="act6__veil"></div>
-    <div class="social__stage">
-      <p class="act-label">Lo que dicen quienes ya confiaron</p>
-      <div class="quotes">
-        <figure class="quote is-active" data-i="0">
-          <div class="quote__stars">★★★★★</div>
-          <blockquote>"Muy profesionales y puntuales. Manejaron todo con cuidado. Los recomiendo y los volvería a contratar."</blockquote>
-          <figcaption>Cliente verificado · Metepec</figcaption>
-        </figure>
-        <figure class="quote" data-i="1">
-          <div class="quote__stars">★★★★★</div>
-          <blockquote>"Cuidaron mis pertenencias en carga, viaje y descarga, todo con protección. Quedé satisfecha, 10/10."</blockquote>
-          <figcaption>Cliente verificado · Toluca</figcaption>
-        </figure>
-        <figure class="quote" data-i="2">
-          <div class="quote__stars">★★★★★</div>
-          <blockquote>"Excelente servicio y mucho cuidado con los muebles. ¿Necesitas una mudanza? Son los indicados."</blockquote>
-          <figcaption>Cliente verificado</figcaption>
-        </figure>
-      </div>
-      <a href="https://www.facebook.com/share/1FBwqgPHJU/" class="social__link" target="_blank" rel="noopener">Recomendados al 100% — ver más en Facebook</a>
+  <!-- ===== ESCENA 6 · OPINIONES (pinned, slides grandes) ===== -->
+  <section class="scene scene--reviews" id="opiniones">
+    <div class="veil"></div>
+    <p class="label reviews__label">Lo que dicen quienes ya confiaron</p>
+    <div class="slides">
+      <figure class="slide"><div class="slide__stars">★★★★★</div><blockquote>"Muy profesionales y puntuales. Manejaron todo con cuidado. Los recomiendo y los volvería a contratar."</blockquote><figcaption>Cliente verificado · Metepec</figcaption></figure>
+      <figure class="slide"><div class="slide__stars">★★★★★</div><blockquote>"Cuidaron mis pertenencias en carga, viaje y descarga, todo con protección. Quedé satisfecha, 10/10."</blockquote><figcaption>Cliente verificado · Toluca</figcaption></figure>
+      <figure class="slide"><div class="slide__stars">★★★★★</div><blockquote>"Excelente servicio y mucho cuidado con los muebles. ¿Necesitas una mudanza? Son los indicados."</blockquote><figcaption>Cliente verificado</figcaption></figure>
     </div>
+    <p class="reviews__link"><a href="https://www.facebook.com/share/1FBwqgPHJU/" target="_blank" rel="noopener">Recomendados al 100% — ver más en Facebook</a></p>
   </section>
 
-  <!-- ============ ACTO 7 · COTIZACIÓN ============ -->
-  <section class="act act7" id="cotizar">
+  <!-- ===== ESCENA 7 · COTIZADOR (final) ===== -->
+  <section class="scene scene--quote" id="cotizar">
     <div class="media media--team"><div class="media__layer"></div></div>
-    <div class="act7__veil"></div>
+    <div class="veil"></div>
     <div class="quotebox">
-      <p class="act-label">El último paso</p>
+      <p class="label">El último paso</p>
       <h2 class="display">Cotiza tu mudanza</h2>
       <p class="quotebox__sub">Respuesta rápida, sin compromiso.</p>
       <form id="quoteForm" novalidate>
         <input id="nombre" name="nombre" type="text" autocomplete="name" placeholder="Tu nombre" required />
         <input id="telefono" name="telefono" type="tel" autocomplete="tel" placeholder="Teléfono / WhatsApp" required />
-        <div class="quotebox__row">
-          <input id="origen" name="origen" type="text" placeholder="Origen" required />
-          <input id="destino" name="destino" type="text" placeholder="Destino" required />
-        </div>
+        <div class="quotebox__row"><input id="origen" name="origen" type="text" placeholder="Origen" required /><input id="destino" name="destino" type="text" placeholder="Destino" required /></div>
         <select id="servicio" name="servicio" required>
           <option value="" disabled selected>Tipo de servicio</option>
           <option>Mudanza residencial</option><option>Mudanza foránea</option><option>Mudanza corporativa</option>
@@ -214,7 +185,7 @@
     </div>
     <footer class="foot">
       <p>© <span id="year"></span> Mudanzas Metepec · Metepec, Estado de México · Cobertura nacional</p>
-      <p class="foot__ver">Versión 10.0 · Experiencia cinematográfica · build 2026-06-18</p>
+      <p class="foot__ver">Versión 11.0 · Scroll experience · build 2026-06-18</p>
     </footer>
   </section>
 
