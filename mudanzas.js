@@ -1,225 +1,161 @@
 /* ============================================================
-   MUDANZAS METEPEC · mudanzas.js (v8)
-   - Funcionalidad comercial SIEMPRE activa (nav, form, WhatsApp).
-   - Animación cinematográfica con GSAP como capa de mejora.
-   - Degradación elegante: sin GSAP / reduced-motion -> legible y usable.
-   - Arquitectura lista para conectar con la plataforma interna.
+   MUDANZAS METEPEC · mudanzas.js (v9)
+   Experiencia cinematográfica de 7 actos.
+   - Conversión SIEMPRE activa (form -> WhatsApp, stub plataforma).
+   - GSAP ScrollTrigger: pins, timelines y reveals por máscara.
+   - Degradación: sin GSAP / reduced-motion -> todo visible (CSS).
    ============================================================ */
 (function () {
   'use strict';
 
-  /* ---------- CONFIG (único lugar a tocar para integraciones) ---------- */
   var CONFIG = {
     whatsapp: '527228300083',
-    // Plataforma interna de cotización (Fase 1+). Cuando exista el endpoint,
-    // coloca la URL aquí y los leads se guardarán además de abrir WhatsApp.
-    leadsEndpoint: null, // p.ej. 'https://api.mudanzasmetepec.com/cotizaciones'
+    leadsEndpoint: null,   // Plataforma interna (Fase 1+): pon aquí la URL.
     source: 'web'
   };
-
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ========================================================
-     UI · navegación, header, progreso, capítulo, año
-     ======================================================== */
-  var UI = {
-    init: function () {
-      this.nav();
-      this.year();
-      this.scroll();
-      window.addEventListener('scroll', this.onScroll.bind(this), { passive: true });
-      this.onScroll();
-    },
-    nav: function () {
-      var toggle = document.getElementById('navToggle');
-      var nav = document.getElementById('nav');
-      if (!toggle || !nav) return;
-      toggle.addEventListener('click', function () {
-        var open = nav.classList.toggle('open');
-        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-        // En móvil el menú aparece como overlay simple
-        nav.style.display = open ? 'flex' : '';
-      });
-      nav.querySelectorAll('a').forEach(function (a) {
-        a.addEventListener('click', function () {
-          nav.classList.remove('open'); nav.style.display = '';
-          toggle.setAttribute('aria-expanded', 'false');
-        });
-      });
-    },
-    year: function () {
-      var y = document.getElementById('year');
-      if (y) y.textContent = new Date().getFullYear();
-    },
-    scroll: function () {
-      this.header = document.getElementById('header');
-      this.bar = document.getElementById('progressBar');
-      this.chapterEl = document.getElementById('chapter');
-      this.scenes = Array.prototype.slice.call(document.querySelectorAll('.scene[data-chapter]'));
-      this.ticking = false;
-    },
-    onScroll: function () {
-      if (this.ticking) return;
-      this.ticking = true;
-      var self = this;
+  /* ---------------- UI ---------------- */
+  function initUI() {
+    var topbar = document.getElementById('topbar');
+    var bar = document.getElementById('progressBar');
+    var ticking = false;
+    function onScroll() {
+      if (ticking) return; ticking = true;
       requestAnimationFrame(function () {
-        self.ticking = false;
-        var doc = document.documentElement;
-        var y = window.scrollY || 0;
+        ticking = false;
+        var doc = document.documentElement, y = window.scrollY || 0;
         var max = (doc.scrollHeight - doc.clientHeight) || 1;
-        if (self.header) self.header.classList.toggle('scrolled', y > 8);
-        if (self.bar) self.bar.style.width = Math.min(100, (y / max) * 100) + '%';
-        if (self.chapterEl && self.scenes.length) {
-          var mid = y + window.innerHeight * 0.5, name = self.scenes[0].getAttribute('data-chapter');
-          for (var i = 0; i < self.scenes.length; i++) {
-            if (self.scenes[i].offsetTop <= mid) name = self.scenes[i].getAttribute('data-chapter');
-          }
-          if (self.chapterEl.textContent !== name) self.chapterEl.textContent = name;
+        if (topbar) topbar.classList.toggle('solid', y > 40);
+        if (bar) bar.style.width = Math.min(100, (y / max) * 100) + '%';
+      });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    var yr = document.getElementById('year');
+    if (yr) yr.textContent = new Date().getFullYear();
+  }
+
+  /* ---------------- Cotizador ---------------- */
+  function initQuote() {
+    var form = document.getElementById('quoteForm');
+    if (!form) return;
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+      var g = function (id) { var el = document.getElementById(id); return el && el.value ? el.value.trim() : ''; };
+      var d = {
+        nombre: g('nombre'), telefono: g('telefono'), origen: g('origen'),
+        destino: g('destino'), servicio: g('servicio'),
+        source: CONFIG.source, createdAt: new Date().toISOString()
+      };
+      // Plataforma interna (no bloquea la conversión)
+      if (CONFIG.leadsEndpoint) {
+        try {
+          fetch(CONFIG.leadsEndpoint, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(d), keepalive: true
+          }).catch(function () {});
+        } catch (e2) {}
+      }
+      var msg = ['¡Hola Mudanzas Metepec! Quiero cotizar una mudanza 🚚', '',
+        '👤 ' + d.nombre, '📞 ' + d.telefono, '📍 Origen: ' + d.origen,
+        '🎯 Destino: ' + d.destino, '📦 Servicio: ' + d.servicio, '', '¿Me ayudan con el precio? ¡Gracias!'].join('\n');
+      window.open('https://wa.me/' + CONFIG.whatsapp + '?text=' + encodeURIComponent(msg), '_blank');
+    });
+  }
+
+  /* ---------------- Motion (GSAP) ---------------- */
+  function initMotion() {
+    var gsap = window.gsap, ST = window.ScrollTrigger;
+    if (!gsap || !ST || reduce) return;
+    gsap.registerPlugin(ST);
+    document.body.classList.add('anim');
+    var vh = function () { return window.innerHeight; };
+
+    /* Reveal por máscara genérico (fuera del hero) */
+    gsap.utils.toArray('[data-mask]').forEach(function (el) {
+      if (el.closest('.act1')) return; // el hero se revela al cargar
+      gsap.to(el, {
+        opacity: 1, y: 0, clipPath: 'inset(0 0 0% 0)', duration: 1, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 85%' }
+      });
+    });
+
+    /* Hero: reveal inmediato + parallax */
+    var heroMasks = gsap.utils.toArray('.act1 [data-mask]');
+    gsap.timeline({ delay: 0.15 }).to(heroMasks, {
+      opacity: 1, y: 0, clipPath: 'inset(0 0 0% 0)', duration: 1.1, ease: 'power3.out', stagger: 0.15
+    });
+
+    /* Parallax de medios */
+    gsap.utils.toArray('.media[data-parallax]').forEach(function (m) {
+      var depth = parseFloat(m.getAttribute('data-parallax')) || 0.15;
+      gsap.fromTo(m, { yPercent: -depth * 50 }, {
+        yPercent: depth * 50, ease: 'none',
+        scrollTrigger: { trigger: m.parentNode, start: 'top bottom', end: 'bottom top', scrub: true }
+      });
+    });
+
+    /* ACTO 2 · datos uno por uno (pin + scrub) */
+    var statements = gsap.utils.toArray('.act2 .statement');
+    if (statements.length) {
+      var tl2 = gsap.timeline({
+        scrollTrigger: { trigger: '.act2', start: 'top top', end: '+=' + (statements.length * vh() * 0.7), pin: true, scrub: 0.6 }
+      });
+      statements.forEach(function (s, i) {
+        tl2.fromTo(s, { opacity: 0, y: 50, filter: 'blur(10px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1 });
+        if (i < statements.length - 1) tl2.to(s, { opacity: 0, y: -50, filter: 'blur(10px)', duration: 1 }, '+=0.4');
+      });
+    }
+
+    /* ACTO 3 · media fija + texto que cambia (sticky CSS + toggle) */
+    var steps = gsap.utils.toArray('.care__step');
+    var slides = document.querySelectorAll('.care__slide');
+    steps.forEach(function (step) {
+      var i = parseInt(step.getAttribute('data-step'), 10);
+      ST.create({
+        trigger: step, start: 'top center', end: 'bottom center',
+        onToggle: function (self) {
+          if (!self.isActive) return;
+          steps.forEach(function (s) { s.classList.remove('is-active'); });
+          step.classList.add('is-active');
+          slides.forEach(function (sl) { sl.classList.toggle('is-active', parseInt(sl.getAttribute('data-slide'), 10) === i); });
         }
       });
-    }
-  };
+    });
 
-  /* ========================================================
-     CONTADORES
-     ======================================================== */
-  function animateCount(el) {
-    var target = parseInt(el.getAttribute('data-count'), 10);
-    if (isNaN(target)) return;
-    var start = null, dur = 1300;
-    (function step(ts) {
-      if (!start) start = ts;
-      var p = Math.min((ts - start) / dur, 1), eased = 1 - Math.pow(1 - p, 3);
-      el.textContent = Math.floor(eased * target);
-      if (p < 1) requestAnimationFrame(step); else el.textContent = target;
-    })(performance.now());
-  }
-  function countersViaIO() {
-    var counters = document.querySelectorAll('.stat__num[data-count]');
-    if (!('IntersectionObserver' in window)) { counters.forEach(animateCount); return; }
-    var io = new IntersectionObserver(function (entries, obs) {
-      entries.forEach(function (en) { if (en.isIntersecting) { animateCount(en.target); obs.unobserve(en.target); } });
-    }, { threshold: 0.5 });
-    counters.forEach(function (c) { io.observe(c); });
-  }
+    /* ACTO 5 · rutas del mapa que se trazan + nodos */
+    gsap.utils.toArray('#map .route').forEach(function (p) {
+      var len = p.getTotalLength ? p.getTotalLength() : 300;
+      gsap.set(p, { strokeDasharray: len, strokeDashoffset: len });
+      gsap.to(p, { strokeDashoffset: 0, ease: 'none',
+        scrollTrigger: { trigger: '.act5', start: 'top 70%', end: 'bottom 80%', scrub: true } });
+    });
+    gsap.from('#map .node', { opacity: 0, scale: 0, transformOrigin: 'center', stagger: 0.08, duration: 0.5, ease: 'back.out(2)',
+      scrollTrigger: { trigger: '.act5', start: 'top 55%' } });
 
-  /* ========================================================
-     FORMULARIO · cotizador
-     1) Construye el mensaje y abre WhatsApp (conversión inmediata).
-     2) Envía el lead a la plataforma interna si hay endpoint (Fase 1+).
-     ======================================================== */
-  var Quote = {
-    init: function () {
-      this.form = document.getElementById('quoteForm');
-      if (!this.form) return;
-      this.form.addEventListener('submit', this.onSubmit.bind(this));
-    },
-    data: function () {
-      var g = function (id) { var el = document.getElementById(id); return el && el.value ? el.value.trim() : ''; };
-      return {
-        nombre: g('nombre'), telefono: g('telefono'), origen: g('origen'),
-        destino: g('destino'), fecha: g('fecha'), servicio: g('servicio'),
-        descripcion: g('descripcion'), source: CONFIG.source, createdAt: new Date().toISOString()
-      };
-    },
-    message: function (d) {
-      var l = ['¡Hola Mudanzas Metepec! Quiero solicitar una cotización 🚚', '',
-        '👤 Nombre: ' + d.nombre, '📞 Teléfono: ' + d.telefono,
-        '📍 Origen: ' + d.origen, '🎯 Destino: ' + d.destino];
-      if (d.fecha) l.push('📅 Fecha tentativa: ' + d.fecha);
-      l.push('📦 Servicio: ' + d.servicio);
-      if (d.descripcion) l.push('📝 Detalles: ' + d.descripcion);
-      l.push('', '¿Me pueden ayudar con el precio? ¡Gracias!');
-      return l.join('\n');
-    },
-    // Stub listo para la plataforma interna. No bloquea la conversión.
-    saveLead: function (d) {
-      if (!CONFIG.leadsEndpoint) return; // Fase 0: aún sin backend
-      try {
-        fetch(CONFIG.leadsEndpoint, {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(d), keepalive: true
-        }).catch(function () {/* silencioso: nunca romper la conversión */});
-      } catch (e) {/* noop */}
-    },
-    onSubmit: function (e) {
-      e.preventDefault();
-      if (!this.form.checkValidity()) { this.form.reportValidity(); return; }
-      var d = this.data();
-      this.saveLead(d); // 2) plataforma interna (si está configurada)
-      window.open('https://wa.me/' + CONFIG.whatsapp + '?text=' + encodeURIComponent(this.message(d)), '_blank'); // 1) WhatsApp
-    }
-  };
-
-  /* ========================================================
-     MOTION · GSAP + ScrollTrigger (capa de mejora)
-     ======================================================== */
-  function initMotion() {
-    var gsap = window.gsap;
-    if (!gsap || !window.ScrollTrigger || reduce) { countersViaIO(); return; }
-    gsap.registerPlugin(window.ScrollTrigger);
-    document.body.classList.add('anim');
-
-    // Reveals genéricos por escena
-    gsap.utils.toArray('.scene').forEach(function (scene) {
-      var items = scene.querySelectorAll('[data-reveal]');
-      if (!items.length) return;
-      gsap.to(items, {
-        opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', stagger: 0.1,
-        scrollTrigger: { trigger: scene, start: 'top 78%' }
+    /* ACTO 6 · opiniones que se funden (pin + scrub) */
+    var quotes = gsap.utils.toArray('.act6 .quote');
+    if (quotes.length) {
+      var tl6 = gsap.timeline({
+        scrollTrigger: { trigger: '.act6', start: 'top top', end: '+=' + (quotes.length * vh() * 0.7), pin: true, scrub: 0.6 }
       });
-    });
-
-    // Contadores
-    gsap.utils.toArray('.stat__num[data-count]').forEach(function (c) {
-      window.ScrollTrigger.create({ trigger: c, start: 'top 88%', once: true, onEnter: function () { animateCount(c); } });
-    });
-
-    // Mapa: rutas que se trazan + nodos que se encienden
-    gsap.utils.toArray('#map .route').forEach(function (path) {
-      var len = path.getTotalLength ? path.getTotalLength() : 300;
-      gsap.set(path, { strokeDasharray: len, strokeDashoffset: len });
-      gsap.to(path, { strokeDashoffset: 0, ease: 'none',
-        scrollTrigger: { trigger: '#cobertura', start: 'top 65%', end: 'bottom 75%', scrub: true } });
-    });
-    gsap.from('#map .node', { opacity: 0, scale: 0, transformOrigin: 'center', stagger: 0.07, duration: 0.4, ease: 'back.out(2)',
-      scrollTrigger: { trigger: '#cobertura', start: 'top 60%' } });
-
-    // Servicios y proceso: stagger de tarjetas
-    ['.services__grid .service', '.process__track .pstep'].forEach(function (sel) {
-      gsap.from(sel, { opacity: 0, y: 36, stagger: 0.1, duration: 0.6, ease: 'power3.out',
-        scrollTrigger: { trigger: sel, start: 'top 82%' } });
-    });
-
-    // Animaciones específicas de desktop (media fija + image-swap)
-    var mm = gsap.matchMedia();
-    mm.add('(min-width: 992px)', function () {
-      var steps = gsap.utils.toArray('.care__step');
-      var slides = document.querySelectorAll('.care__slide');
-      steps.forEach(function (step) {
-        var i = parseInt(step.getAttribute('data-step'), 10);
-        window.ScrollTrigger.create({
-          trigger: step, start: 'top 60%', end: 'bottom 60%',
-          onToggle: function (self) {
-            if (!self.isActive) return;
-            steps.forEach(function (s) { s.classList.remove('is-active'); });
-            step.classList.add('is-active');
-            slides.forEach(function (sl) { sl.classList.toggle('is-active', parseInt(sl.getAttribute('data-slide'), 10) === i); });
-          }
-        });
+      quotes.forEach(function (q, i) {
+        tl6.fromTo(q, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1 });
+        if (i < quotes.length - 1) tl6.to(q, { opacity: 0, y: -30, duration: 1 }, '+=0.5');
       });
-    });
+    }
 
-    window.addEventListener('load', function () { window.ScrollTrigger.refresh(); });
+    window.addEventListener('load', function () { ST.refresh(); });
   }
 
-  /* ========================================================
-     ARRANQUE
-     ======================================================== */
+  /* ---------------- Arranque ---------------- */
   function start() {
-    UI.init();
-    Quote.init();
-    initMotion();
+    initUI();
+    initQuote();
+    try { initMotion(); }
+    catch (e) { document.body.classList.remove('anim'); /* fallback: todo visible */ }
   }
   if (document.readyState !== 'loading') start();
   else window.addEventListener('DOMContentLoaded', start);
