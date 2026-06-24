@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Una invitación para ti 💛</title>
+  <meta name="theme-color" content="#fff0f5" />
+  <!-- Open Graph: así se ve bonito al compartir el link por WhatsApp -->
+  <meta property="og:title" content="Tengo una invitación para ti 💛" />
+  <meta property="og:description" content="Toca para abrir tu invitación especial..." />
+  <meta property="og:type" content="website" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(160deg, #fff0f5 0%, #fde7ef 60%, #ffe9d6 100%);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      overflow: hidden;
+      padding: 16px;
+    }
+    .tarjeta {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 40px 30px;
+      border-radius: 26px;
+      border: 1.5px solid #f4c0d1;
+      background: #fff;
+      box-shadow: 0 10px 44px rgba(212,83,126,0.16);
+      max-width: 360px;
+      width: 100%;
+      min-height: 320px;
+      user-select: none;
+      overflow: hidden;
+    }
+
+    /* Pantalla 1: invitación cerrada */
+    #cerrada {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      cursor: pointer;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    #cerrada .sello { font-size: 60px; animation: pulso 1.5s infinite; line-height: 1; }
+    @keyframes pulso { 0%,100%{transform:scale(1);} 50%{transform:scale(1.15) rotate(-3deg);} }
+    #cerrada .saludo { font-size: 22px; font-weight: 700; color: #c4406c; text-align: center; }
+    #cerrada .toca { font-size: 15px; color: #b56080; text-align: center; line-height: 1.5; }
+    #cerrada .boton {
+      margin-top: 6px;
+      background: linear-gradient(135deg, #e86a96, #c4406c);
+      color: #fff; border: none; border-radius: 30px;
+      padding: 13px 30px; font-size: 16px; font-weight: 700;
+      cursor: pointer; box-shadow: 0 6px 18px rgba(196,64,108,0.32);
+      transition: transform 0.15s;
+    }
+    #cerrada .boton:active { transform: scale(0.95); }
+
+    /* Pantalla 2: invitación abierta */
+    #abierta { display: none; flex-direction: column; align-items: center; gap: 14px; animation: aparecer 0.6s cubic-bezier(.34,1.56,.64,1); }
+    @keyframes aparecer { from{opacity:0;transform:scale(0.6);} to{opacity:1;transform:scale(1);} }
+    #abierta .emojis { font-size: 40px; line-height: 1; }
+    #abierta .titulo { font-size: 26px; font-weight: 800; color: #c4406c; text-align: center; line-height: 1.25; }
+    #abierta .detalle {
+      display: flex; flex-direction: column; gap: 4px;
+      background: #fff5f8; border: 1px dashed #f0a8c2; border-radius: 16px;
+      padding: 14px 22px; text-align: center;
+    }
+    #abierta .detalle .cuando { font-size: 20px; font-weight: 700; color: #b8345f; }
+    #abierta .detalle .que { font-size: 14px; color: #b56080; }
+    #abierta .frase { font-size: 16px; color: #7a4a5c; text-align: center; line-height: 1.55; font-style: italic; padding: 0 4px; }
+    #abierta .firma { font-size: 14px; color: #b56080; }
+    #abierta .si {
+      margin-top: 4px;
+      background: linear-gradient(135deg, #e86a96, #c4406c);
+      color: #fff; border: none; border-radius: 30px;
+      padding: 13px 34px; font-size: 17px; font-weight: 700;
+      cursor: pointer; box-shadow: 0 6px 18px rgba(196,64,108,0.32);
+      transition: transform 0.15s;
+    }
+    #abierta .si:active { transform: scale(0.95); }
+
+    /* Pantalla 3: confirmación */
+    #si-dicho { display: none; flex-direction: column; align-items: center; gap: 14px; animation: aparecer 0.6s cubic-bezier(.34,1.56,.64,1); }
+    #si-dicho .titulo { font-size: 30px; font-weight: 800; color: #c4406c; text-align: center; line-height: 1.2; }
+    #si-dicho .sub { font-size: 16px; color: #7a4a5c; text-align: center; line-height: 1.55; }
+
+    #volver { margin-top: 4px; font-size: 13px; color: #c4406c; background: none; border: 1px solid #f4c0d1; border-radius: 20px; padding: 6px 18px; cursor: pointer; }
+
+    /* Corazones / confeti flotante */
+    .corazon { position: fixed; font-size: 26px; pointer-events: none; animation: flotar linear forwards; opacity: 0; z-index: 50; }
+    @keyframes flotar { 0%{opacity:1;transform:translateY(0) scale(1);} 100%{opacity:0;transform:translateY(-240px) scale(0.4);} }
+  </style>
+</head>
+<body>
+  <div class="tarjeta">
+    <!-- 1) Cerrada -->
+    <div id="cerrada" onclick="abrir()">
+      <div class="sello">💌</div>
+      <div class="saludo">Para Gaby 💛</div>
+      <div class="toca">Tengo una invitación<br>muy especial para ti…</div>
+      <button class="boton" type="button">Toca para abrir ✨</button>
+    </div>
+
+    <!-- 2) Abierta -->
+    <div id="abierta">
+      <div class="emojis">⚽🇲🇽💛</div>
+      <div class="titulo">¿Vemos juntos<br>el partido de México?</div>
+      <div class="detalle">
+        <span class="cuando">Hoy · 7:00 PM</span>
+        <span class="que">Selección Mexicana · tú y yo</span>
+      </div>
+      <div class="frase">"No me importa quién gane el partido…<br>contigo a mi lado yo ya gané. Eres mi lugar favorito, Gaby."</div>
+      <div class="firma">Con todo mi corazón 💕</div>
+      <button class="si" type="button" onclick="aceptar(event)">¡Sí, acepto! 💛</button>
+    </div>
+
+    <!-- 3) Confirmación -->
+    <div id="si-dicho">
+      <div class="titulo">¡Es una cita! 🥳💖</div>
+      <div class="sub">Hoy a las 7, México y nosotros.<br>Prepárate para porras, abrazos<br>y muchos goles de cariño ⚽💛</div>
+      <button id="volver" type="button" onclick="reiniciar(event)">volver</button>
+    </div>
+  </div>
+
+  <script>
+    let abierta = false;
+
+    function lluvia(emojis, total) {
+      let n = 0;
+      const iv = setInterval(() => {
+        const el = document.createElement('span');
+        el.className = 'corazon';
+        el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        el.style.left = (3 + Math.random() * 94) + 'vw';
+        el.style.top = (55 + Math.random() * 35) + 'vh';
+        el.style.fontSize = (18 + Math.random() * 18) + 'px';
+        el.style.animationDuration = (1.6 + Math.random() * 1.6) + 's';
+        document.body.appendChild(el);
+        el.addEventListener('animationend', () => el.remove());
+        if (++n >= total) clearInterval(iv);
+      }, 90);
+    }
+
+    function abrir() {
+      if (abierta) return; abierta = true;
+      const c = document.getElementById('cerrada');
+      c.style.opacity = '0'; c.style.transform = 'scale(0.9)';
+      setTimeout(() => {
+        c.style.display = 'none';
+        document.getElementById('abierta').style.display = 'flex';
+      }, 280);
+      lluvia(['❤️','💕','💖','💗','💝','🌸','✨'], 20);
+    }
+
+    function aceptar(e) {
+      e.stopPropagation();
+      document.getElementById('abierta').style.display = 'none';
+      document.getElementById('si-dicho').style.display = 'flex';
+      lluvia(['💛','⚽','🇲🇽','🎉','💖','✨','🥳'], 32);
+    }
+
+    function reiniciar(e) {
+      e.stopPropagation(); abierta = false;
+      document.getElementById('si-dicho').style.display = 'none';
+      const c = document.getElementById('cerrada');
+      c.style.display = 'flex'; c.style.opacity = '1'; c.style.transform = 'scale(1)';
+    }
+  </script>
+</body>
+</html>
