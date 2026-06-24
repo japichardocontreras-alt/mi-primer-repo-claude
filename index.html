@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="theme-color" content="#070809" />
+<meta name="theme-color" content="#0B0B0C" />
 
-<title>Mudanzas Metepec | Conoce el arte de mudarte</title>
-<meta name="description" content="El arte de mudarte. +25 años cuidando hogares, empresas e historias en Metepec, Toluca y toda la República. Camiones cerrados, cámaras corporales, facturación y pago con tarjeta." />
+<title>Mudanzas Metepec | El arte de mudarte</title>
+<meta name="description" content="Mudanzas y fletes con +25 años de experiencia en Metepec, Toluca y toda la República. Camiones cerrados, cámaras corporales, emplaye profesional, facturación y pago con tarjeta. Cotiza sin compromiso por WhatsApp." />
 <meta name="robots" content="index, follow" />
 <link rel="canonical" href="https://www.mudanzasmetepec.com/" />
 <meta property="og:type" content="website" />
-<meta property="og:title" content="Mudanzas Metepec | Conoce el arte de mudarte" />
-<meta property="og:description" content="+25 años cuidando hogares, empresas e historias. Cotiza en 2 minutos por WhatsApp." />
+<meta property="og:title" content="Mudanzas Metepec | El arte de mudarte" />
+<meta property="og:description" content="Mudamos lo que importa. +25 años cuidando tu patrimonio. Cobertura nacional. Cotiza por WhatsApp." />
 <meta property="og:locale" content="es_MX" />
 <meta property="og:url" content="https://www.mudanzasmetepec.com/" />
 <meta property="og:image" content="https://www.mudanzasmetepec.com/assets/img/logo-mudanzas-metepec.jpeg" />
@@ -19,17 +19,17 @@
 <link rel="icon" type="image/jpeg" href="assets/img/logo-mudanzas-metepec.jpeg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="mudanzas.css?v=11" />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@500;600;700;800&family=Inter:wght@400;500;600&family=Caveat:wght@600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="mudanzas.css?v=12" />
 
 <script type="application/ld+json">
 {
   "@context":"https://schema.org","@type":"MovingCompany","name":"Mudanzas Metepec",
   "image":"https://www.mudanzasmetepec.com/assets/img/logo-mudanzas-metepec.jpeg",
-  "url":"https://www.mudanzasmetepec.com/","telephone":"+527228300083","slogan":"Conoce el arte de mudarte",
+  "url":"https://www.mudanzasmetepec.com/","telephone":"+527228300083","slogan":"El arte de mudarte",
   "priceRange":"$$","foundingDate":"1999",
   "address":{"@type":"PostalAddress","addressLocality":"Metepec","addressRegion":"Estado de México","addressCountry":"MX"},
-  "areaServed":["Metepec","Toluca","Ciudad de México","Querétaro","Puebla","Veracruz","Guadalajara","Cancún"],
+  "areaServed":["Metepec","Toluca","Ciudad de México","Querétaro","Puebla","Veracruz","Guadalajara","Cancún","Chiapas"],
   "sameAs":["https://www.facebook.com/share/1FBwqgPHJU/","https://www.tiktok.com/@mudanzas.metepec"],
   "aggregateRating":{"@type":"AggregateRating","ratingValue":"5","reviewCount":"11","bestRating":"5"}
 }
@@ -37,7 +37,7 @@
 
 <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-<script defer src="mudanzas.js?v=11"></script>
+<script defer src="mudanzas.js?v=12"></script>
 </head>
 
 <body>
@@ -46,94 +46,125 @@
 
 <header class="topbar" id="topbar">
   <a href="#hero" class="topbar__brand" aria-label="Mudanzas Metepec">
-    <img src="assets/img/logo-mudanzas-metepec.jpeg" alt="Mudanzas Metepec" width="32" height="32" />
-    <span>Mudanzas Metepec</span>
+    <img src="assets/img/logo-mudanzas-metepec.jpeg" alt="Mudanzas Metepec" width="38" height="38" />
+    <span><b>MUDANZAS METEPEC</b><i>El arte de mudarte</i></span>
   </a>
   <a href="https://wa.me/527228300083?text=Hola%2C%20me%20interesa%20cotizar%20una%20mudanza." class="topbar__wa" target="_blank" rel="noopener">WhatsApp</a>
 </header>
 
-<main id="scroller">
+<main>
 
-  <!-- ===== ESCENA 1 · HERO (pinned) ===== -->
-  <section class="scene scene--hero" id="hero">
-    <!-- [VIDEO REAL HERO] -> sustituir .media__layer por:
-         <video class="media__el" autoplay muted loop playsinline poster="assets/video/hero.jpg">
-           <source src="assets/video/hero.mp4" type="video/mp4"></video> -->
-    <div class="media media--hero"><div class="media__layer is-live"></div><div class="media__frame"></div><span class="media__tag"><i></i>Video real hero</span></div>
+  <!-- ===== 1 · HERO (video real) ===== -->
+  <section class="scene hero" id="hero">
+    <div class="media">
+      <!-- VIDEO REAL · comprimir a ~1080p y <6MB antes de producción -->
+      <video class="bgvideo" autoplay muted loop playsinline preload="metadata" poster="assets/img/logo-mudanzas-metepec.jpeg">
+        <source src="assets/video/promo-1.mp4" type="video/mp4" />
+      </video>
+    </div>
     <div class="veil"></div>
-    <div class="scene__inner hero__inner">
-      <p class="hero__eyebrow" data-mask>Mudanzas Metepec</p>
-      <h1 class="hero__title display" data-mask>Conoce el arte<br>de mudarte</h1>
-      <p class="hero__sub" data-mask>+25 años cuidando hogares, empresas e historias.</p>
-      <a href="https://wa.me/527228300083?text=Hola%2C%20me%20interesa%20cotizar%20una%20mudanza." class="cta" target="_blank" rel="noopener" data-mask><span>Cotizar por WhatsApp</span></a>
+    <span class="slash" style="top:22%;left:-30px" aria-hidden="true"></span>
+    <div class="inner hero__inner">
+      <p class="hero__kicker" data-mask>Mudanzas y fletes · +25 años</p>
+      <h1 class="hero__title impact" data-mask>El <span class="brush">arte</span><span class="script">de mudarte</span></h1>
+      <p class="hero__sub" data-mask>Mudamos lo que importa. Cuidamos tu patrimonio y lo llevamos a donde nos necesites.</p>
+      <div class="hero__cta" data-mask>
+        <a href="https://wa.me/527228300083?text=Hola%2C%20me%20interesa%20cotizar%20una%20mudanza." class="cta" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 4.9A9.8 9.8 0 0 0 12 2C6.6 2 2.1 6.5 2.1 11.9c0 1.8.5 3.5 1.3 5L2 22l5.3-1.4a9.9 9.9 0 0 0 4.8 1.2c5.5 0 9.9-4.4 9.9-9.9 0-2.6-1-5.1-2.9-7Z"/></svg>
+          Cotizar por WhatsApp
+        </a>
+        <a href="tel:+527228300083" class="hero__phone">722 830 0083</a>
+      </div>
     </div>
     <span class="scroll-hint" aria-hidden="true"><i></i></span>
   </section>
 
-  <!-- ===== ESCENA 2 · CONFIANZA (pinned, datos uno por uno) ===== -->
-  <section class="scene scene--trust" id="confianza">
-    <div class="media media--team"><div class="media__layer is-live"></div><div class="media__frame"></div><span class="media__tag"><i></i>Foto real equipo</span></div>
+  <!-- ===== 2 · CONFIANZA ===== -->
+  <section class="scene trust" id="confianza">
+    <div class="media"><div class="media__panel"></div><div class="media__frame"></div><span class="media__tag"><i></i>Foto real · equipo</span></div>
     <div class="veil"></div>
     <p class="label trust__label">En quién estás confiando</p>
-    <div class="scene__inner">
-      <div class="statements">
-        <span class="statement"><span class="statement__idx">01</span><span class="statement__big display">+25 años</span><span class="statement__sub">de experiencia real</span></span>
-        <span class="statement"><span class="statement__idx">02</span><span class="statement__big display">Camiones cerrados</span><span class="statement__sub">tus cosas, protegidas</span></span>
-        <span class="statement"><span class="statement__idx">03</span><span class="statement__big display">Cámaras corporales</span><span class="statement__sub">transparencia total</span></span>
-        <span class="statement"><span class="statement__idx">04</span><span class="statement__big display">Pago con tarjeta</span><span class="statement__sub">como debe ser</span></span>
-        <span class="statement"><span class="statement__idx">05</span><span class="statement__big display">Facturación</span><span class="statement__sub">empresa formal</span></span>
+    <div class="inner">
+      <div class="stmts">
+        <span class="stmt"><span class="stmt__k">01</span><span class="stmt__big">+25 años</span><span class="stmt__sub">de experiencia real</span></span>
+        <span class="stmt"><span class="stmt__k">02</span><span class="stmt__big">Cobertura nacional</span><span class="stmt__sub">vamos a donde nos necesites</span></span>
+        <span class="stmt"><span class="stmt__k">03</span><span class="stmt__big">Recomendados 100%</span><span class="stmt__sub">opiniones reales de clientes</span></span>
+        <span class="stmt"><span class="stmt__k">04</span><span class="stmt__big">Atención inmediata</span><span class="stmt__sub">respondemos sin compromiso</span></span>
       </div>
     </div>
   </section>
 
-  <!-- ===== ESCENA 3 · CUIDADO (pinned: imagen fija + texto que cambia) ===== -->
-  <section class="scene scene--care" id="cuidado">
-    <!-- [FOTO REAL EMPAQUE] una toma por paso -->
+  <!-- ===== 3 · POR QUÉ NOSOTROS ===== -->
+  <section class="scene why" id="porque">
+    <div class="media"><div class="media__panel"></div><div class="media__frame"></div><span class="media__tag"><i></i>Foto real · unidad</span></div>
+    <div class="veil"></div>
+    <div class="inner why__inner">
+      <p class="label" data-mask>Por qué nosotros</p>
+      <h2 class="why__title impact" data-mask>No somos<br>cualquier <span class="brush--red brush">mudanza</span></h2>
+      <div class="why__list">
+        <div class="why__item" data-mask><span class="why__n">01</span><b>Cámaras corporales</b><span>Grabamos el servicio. Transparencia total y tranquilidad para ti.</span></div>
+        <div class="why__item" data-mask><span class="why__n">02</span><b>Camiones cerrados</b><span>Tus cosas, protegidas del polvo, la lluvia y la vía pública.</span></div>
+        <div class="why__item" data-mask><span class="why__n">03</span><b>Emplaye profesional</b><span>Empaque y protección que cuidan cada mueble como nuestro.</span></div>
+        <div class="why__item" data-mask><span class="why__n">04</span><b>Factura y tarjeta</b><span>Facturación disponible y pago con tarjeta. Empresa formal.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 4 · CUIDADO ===== -->
+  <section class="scene care" id="cuidado">
     <div class="care__shots">
-      <div class="care__shot"><div class="media__layer"></div></div>
-      <div class="care__shot"><div class="media__layer"></div></div>
-      <div class="care__shot"><div class="media__layer"></div></div>
-      <div class="care__shot"><div class="media__layer"></div></div>
-      <div class="care__shot"><div class="media__layer"></div></div>
-      <div class="care__shot"><div class="media__layer"></div></div>
-      <span class="media__tag"><i></i>Foto real empaque</span>
+      <div class="care__shot"><div class="media__panel"></div></div>
+      <div class="care__shot"><div class="media__panel"></div></div>
+      <div class="care__shot"><div class="media__panel"></div></div>
+      <div class="care__shot"><div class="media__panel"></div></div>
+      <div class="care__shot"><div class="media__panel"></div></div>
+      <div class="care__shot"><div class="media__panel"></div></div>
+      <span class="media__tag"><i></i>Foto real · empaque</span>
     </div>
     <div class="veil"></div>
     <div class="care__steps">
-      <div class="care__step"><span class="care__num">01 — Cómo cuidamos</span><span class="care__word display">Cobijas</span><p class="care__desc">Una primera capa que abraza cada mueble.</p></div>
-      <div class="care__step"><span class="care__num">02 — Cómo cuidamos</span><span class="care__word display">Emplaye</span><p class="care__desc">Sellamos y fijamos para que nada se abra.</p></div>
-      <div class="care__step"><span class="care__num">03 — Cómo cuidamos</span><span class="care__word display">Burbuja</span><p class="care__desc">Vidrios y frágiles, pieza por pieza.</p></div>
-      <div class="care__step"><span class="care__num">04 — Cómo cuidamos</span><span class="care__word display">Desarmado</span><p class="care__desc">Camas, roperos y comedores, con técnica.</p></div>
-      <div class="care__step"><span class="care__num">05 — Cómo cuidamos</span><span class="care__word display">Armado</span><p class="care__desc">Todo vuelve a su lugar en destino.</p></div>
-      <div class="care__step"><span class="care__num">06 — Cómo cuidamos</span><span class="care__word display">Protección</span><p class="care__desc">El arte está en el detalle.</p></div>
+      <div class="care__step"><span class="care__num">01 — Cuidamos lo que importa</span><span class="care__word">Cobijas</span><p class="care__desc">Una primera capa que abraza cada mueble.</p></div>
+      <div class="care__step"><span class="care__num">02 — Cuidamos lo que importa</span><span class="care__word">Emplaye</span><p class="care__desc">Sellamos y fijamos para que nada se abra.</p></div>
+      <div class="care__step"><span class="care__num">03 — Cuidamos lo que importa</span><span class="care__word">Burbuja</span><p class="care__desc">Vidrios y frágiles, pieza por pieza.</p></div>
+      <div class="care__step"><span class="care__num">04 — Cuidamos lo que importa</span><span class="care__word">Desarmado</span><p class="care__desc">Camas, roperos y comedores, con técnica.</p></div>
+      <div class="care__step"><span class="care__num">05 — Cuidamos lo que importa</span><span class="care__word">Armado</span><p class="care__desc">Todo vuelve a su lugar en destino.</p></div>
+      <div class="care__step"><span class="care__num">06 — Cuidamos lo que importa</span><span class="care__word">Protección</span><p class="care__desc">El arte está en el detalle.</p></div>
     </div>
     <div class="care__hud"><span class="care__count" id="careCount">01</span><span class="care__total">/ 06</span><div class="care__bar"><i id="careBar"></i></div></div>
   </section>
 
-  <!-- ===== ESCENA 4 · SEGURIDAD (pinned, líneas una por una) ===== -->
-  <section class="scene scene--safety" id="seguridad">
-    <div class="media media--safety"><div class="media__layer is-live"></div><div class="media__frame"></div><span class="media__tag"><i></i>Foto real cámara corporal</span></div>
+  <!-- ===== 5 · SEGURIDAD (video real 2) ===== -->
+  <section class="scene safety" id="seguridad">
+    <div class="media">
+      <video class="bgvideo" id="safetyVideo" muted loop playsinline preload="none" poster="assets/img/logo-mudanzas-metepec.jpeg">
+        <source src="assets/video/promo-2.mp4" type="video/mp4" />
+      </video>
+    </div>
     <div class="veil"></div>
-    <div class="scene__inner safety__inner">
-      <p class="label safety__label">Seguridad y transparencia</p>
-      <h2 class="safety__title display">No es una mudanza<br>cualquiera.</h2>
+    <div class="inner safety__inner">
+      <p class="label" data-mask>Seguridad y transparencia</p>
+      <h2 class="safety__title impact" data-mask>Mudamos tu<br><span class="brush">tranquilidad</span></h2>
       <div class="safety__lines">
-        <p class="safety__line"><b>Cámaras corporales</b> — verás cómo cuidamos cada cosa.</p>
-        <p class="safety__line"><b>Unidades cerradas</b> — protegidas en todo el trayecto.</p>
-        <p class="safety__line"><b>Carga profesional</b> — equipo capacitado e identificado.</p>
+        <p class="safety__line" data-mask><b>Personal capacitado</b> — equipo identificado y de confianza.</p>
+        <p class="safety__line" data-mask><b>Entregas puntuales</b> — cumplimos el día y la hora acordada.</p>
+        <p class="safety__line" data-mask><b>Protección garantizada</b> — cuidamos lo que más valoras.</p>
       </div>
-      <a href="https://wa.me/527228300083?text=Hola%2C%20quiero%20una%20mudanza%20segura." class="cta cta--light safety__cta" target="_blank" rel="noopener"><span>Quiero una mudanza segura</span></a>
+      <a href="https://wa.me/527228300083?text=Hola%2C%20quiero%20una%20mudanza%20segura%20con%20Mudanzas%20Metepec." class="cta cta--yellow" target="_blank" rel="noopener" data-mask>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 4.9A9.8 9.8 0 0 0 12 2C6.6 2 2.1 6.5 2.1 11.9c0 1.8.5 3.5 1.3 5L2 22l5.3-1.4a9.9 9.9 0 0 0 4.8 1.2c5.5 0 9.9-4.4 9.9-9.9 0-2.6-1-5.1-2.9-7Z"/></svg>
+        Quiero una mudanza segura
+      </a>
     </div>
   </section>
 
-  <!-- ===== ESCENA 5 · COBERTURA (pinned, mapa con líneas animadas) ===== -->
-  <section class="scene scene--map" id="cobertura">
-    <div class="scene__inner map__head">
+  <!-- ===== 6 · COBERTURA ===== -->
+  <section class="scene map-scene" id="cobertura">
+    <div class="rings" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+    <div class="inner map-head">
       <p class="label" data-mask>Cobertura nacional</p>
-      <h2 class="display" data-mask>De Metepec y Toluca,<br>a todo México.</h2>
+      <h2 class="impact" data-mask>De Metepec<br>a todo México</h2>
     </div>
     <svg class="map" id="map" viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-      <g class="map__routes" fill="none" stroke="#E0531F" stroke-width="2.4" stroke-linecap="round">
+      <g class="map__routes" fill="none" stroke="#FFC400" stroke-width="2.4" stroke-linecap="round">
         <path class="route" d="M330,470 L470,330"/><path class="route" d="M330,470 L600,290"/>
         <path class="route" d="M330,470 L560,180"/><path class="route" d="M330,470 L800,360"/>
         <path class="route" d="M330,470 L200,300"/><path class="route" d="M330,470 L890,180"/>
@@ -150,9 +181,8 @@
     </svg>
   </section>
 
-  <!-- ===== ESCENA 6 · OPINIONES (pinned, slides grandes) ===== -->
-  <section class="scene scene--reviews" id="opiniones">
-    <div class="veil"></div>
+  <!-- ===== 7 · OPINIONES ===== -->
+  <section class="scene reviews" id="opiniones">
     <p class="label reviews__label">Lo que dicen quienes ya confiaron</p>
     <div class="slides">
       <figure class="slide"><div class="slide__stars">★★★★★</div><blockquote>"Muy profesionales y puntuales. Manejaron todo con cuidado. Los recomiendo y los volvería a contratar."</blockquote><figcaption>Cliente verificado · Metepec</figcaption></figure>
@@ -162,30 +192,33 @@
     <p class="reviews__link"><a href="https://www.facebook.com/share/1FBwqgPHJU/" target="_blank" rel="noopener">Recomendados al 100% — ver más en Facebook</a></p>
   </section>
 
-  <!-- ===== ESCENA 7 · COTIZADOR (final) ===== -->
-  <section class="scene scene--quote" id="cotizar">
-    <div class="media media--team"><div class="media__layer"></div></div>
+  <!-- ===== 8 · COTIZADOR ===== -->
+  <section class="scene quote" id="cotizar">
+    <div class="media"><div class="media__panel"></div></div>
     <div class="veil"></div>
     <div class="quotebox">
       <p class="label">El último paso</p>
-      <h2 class="display">Cotiza tu mudanza</h2>
-      <p class="quotebox__sub">Respuesta rápida, sin compromiso.</p>
+      <h2 class="impact">Cotiza tu mudanza</h2>
+      <p class="quotebox__sub">Envíanos fotos por WhatsApp y recibe tu precio. Sin compromiso.</p>
       <form id="quoteForm" novalidate>
         <input id="nombre" name="nombre" type="text" autocomplete="name" placeholder="Tu nombre" required />
         <input id="telefono" name="telefono" type="tel" autocomplete="tel" placeholder="Teléfono / WhatsApp" required />
         <div class="quotebox__row"><input id="origen" name="origen" type="text" placeholder="Origen" required /><input id="destino" name="destino" type="text" placeholder="Destino" required /></div>
         <select id="servicio" name="servicio" required>
           <option value="" disabled selected>Tipo de servicio</option>
-          <option>Mudanza residencial</option><option>Mudanza foránea</option><option>Mudanza corporativa</option>
+          <option>Mudanza local</option><option>Mudanza foránea</option><option>Mudanza corporativa</option>
           <option>Flete express</option><option>Transporte especial</option><option>Empaque y protección</option>
         </select>
-        <button type="submit" class="cta cta--block"><span>Enviar por WhatsApp</span></button>
+        <button type="submit" class="cta cta--block">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 4.9A9.8 9.8 0 0 0 12 2C6.6 2 2.1 6.5 2.1 11.9c0 1.8.5 3.5 1.3 5L2 22l5.3-1.4a9.9 9.9 0 0 0 4.8 1.2c5.5 0 9.9-4.4 9.9-9.9 0-2.6-1-5.1-2.9-7Z"/></svg>
+          Enviar por WhatsApp
+        </button>
       </form>
       <a href="tel:+527228300083" class="quotebox__call">o llámanos: 722 830 0083</a>
     </div>
     <footer class="foot">
-      <p>© <span id="year"></span> Mudanzas Metepec · Metepec, Estado de México · Cobertura nacional</p>
-      <p class="foot__ver">Versión 11.0 · Scroll experience · build 2026-06-18</p>
+      <p>© <span id="year"></span> Mudanzas Metepec · Metepec · Toluca · CDMX · Cobertura nacional</p>
+      <p class="foot__ver">Versión 12.0 · Marca elevada · build 2026-06-24</p>
     </footer>
   </section>
 
@@ -194,7 +227,10 @@
 <a href="https://wa.me/527228300083?text=Hola%2C%20me%20interesa%20cotizar%20una%20mudanza." class="wa-float" target="_blank" rel="noopener" aria-label="WhatsApp">
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.05 4.91A9.82 9.82 0 0 0 12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.91-7.02ZM12.04 20.15a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.11.82.83-3.04-.2-.31a8.18 8.18 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.69 8.23-8.23 8.23Z"/></svg>
 </a>
-<a href="#cotizar" class="cotizar-bar">Cotizar mi mudanza</a>
+<div class="cotizar-bar">
+  <a href="tel:+527228300083" class="b-call">📞 Llamar</a>
+  <a href="#cotizar" class="b-quote">Cotizar por WhatsApp</a>
+</div>
 
 </body>
 </html>
