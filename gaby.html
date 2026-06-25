@@ -1,92 +1,529 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Un mensaje para ti</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #fff0f5;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      overflow: hidden;
-    }
-    #pantalla {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 18px;
-      cursor: pointer;
-      padding: 48px 32px;
-      border-radius: 24px;
-      border: 1.5px solid #f4c0d1;
-      background: #fff;
-      box-shadow: 0 4px 32px rgba(212,83,126,0.08);
-      max-width: 340px;
-      width: 90vw;
-      min-height: 260px;
-      user-select: none;
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-    #pantalla:hover { transform: scale(1.02); box-shadow: 0 8px 40px rgba(212,83,126,0.14); }
-    #pantalla:active { transform: scale(0.98); }
-    #hint { display: flex; flex-direction: column; align-items: center; gap: 14px; transition: opacity 0.3s; }
-    #hint .icono { font-size: 52px; animation: pulso 1.4s infinite; line-height: 1; }
-    @keyframes pulso { 0%,100%{transform:scale(1);} 50%{transform:scale(1.18);} }
-    #hint p { font-size: 15px; color: #b56080; text-align: center; }
-    #mensaje { display: none; flex-direction: column; align-items: center; gap: 14px; animation: aparecer 0.6s cubic-bezier(.34,1.56,.64,1); }
-    @keyframes aparecer { from{opacity:0;transform:scale(0.6);} to{opacity:1;transform:scale(1);} }
-    #mensaje .titulo { font-size: 38px; font-weight: 700; color: #c4406c; text-align: center; line-height: 1.2; }
-    #mensaje .sub { font-size: 15px; color: #b56080; text-align: center; }
-    #volver { margin-top: 6px; font-size: 13px; color: #c4406c; background: none; border: 1px solid #f4c0d1; border-radius: 20px; padding: 6px 18px; cursor: pointer; }
-    .corazon { position: fixed; font-size: 24px; pointer-events: none; animation: flotar linear forwards; opacity: 0; }
-    @keyframes flotar { 0%{opacity:1;transform:translateY(0) scale(1);} 100%{opacity:0;transform:translateY(-220px) scale(0.4);} }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no"/>
+<meta name="theme-color" content="#0a0a1a"/>
+<title>Tienes un mensaje</title>
+<meta property="og:title" content="Alguien tiene algo para ti ✨"/>
+<meta property="og:description" content="Toca para descubrir tu sorpresa."/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{
+  font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+  background:#0a0a1a;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+
+/* ── canvas de partículas ── */
+#particles{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* ── escenas ── */
+.scene{
+  position:fixed;inset:0;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  z-index:1;
+  opacity:0;pointer-events:none;
+  transition:opacity .8s ease;
+  padding:24px;
+}
+.scene.active{opacity:1;pointer-events:auto}
+
+/* ── ESCENA 1: SOBRE ── */
+.envelope-wrap{perspective:800px;cursor:pointer}
+.envelope{
+  width:260px;height:180px;
+  position:relative;
+  transform-style:preserve-3d;
+}
+.env-body{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,#e8c4a0,#d4956b);
+  border-radius:8px;
+  box-shadow:0 8px 40px rgba(0,0,0,.4);
+}
+.env-body::after{
+  content:'';position:absolute;
+  bottom:0;left:0;right:0;height:50%;
+  background:linear-gradient(135deg,#daa87a,#c48555);
+  border-radius:0 0 8px 8px;
+}
+.env-flap{
+  position:absolute;top:0;left:0;right:0;height:50%;
+  transform-origin:top center;
+  transform:rotateX(0deg);
+  transition:transform 1s cubic-bezier(.4,0,.2,1);
+  z-index:2;
+}
+.env-flap-inner{
+  width:100%;height:100%;
+  background:linear-gradient(180deg,#d4956b,#c48050);
+  clip-path:polygon(0 0,50% 100%,100% 0);
+  border-radius:8px 8px 0 0;
+}
+.envelope.open .env-flap{transform:rotateX(-180deg)}
+.env-heart{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  font-size:36px;
+  z-index:3;
+  filter:drop-shadow(0 2px 8px rgba(200,60,100,.4));
+  animation:heartbeat 1.3s ease-in-out infinite;
+}
+@keyframes heartbeat{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.15)}}
+
+.env-label{
+  margin-top:32px;
+  font-size:15px;
+  color:rgba(255,255,255,.5);
+  letter-spacing:.5px;
+  animation:fadeUpSoft 1.5s ease both;
+}
+.env-title{
+  margin-top:10px;
+  font-size:18px;
+  color:rgba(255,255,255,.75);
+  font-weight:400;
+  animation:fadeUpSoft 1.8s ease both;
+}
+@keyframes fadeUpSoft{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.tap-hint{
+  margin-top:28px;
+  font-size:13px;
+  color:rgba(255,255,255,.3);
+  animation:pulse-opacity 2s ease-in-out infinite;
+}
+@keyframes pulse-opacity{0%,100%{opacity:.3}50%{opacity:.7}}
+
+/* ── ESCENA 2: NOMBRE ── */
+#scene2{z-index:2}
+.name-reveal{
+  font-size:clamp(52px,14vw,90px);
+  font-weight:300;
+  letter-spacing:4px;
+  background:linear-gradient(135deg,#f7c9b6,#e8a0c9,#c4a0e8,#a0c4e8);
+  background-size:300% 300%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:gradientShift 4s ease infinite;
+  opacity:0;
+  transform:scale(.7);
+}
+.name-reveal.show{
+  animation:nameIn .9s cubic-bezier(.34,1.56,.64,1) forwards,gradientShift 4s ease infinite;
+}
+@keyframes nameIn{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+@keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+.name-line{
+  margin-top:16px;
+  font-size:15px;
+  font-weight:300;
+  color:rgba(255,255,255,.45);
+  letter-spacing:1px;
+  opacity:0;
+}
+.name-line.show{animation:fadeUpSoft .8s ease forwards}
+
+/* ── ESCENA 3: FRASES ── */
+#scene3{z-index:3}
+.phrase-container{
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:0;
+  min-height:120px;
+  text-align:center;
+}
+.phrase{
+  font-size:clamp(26px,7vw,44px);
+  font-weight:300;
+  letter-spacing:1px;
+  line-height:1.3;
+  opacity:0;
+  position:absolute;
+  transition:none;
+}
+.phrase.enter{
+  animation:phraseIn .7s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+.phrase.exit{
+  animation:phraseOut .5s ease forwards;
+}
+@keyframes phraseIn{from{opacity:0;transform:translateY(30px) scale(.9)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes phraseOut{from{opacity:1;transform:translateY(0) scale(1)}to{opacity:0;transform:translateY(-20px) scale(.95)}}
+
+.phrase-dots{
+  margin-top:40px;
+  display:flex;gap:8px;
+}
+.phrase-dot{
+  width:6px;height:6px;
+  border-radius:50%;
+  background:rgba(255,255,255,.2);
+  transition:background .4s,transform .4s;
+}
+.phrase-dot.active{
+  background:rgba(255,255,255,.7);
+  transform:scale(1.4);
+}
+
+.phrase-tap{
+  margin-top:24px;
+  font-size:12px;
+  color:rgba(255,255,255,.25);
+}
+
+/* ── ESCENA 4: FINAL ── */
+#scene4{z-index:4}
+.final-wrap{
+  display:flex;flex-direction:column;
+  align-items:center;gap:20px;
+  text-align:center;
+}
+.final-emoji{
+  font-size:48px;
+  opacity:0;
+}
+.final-emoji.show{animation:popIn .6s cubic-bezier(.34,1.56,.64,1) forwards}
+@keyframes popIn{from{opacity:0;transform:scale(0)}to{opacity:1;transform:scale(1)}}
+
+.final-text{
+  font-size:clamp(18px,5vw,24px);
+  font-weight:300;
+  line-height:1.6;
+  color:rgba(255,255,255,.8);
+  max-width:320px;
+  opacity:0;
+}
+.final-text.show{animation:fadeUpSoft .8s ease forwards}
+
+.final-name{
+  font-size:clamp(14px,3.5vw,16px);
+  color:rgba(255,255,255,.35);
+  letter-spacing:2px;
+  text-transform:uppercase;
+  opacity:0;
+}
+.final-name.show{animation:fadeUpSoft .8s ease .3s forwards}
+
+.replay-btn{
+  margin-top:16px;
+  font-size:13px;
+  color:rgba(255,255,255,.3);
+  background:none;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:24px;
+  padding:8px 24px;
+  cursor:pointer;
+  opacity:0;
+  transition:color .3s,border-color .3s;
+}
+.replay-btn:hover{color:rgba(255,255,255,.6);border-color:rgba(255,255,255,.25)}
+.replay-btn.show{animation:fadeUpSoft .6s ease .6s forwards}
+
+/* ── confetti ── */
+.confetti{
+  position:fixed;
+  width:8px;height:8px;
+  border-radius:1px;
+  pointer-events:none;
+  z-index:10;
+  animation:confettiFall linear forwards;
+}
+@keyframes confettiFall{
+  0%{opacity:1;transform:translateY(0) rotate(0deg)}
+  100%{opacity:0;transform:translateY(100vh) rotate(720deg)}
+}
+
+/* ── sparkle burst ── */
+.sparkle{
+  position:fixed;
+  font-size:16px;
+  pointer-events:none;
+  z-index:5;
+  animation:sparkleFly ease-out forwards;
+  opacity:0;
+}
+@keyframes sparkleFly{
+  0%{opacity:1;transform:translate(0,0) scale(1)}
+  100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.3)}
+}
+</style>
 </head>
 <body>
-<div id="pantalla" onclick="mostrar()">
-  <div id="hint">
-    <div class="icono">💌</div>
-    <p>Toca aquí,<br>tengo algo para ti ✨</p>
+
+<canvas id="particles"></canvas>
+
+<!-- ESCENA 1: SOBRE -->
+<div class="scene active" id="scene1">
+  <div class="envelope-wrap" id="envelopeWrap">
+    <div class="envelope" id="envelope">
+      <div class="env-body"></div>
+      <div class="env-flap"><div class="env-flap-inner"></div></div>
+      <div class="env-heart">💜</div>
+    </div>
   </div>
-  <div id="mensaje">
-    <div class="titulo">Te amo,<br>Gaby 💖</div>
-    <div class="sub">Siempre. Sin condiciones.</div>
-    <button id="volver" onclick="reiniciar(event)">volver</button>
+  <p class="env-label">Alguien tiene algo para ti</p>
+  <p class="env-title">un pequeño mensaje</p>
+  <p class="tap-hint">toca el sobre</p>
+</div>
+
+<!-- ESCENA 2: NOMBRE -->
+<div class="scene" id="scene2">
+  <div class="name-reveal" id="nameReveal">Gaby</div>
+  <p class="name-line" id="nameLine">esto es para ti</p>
+</div>
+
+<!-- ESCENA 3: FRASES -->
+<div class="scene" id="scene3">
+  <div class="phrase-container" id="phraseContainer"></div>
+  <div class="phrase-dots" id="phraseDots"></div>
+  <p class="phrase-tap" id="phraseTap">toca para continuar</p>
+</div>
+
+<!-- ESCENA 4: FINAL -->
+<div class="scene" id="scene4">
+  <div class="final-wrap">
+    <div class="final-emoji" id="finalEmoji">✨</div>
+    <p class="final-text" id="finalText">Solo quería que supieras<br>que alguien piensa en ti<br>y quiere verte bien, siempre.</p>
+    <p class="final-name" id="finalName">— para Gaby</p>
+    <button class="replay-btn" id="replayBtn">ver de nuevo</button>
   </div>
 </div>
+
 <script>
-  let activo = false;
-  function mostrar() {
-    if (activo) return; activo = true;
-    const hint = document.getElementById('hint');
-    hint.style.opacity = '0';
-    setTimeout(() => { hint.style.display='none'; document.getElementById('mensaje').style.display='flex'; }, 280);
-    const emojis = ['❤️','💕','💖','💗','💝','🌸','✨'];
-    let n = 0;
-    const iv = setInterval(() => {
-      const el = document.createElement('span');
-      el.className = 'corazon';
-      el.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-      el.style.left = (5+Math.random()*90)+'vw';
-      el.style.top = (60+Math.random()*30)+'vh';
-      el.style.animationDuration = (1.6+Math.random()*1.4)+'s';
-      document.body.appendChild(el);
-      el.addEventListener('animationend', ()=>el.remove());
-      if(++n>=22) clearInterval(iv);
-    }, 100);
+/* ── partículas de fondo ── */
+const cv = document.getElementById('particles');
+const cx = cv.getContext('2d');
+let W, H;
+function resize(){W=cv.width=innerWidth;H=cv.height=innerHeight}
+resize();
+window.addEventListener('resize',resize);
+
+const dots = Array.from({length:45},()=>({
+  x:Math.random()*innerWidth,
+  y:Math.random()*innerHeight,
+  r:Math.random()*1.8+.5,
+  dx:(Math.random()-.5)*.3,
+  dy:(Math.random()-.5)*.3,
+  a:Math.random()*.4+.1,
+}));
+
+function drawParticles(){
+  cx.clearRect(0,0,W,H);
+  for(const d of dots){
+    d.x+=d.dx; d.y+=d.dy;
+    if(d.x<0)d.x=W; if(d.x>W)d.x=0;
+    if(d.y<0)d.y=H; if(d.y>H)d.y=0;
+    cx.beginPath();
+    cx.arc(d.x,d.y,d.r,0,Math.PI*2);
+    cx.fillStyle=`rgba(200,180,255,${d.a})`;
+    cx.fill();
   }
-  function reiniciar(e) {
-    e.stopPropagation(); activo = false;
-    document.getElementById('mensaje').style.display='none';
-    const hint = document.getElementById('hint');
-    hint.style.display='flex'; hint.style.opacity='1';
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+/* ── frases ── */
+const phrases=[
+  {text:'Puedes con todo',color:'#f0c4a8'},
+  {text:'Bonita',color:'#e8a0c9'},
+  {text:'Brillas sin darte cuenta',color:'#a0c4e8'},
+  {text:'El mundo es mejor\ncontigo en él',color:'#c4e8a0'},
+  {text:'No dejes que nadie\napague tu luz',color:'#f0d4a8'},
+  {text:'Eres más fuerte\nde lo que crees',color:'#c9a0e8'},
+];
+
+let currentPhrase=-1;
+let scene=1;
+let transitioning=false;
+
+/* ── sparkles ── */
+function sparkles(x,y,n){
+  const icons=['✨','💫','⭐','🌟'];
+  for(let i=0;i<n;i++){
+    const el=document.createElement('span');
+    el.className='sparkle';
+    el.textContent=icons[Math.floor(Math.random()*icons.length)];
+    const angle=Math.random()*Math.PI*2;
+    const dist=60+Math.random()*80;
+    el.style.left=x+'px';
+    el.style.top=y+'px';
+    el.style.setProperty('--dx',Math.cos(angle)*dist+'px');
+    el.style.setProperty('--dy',Math.sin(angle)*dist+'px');
+    el.style.animationDuration=(.6+Math.random()*.5)+'s';
+    document.body.appendChild(el);
+    el.addEventListener('animationend',()=>el.remove());
   }
+}
+
+/* ── confetti ── */
+function confetti(){
+  const colors=['#f0c4a8','#e8a0c9','#a0c4e8','#c4e8a0','#f0d4a8','#c9a0e8','#fff'];
+  for(let i=0;i<60;i++){
+    const el=document.createElement('div');
+    el.className='confetti';
+    el.style.left=Math.random()*100+'vw';
+    el.style.top=-10+'px';
+    el.style.width=(5+Math.random()*6)+'px';
+    el.style.height=(5+Math.random()*6)+'px';
+    el.style.background=colors[Math.floor(Math.random()*colors.length)];
+    el.style.animationDuration=(1.5+Math.random()*2)+'s';
+    el.style.animationDelay=(Math.random()*1.2)+'s';
+    el.style.borderRadius=Math.random()>.5?'50%':'2px';
+    document.body.appendChild(el);
+    el.addEventListener('animationend',()=>el.remove());
+  }
+}
+
+/* ── transiciones ── */
+function goScene(n){
+  if(transitioning)return;
+  transitioning=true;
+  document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));
+  setTimeout(()=>{
+    document.getElementById('scene'+n).classList.add('active');
+    scene=n;
+    transitioning=false;
+  },400);
+}
+
+/* ── escena 1: sobre ── */
+document.getElementById('envelopeWrap').addEventListener('click',function(e){
+  if(scene!==1||transitioning)return;
+  const env=document.getElementById('envelope');
+  env.classList.add('open');
+
+  const rect=env.getBoundingClientRect();
+  sparkles(rect.left+rect.width/2,rect.top+rect.height/2,12);
+
+  setTimeout(()=>{
+    goScene(2);
+    setTimeout(()=>{
+      document.getElementById('nameReveal').classList.add('show');
+      const nr=document.getElementById('nameReveal');
+      const r2=nr.getBoundingClientRect();
+      sparkles(r2.left+r2.width/2,r2.top+r2.height/2,10);
+      setTimeout(()=>{
+        document.getElementById('nameLine').classList.add('show');
+      },600);
+      setTimeout(()=>{
+        goScene(3);
+        initPhrases();
+      },2600);
+    },500);
+  },1200);
+});
+
+/* ── escena 3: frases ── */
+function initPhrases(){
+  const container=document.getElementById('phraseContainer');
+  const dotsWrap=document.getElementById('phraseDots');
+  container.innerHTML='';
+  dotsWrap.innerHTML='';
+
+  phrases.forEach((_,i)=>{
+    const dot=document.createElement('div');
+    dot.className='phrase-dot';
+    dotsWrap.appendChild(dot);
+  });
+
+  currentPhrase=-1;
+  nextPhrase();
+}
+
+function nextPhrase(){
+  if(currentPhrase>=phrases.length-1){
+    setTimeout(()=>{
+      goScene(4);
+      showFinal();
+    },300);
+    return;
+  }
+
+  const container=document.getElementById('phraseContainer');
+  const dots=document.querySelectorAll('.phrase-dot');
+
+  const prev=container.querySelector('.phrase.enter');
+  if(prev){
+    prev.classList.remove('enter');
+    prev.classList.add('exit');
+    prev.addEventListener('animationend',()=>prev.remove(),{once:true});
+  }
+
+  currentPhrase++;
+
+  const el=document.createElement('div');
+  el.className='phrase';
+  el.style.color=phrases[currentPhrase].color;
+  el.innerHTML=phrases[currentPhrase].text.replace(/\n/g,'<br>');
+  container.appendChild(el);
+
+  requestAnimationFrame(()=>el.classList.add('enter'));
+
+  dots.forEach((d,i)=>d.classList.toggle('active',i===currentPhrase));
+}
+
+document.getElementById('scene3').addEventListener('click',function(){
+  if(scene!==3||transitioning)return;
+  nextPhrase();
+});
+
+/* ── escena 4: final ── */
+function showFinal(){
+  confetti();
+  setTimeout(()=>{
+    document.getElementById('finalEmoji').classList.add('show');
+  },200);
+  setTimeout(()=>{
+    document.getElementById('finalText').classList.add('show');
+  },600);
+  setTimeout(()=>{
+    document.getElementById('finalName').classList.add('show');
+  },1000);
+  setTimeout(()=>{
+    document.getElementById('replayBtn').classList.add('show');
+    confetti();
+  },1500);
+}
+
+/* ── replay ── */
+document.getElementById('replayBtn').addEventListener('click',function(){
+  if(transitioning)return;
+
+  document.getElementById('envelope').classList.remove('open');
+  document.getElementById('nameReveal').classList.remove('show');
+  document.getElementById('nameLine').classList.remove('show');
+  document.getElementById('finalEmoji').classList.remove('show');
+  document.getElementById('finalText').classList.remove('show');
+  document.getElementById('finalName').classList.remove('show');
+  document.getElementById('replayBtn').classList.remove('show');
+  document.getElementById('phraseContainer').innerHTML='';
+  document.getElementById('phraseDots').innerHTML='';
+  document.getElementById('phraseTap').style.display='';
+  currentPhrase=-1;
+
+  goScene(1);
+});
+
+/* ── cambiar color de fondo suavemente ── */
+const bgColors=['#0a0a1a','#0d0a1a','#0a0d1a','#10081a','#0a1018'];
+let bgIdx=0;
+setInterval(()=>{
+  bgIdx=(bgIdx+1)%bgColors.length;
+  document.body.style.background=bgColors[bgIdx];
+},8000);
+document.body.style.transition='background 4s ease';
 </script>
 </body>
 </html>
