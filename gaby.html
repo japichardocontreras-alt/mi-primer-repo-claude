@@ -3,527 +3,474 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no"/>
-<meta name="theme-color" content="#0a0a1a"/>
-<title>Tienes un mensaje</title>
-<meta property="og:title" content="Alguien tiene algo para ti ✨"/>
-<meta property="og:description" content="Toca para descubrir tu sorpresa."/>
+<meta name="theme-color" content="#0d0d0d"/>
+<title>Para ti</title>
+<meta property="og:title" content="Alguien dejó algo para ti ✨"/>
+<meta property="og:description" content="Toca para descubrir."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;overflow:hidden}
 body{
-  font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
-  background:#0a0a1a;
+  font-family:'Inter',system-ui,sans-serif;
+  background:#0d0d0d;
   color:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
   -webkit-tap-highlight-color:transparent;
   touch-action:manipulation;
 }
 
-/* ── canvas de partículas ── */
-#particles{position:fixed;inset:0;z-index:0;pointer-events:none}
+/* ── fondo animado ── */
+.bg{
+  position:fixed;inset:0;z-index:0;
+  overflow:hidden;
+}
+.bg-orb{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(80px);
+  opacity:.25;
+  animation:orbFloat 12s ease-in-out infinite alternate;
+}
+.bg-orb:nth-child(1){width:300px;height:300px;background:#d4956b;top:-50px;left:-50px;animation-delay:0s}
+.bg-orb:nth-child(2){width:250px;height:250px;background:#c47a8a;bottom:-40px;right:-40px;animation-delay:-4s}
+.bg-orb:nth-child(3){width:200px;height:200px;background:#8a7ac4;top:40%;left:50%;animation-delay:-8s}
+@keyframes orbFloat{
+  0%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(30px,-20px) scale(1.1)}
+  66%{transform:translate(-20px,30px) scale(.9)}
+  100%{transform:translate(15px,15px) scale(1.05)}
+}
 
 /* ── escenas ── */
-.scene{
-  position:fixed;inset:0;
+.s{
+  position:fixed;inset:0;z-index:1;
   display:flex;flex-direction:column;
   align-items:center;justify-content:center;
-  z-index:1;
-  opacity:0;pointer-events:none;
-  transition:opacity .8s ease;
-  padding:24px;
+  padding:32px;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .9s ease;
 }
-.scene.active{opacity:1;pointer-events:auto}
+.s.on{opacity:1;pointer-events:auto}
 
-/* ── ESCENA 1: SOBRE ── */
-.envelope-wrap{perspective:800px;cursor:pointer}
-.envelope{
-  width:260px;height:180px;
+/* ── ESCENA 1: la llama ── */
+.flame-wrap{
   position:relative;
-  transform-style:preserve-3d;
+  width:120px;height:120px;
+  cursor:pointer;
 }
-.env-body{
+.flame-ring{
   position:absolute;inset:0;
-  background:linear-gradient(135deg,#e8c4a0,#d4956b);
-  border-radius:8px;
-  box-shadow:0 8px 40px rgba(0,0,0,.4);
+  border-radius:50%;
+  border:1.5px solid rgba(212,149,107,.3);
+  animation:ringPulse 2.5s ease-in-out infinite;
 }
-.env-body::after{
-  content:'';position:absolute;
-  bottom:0;left:0;right:0;height:50%;
-  background:linear-gradient(135deg,#daa87a,#c48555);
-  border-radius:0 0 8px 8px;
-}
-.env-flap{
-  position:absolute;top:0;left:0;right:0;height:50%;
-  transform-origin:top center;
-  transform:rotateX(0deg);
-  transition:transform 1s cubic-bezier(.4,0,.2,1);
-  z-index:2;
-}
-.env-flap-inner{
-  width:100%;height:100%;
-  background:linear-gradient(180deg,#d4956b,#c48050);
-  clip-path:polygon(0 0,50% 100%,100% 0);
-  border-radius:8px 8px 0 0;
-}
-.envelope.open .env-flap{transform:rotateX(-180deg)}
-.env-heart{
+.flame-ring:nth-child(2){animation-delay:.8s;inset:-12px}
+.flame-ring:nth-child(3){animation-delay:1.6s;inset:-24px}
+@keyframes ringPulse{0%,100%{opacity:.15;transform:scale(1)}50%{opacity:.5;transform:scale(1.04)}}
+
+.flame-core{
   position:absolute;
   top:50%;left:50%;
+  width:36px;height:36px;
   transform:translate(-50%,-50%);
-  font-size:36px;
-  z-index:3;
-  filter:drop-shadow(0 2px 8px rgba(200,60,100,.4));
-  animation:heartbeat 1.3s ease-in-out infinite;
+  background:radial-gradient(circle,#f0c898,#d4956b);
+  border-radius:50%;
+  box-shadow:0 0 40px 12px rgba(212,149,107,.35),0 0 80px 24px rgba(212,149,107,.15);
+  animation:coreBreathe 2s ease-in-out infinite;
 }
-@keyframes heartbeat{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.15)}}
+@keyframes coreBreathe{0%,100%{transform:translate(-50%,-50%) scale(1);box-shadow:0 0 40px 12px rgba(212,149,107,.35),0 0 80px 24px rgba(212,149,107,.15)}50%{transform:translate(-50%,-50%) scale(1.15);box-shadow:0 0 50px 16px rgba(212,149,107,.45),0 0 100px 30px rgba(212,149,107,.2)}}
 
-.env-label{
-  margin-top:32px;
-  font-size:15px;
-  color:rgba(255,255,255,.5);
-  letter-spacing:.5px;
-  animation:fadeUpSoft 1.5s ease both;
-}
-.env-title{
-  margin-top:10px;
-  font-size:18px;
-  color:rgba(255,255,255,.75);
-  font-weight:400;
-  animation:fadeUpSoft 1.8s ease both;
-}
-@keyframes fadeUpSoft{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-
-.tap-hint{
-  margin-top:28px;
-  font-size:13px;
-  color:rgba(255,255,255,.3);
-  animation:pulse-opacity 2s ease-in-out infinite;
-}
-@keyframes pulse-opacity{0%,100%{opacity:.3}50%{opacity:.7}}
-
-/* ── ESCENA 2: NOMBRE ── */
-#scene2{z-index:2}
-.name-reveal{
-  font-size:clamp(52px,14vw,90px);
-  font-weight:300;
-  letter-spacing:4px;
-  background:linear-gradient(135deg,#f7c9b6,#e8a0c9,#c4a0e8,#a0c4e8);
-  background-size:300% 300%;
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  background-clip:text;
-  animation:gradientShift 4s ease infinite;
-  opacity:0;
-  transform:scale(.7);
-}
-.name-reveal.show{
-  animation:nameIn .9s cubic-bezier(.34,1.56,.64,1) forwards,gradientShift 4s ease infinite;
-}
-@keyframes nameIn{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
-@keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-
-.name-line{
-  margin-top:16px;
-  font-size:15px;
+.s1-text{
+  margin-top:48px;
+  font-size:16px;
   font-weight:300;
   color:rgba(255,255,255,.45);
-  letter-spacing:1px;
-  opacity:0;
-}
-.name-line.show{animation:fadeUpSoft .8s ease forwards}
-
-/* ── ESCENA 3: FRASES ── */
-#scene3{z-index:3}
-.phrase-container{
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  gap:0;
-  min-height:120px;
+  letter-spacing:.5px;
   text-align:center;
-}
-.phrase{
-  font-size:clamp(26px,7vw,44px);
-  font-weight:300;
-  letter-spacing:1px;
-  line-height:1.3;
-  opacity:0;
-  position:absolute;
-  transition:none;
-}
-.phrase.enter{
-  animation:phraseIn .7s cubic-bezier(.34,1.56,.64,1) forwards;
-}
-.phrase.exit{
-  animation:phraseOut .5s ease forwards;
-}
-@keyframes phraseIn{from{opacity:0;transform:translateY(30px) scale(.9)}to{opacity:1;transform:translateY(0) scale(1)}}
-@keyframes phraseOut{from{opacity:1;transform:translateY(0) scale(1)}to{opacity:0;transform:translateY(-20px) scale(.95)}}
-
-.phrase-dots{
-  margin-top:40px;
-  display:flex;gap:8px;
-}
-.phrase-dot{
-  width:6px;height:6px;
-  border-radius:50%;
-  background:rgba(255,255,255,.2);
-  transition:background .4s,transform .4s;
-}
-.phrase-dot.active{
-  background:rgba(255,255,255,.7);
-  transform:scale(1.4);
-}
-
-.phrase-tap{
-  margin-top:24px;
-  font-size:12px;
-  color:rgba(255,255,255,.25);
-}
-
-/* ── ESCENA 4: FINAL ── */
-#scene4{z-index:4}
-.final-wrap{
-  display:flex;flex-direction:column;
-  align-items:center;gap:20px;
-  text-align:center;
-}
-.final-emoji{
-  font-size:48px;
-  opacity:0;
-}
-.final-emoji.show{animation:popIn .6s cubic-bezier(.34,1.56,.64,1) forwards}
-@keyframes popIn{from{opacity:0;transform:scale(0)}to{opacity:1;transform:scale(1)}}
-
-.final-text{
-  font-size:clamp(18px,5vw,24px);
-  font-weight:300;
   line-height:1.6;
-  color:rgba(255,255,255,.8);
-  max-width:320px;
-  opacity:0;
 }
-.final-text.show{animation:fadeUpSoft .8s ease forwards}
+.s1-hint{
+  margin-top:20px;
+  font-size:12px;
+  color:rgba(255,255,255,.2);
+  animation:hintFade 2.5s ease-in-out infinite;
+}
+@keyframes hintFade{0%,100%{opacity:.2}50%{opacity:.5}}
 
-.final-name{
-  font-size:clamp(14px,3.5vw,16px);
+/* ── ESCENA 2: nombre ── */
+.name{
+  font-family:'Dancing Script',cursive;
+  font-size:clamp(58px,16vw,100px);
+  font-weight:700;
+  color:#f0c898;
+  text-shadow:0 0 30px rgba(240,200,152,.3),0 0 60px rgba(240,200,152,.1);
+  opacity:0;
+  transform:scale(.5);
+}
+.name.in{animation:nameEnter 1.2s cubic-bezier(.34,1.56,.64,1) forwards}
+@keyframes nameEnter{from{opacity:0;transform:scale(.5) rotate(-3deg)}to{opacity:1;transform:scale(1) rotate(0deg)}}
+
+.name-sub{
+  margin-top:12px;
+  font-size:14px;
+  font-weight:300;
   color:rgba(255,255,255,.35);
-  letter-spacing:2px;
+  letter-spacing:3px;
   text-transform:uppercase;
   opacity:0;
 }
-.final-name.show{animation:fadeUpSoft .8s ease .3s forwards}
+.name-sub.in{animation:softUp .8s ease forwards}
+@keyframes softUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
-.replay-btn{
+/* ── ESCENA 3: tarjetas glass ── */
+.card-stage{
+  position:relative;
+  width:min(340px,85vw);
+  height:220px;
+}
+.card{
+  position:absolute;inset:0;
+  background:rgba(255,255,255,.06);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:32px;
+  opacity:0;
+  transform:translateY(40px) scale(.92);
+}
+.card.in{animation:cardIn .7s cubic-bezier(.34,1.56,.64,1) forwards}
+.card.out{animation:cardOut .4s ease forwards}
+@keyframes cardIn{from{opacity:0;transform:translateY(40px) scale(.92)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes cardOut{from{opacity:1;transform:translateY(0) scale(1)}to{opacity:0;transform:translateY(-30px) scale(.95)}}
+
+.card-text{
+  font-size:clamp(22px,6vw,32px);
+  font-weight:300;
+  line-height:1.5;
+  letter-spacing:.3px;
+}
+
+.card-count{
+  margin-top:28px;
+  font-size:12px;
+  color:rgba(255,255,255,.2);
+  letter-spacing:4px;
+}
+
+.card-bar-wrap{
   margin-top:16px;
-  font-size:13px;
-  color:rgba(255,255,255,.3);
+  width:min(200px,50vw);
+  height:2px;
+  background:rgba(255,255,255,.08);
+  border-radius:2px;
+  overflow:hidden;
+}
+.card-bar{
+  height:100%;
+  background:rgba(240,200,152,.5);
+  border-radius:2px;
+  transition:width .5s ease;
+}
+
+.card-tap{
+  margin-top:16px;
+  font-size:11px;
+  color:rgba(255,255,255,.18);
+}
+
+/* ── ESCENA 4: final ── */
+.final{
+  display:flex;flex-direction:column;
+  align-items:center;gap:24px;
+  text-align:center;
+}
+.final-line{
+  font-size:clamp(20px,5.5vw,28px);
+  font-weight:300;
+  line-height:1.7;
+  color:rgba(255,255,255,.75);
+  max-width:300px;
+  opacity:0;
+}
+.final-line.in{animation:softUp .9s ease forwards}
+
+.final-sig{
+  font-family:'Dancing Script',cursive;
+  font-size:22px;
+  color:#d4956b;
+  opacity:0;
+}
+.final-sig.in{animation:softUp .8s ease .2s forwards}
+
+.final-btn{
+  margin-top:8px;
+  font-size:12px;font-weight:400;
+  color:rgba(255,255,255,.25);
   background:none;
-  border:1px solid rgba(255,255,255,.12);
-  border-radius:24px;
-  padding:8px 24px;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:20px;
+  padding:8px 22px;
   cursor:pointer;
   opacity:0;
   transition:color .3s,border-color .3s;
+  font-family:inherit;
 }
-.replay-btn:hover{color:rgba(255,255,255,.6);border-color:rgba(255,255,255,.25)}
-.replay-btn.show{animation:fadeUpSoft .6s ease .6s forwards}
+.final-btn:hover{color:rgba(255,255,255,.5);border-color:rgba(255,255,255,.2)}
+.final-btn.in{animation:softUp .6s ease .5s forwards}
 
-/* ── confetti ── */
-.confetti{
+/* ── ripple al tocar ── */
+.ripple{
   position:fixed;
   width:8px;height:8px;
-  border-radius:1px;
+  border-radius:50%;
+  background:rgba(240,200,152,.25);
+  pointer-events:none;
+  z-index:50;
+  animation:rippleOut .6s ease-out forwards;
+}
+@keyframes rippleOut{from{transform:scale(1);opacity:.4}to{transform:scale(25);opacity:0}}
+
+/* ── golden rain ── */
+.grain{
+  position:fixed;
+  width:3px;
+  border-radius:3px;
   pointer-events:none;
   z-index:10;
-  animation:confettiFall linear forwards;
+  opacity:0;
+  animation:grainFall linear forwards;
 }
-@keyframes confettiFall{
-  0%{opacity:1;transform:translateY(0) rotate(0deg)}
-  100%{opacity:0;transform:translateY(100vh) rotate(720deg)}
+@keyframes grainFall{
+  0%{opacity:0;transform:translateY(0)}
+  10%{opacity:.8}
+  90%{opacity:.6}
+  100%{opacity:0;transform:translateY(85vh)}
 }
 
-/* ── sparkle burst ── */
-.sparkle{
+/* ── burst ── */
+.dot{
   position:fixed;
-  font-size:16px;
+  width:5px;height:5px;
+  border-radius:50%;
   pointer-events:none;
-  z-index:5;
-  animation:sparkleFly ease-out forwards;
-  opacity:0;
+  z-index:10;
+  animation:dotBurst ease-out forwards;
 }
-@keyframes sparkleFly{
+@keyframes dotBurst{
   0%{opacity:1;transform:translate(0,0) scale(1)}
-  100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.3)}
+  100%{opacity:0;transform:translate(var(--bx),var(--by)) scale(0)}
 }
 </style>
 </head>
 <body>
 
-<canvas id="particles"></canvas>
+<div class="bg">
+  <div class="bg-orb"></div>
+  <div class="bg-orb"></div>
+  <div class="bg-orb"></div>
+</div>
 
-<!-- ESCENA 1: SOBRE -->
-<div class="scene active" id="scene1">
-  <div class="envelope-wrap" id="envelopeWrap">
-    <div class="envelope" id="envelope">
-      <div class="env-body"></div>
-      <div class="env-flap"><div class="env-flap-inner"></div></div>
-      <div class="env-heart">💜</div>
-    </div>
+<!-- ESCENA 1 -->
+<div class="s on" id="s1">
+  <div class="flame-wrap" id="flame">
+    <div class="flame-ring"></div>
+    <div class="flame-ring"></div>
+    <div class="flame-ring"></div>
+    <div class="flame-core"></div>
   </div>
-  <p class="env-label">Alguien tiene algo para ti</p>
-  <p class="env-title">un pequeño mensaje</p>
-  <p class="tap-hint">toca el sobre</p>
+  <p class="s1-text">Alguien dejó algo<br>aquí para ti</p>
+  <p class="s1-hint">toca la luz</p>
 </div>
 
-<!-- ESCENA 2: NOMBRE -->
-<div class="scene" id="scene2">
-  <div class="name-reveal" id="nameReveal">Gaby</div>
-  <p class="name-line" id="nameLine">esto es para ti</p>
+<!-- ESCENA 2 -->
+<div class="s" id="s2">
+  <div class="name" id="gName">Gaby</div>
+  <p class="name-sub" id="gSub">esto es para ti</p>
 </div>
 
-<!-- ESCENA 3: FRASES -->
-<div class="scene" id="scene3">
-  <div class="phrase-container" id="phraseContainer"></div>
-  <div class="phrase-dots" id="phraseDots"></div>
-  <p class="phrase-tap" id="phraseTap">toca para continuar</p>
+<!-- ESCENA 3 -->
+<div class="s" id="s3">
+  <div class="card-stage" id="cardStage"></div>
+  <p class="card-count" id="cardCount"></p>
+  <div class="card-bar-wrap"><div class="card-bar" id="cardBar"></div></div>
+  <p class="card-tap" id="cardTap">toca para seguir</p>
 </div>
 
-<!-- ESCENA 4: FINAL -->
-<div class="scene" id="scene4">
-  <div class="final-wrap">
-    <div class="final-emoji" id="finalEmoji">✨</div>
-    <p class="final-text" id="finalText">Solo quería que supieras<br>que alguien piensa en ti<br>y quiere verte bien, siempre.</p>
-    <p class="final-name" id="finalName">— para Gaby</p>
-    <button class="replay-btn" id="replayBtn">ver de nuevo</button>
+<!-- ESCENA 4 -->
+<div class="s" id="s4">
+  <div class="final">
+    <p class="final-line" id="fLine">Solo quería recordarte<br>que alguien está orgulloso<br>de quien eres.</p>
+    <p class="final-sig" id="fSig">— para ti, Gaby</p>
+    <button class="final-btn" id="fBtn">ver de nuevo</button>
   </div>
 </div>
 
 <script>
-/* ── partículas de fondo ── */
-const cv = document.getElementById('particles');
-const cx = cv.getContext('2d');
-let W, H;
-function resize(){W=cv.width=innerWidth;H=cv.height=innerHeight}
-resize();
-window.addEventListener('resize',resize);
-
-const dots = Array.from({length:45},()=>({
-  x:Math.random()*innerWidth,
-  y:Math.random()*innerHeight,
-  r:Math.random()*1.8+.5,
-  dx:(Math.random()-.5)*.3,
-  dy:(Math.random()-.5)*.3,
-  a:Math.random()*.4+.1,
-}));
-
-function drawParticles(){
-  cx.clearRect(0,0,W,H);
-  for(const d of dots){
-    d.x+=d.dx; d.y+=d.dy;
-    if(d.x<0)d.x=W; if(d.x>W)d.x=0;
-    if(d.y<0)d.y=H; if(d.y>H)d.y=0;
-    cx.beginPath();
-    cx.arc(d.x,d.y,d.r,0,Math.PI*2);
-    cx.fillStyle=`rgba(200,180,255,${d.a})`;
-    cx.fill();
-  }
-  requestAnimationFrame(drawParticles);
-}
-drawParticles();
-
-/* ── frases ── */
-const phrases=[
-  {text:'Tú puedes con todo',color:'#f0c4a8'},
-  {text:'Siempre bonita, Gaby',color:'#e8a0c9'},
-  {text:'Todo lo que te propones\nlo logras, y eso se nota',color:'#a0c4e8'},
-  {text:'Me gusta verte bien',color:'#c4e8a0'},
-  {text:'No dejes que nadie\napague tu luz',color:'#f0d4a8'},
-  {text:'Eres más fuerte\nde lo que crees',color:'#c9a0e8'},
+const phrases = [
+  {text:'Tú puedes con todo',color:'#f0c898'},
+  {text:'Siempre bonita, Gaby',color:'#e8b0b0'},
+  {text:'Lo que te propones\nlo sacas adelante',color:'#b0c8e8'},
+  {text:'Me gusta verte bien',color:'#c8e8b0'},
+  {text:'Nunca dejes\nde ser como eres',color:'#e8c8f0'},
+  {text:'Eres más fuerte\nde lo que crees',color:'#f0d8a8'},
 ];
 
-let currentPhrase=-1;
-let scene=1;
-let transitioning=false;
+let ci = -1, sc = 1, lock = false;
 
-/* ── sparkles ── */
-function sparkles(x,y,n){
-  const icons=['✨','💫','⭐','🌟'];
-  for(let i=0;i<n;i++){
-    const el=document.createElement('span');
-    el.className='sparkle';
-    el.textContent=icons[Math.floor(Math.random()*icons.length)];
-    const angle=Math.random()*Math.PI*2;
-    const dist=60+Math.random()*80;
-    el.style.left=x+'px';
-    el.style.top=y+'px';
-    el.style.setProperty('--dx',Math.cos(angle)*dist+'px');
-    el.style.setProperty('--dy',Math.sin(angle)*dist+'px');
-    el.style.animationDuration=(.6+Math.random()*.5)+'s';
-    document.body.appendChild(el);
-    el.addEventListener('animationend',()=>el.remove());
+/* ── utilidades ── */
+function go(n) {
+  if (lock) return;
+  lock = true;
+  document.querySelectorAll('.s').forEach(s => s.classList.remove('on'));
+  setTimeout(() => {
+    document.getElementById('s' + n).classList.add('on');
+    sc = n;
+    lock = false;
+  }, 500);
+}
+
+function ripple(e) {
+  const r = document.createElement('div');
+  r.className = 'ripple';
+  const x = e.clientX || e.touches?.[0]?.clientX || innerWidth / 2;
+  const y = e.clientY || e.touches?.[0]?.clientY || innerHeight / 2;
+  r.style.left = x + 'px';
+  r.style.top = y + 'px';
+  document.body.appendChild(r);
+  r.addEventListener('animationend', () => r.remove());
+}
+
+function burst(x, y, n) {
+  const colors = ['#f0c898', '#e8b0b0', '#d4956b', '#c47a8a', '#b0c8e8', '#fff'];
+  for (let i = 0; i < n; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    const a = Math.random() * Math.PI * 2;
+    const dist = 40 + Math.random() * 70;
+    d.style.left = x + 'px';
+    d.style.top = y + 'px';
+    d.style.background = colors[Math.floor(Math.random() * colors.length)];
+    d.style.setProperty('--bx', Math.cos(a) * dist + 'px');
+    d.style.setProperty('--by', Math.sin(a) * dist + 'px');
+    d.style.animationDuration = (.5 + Math.random() * .4) + 's';
+    document.body.appendChild(d);
+    d.addEventListener('animationend', () => d.remove());
   }
 }
 
-/* ── confetti ── */
-function confetti(){
-  const colors=['#f0c4a8','#e8a0c9','#a0c4e8','#c4e8a0','#f0d4a8','#c9a0e8','#fff'];
-  for(let i=0;i<60;i++){
-    const el=document.createElement('div');
-    el.className='confetti';
-    el.style.left=Math.random()*100+'vw';
-    el.style.top=-10+'px';
-    el.style.width=(5+Math.random()*6)+'px';
-    el.style.height=(5+Math.random()*6)+'px';
-    el.style.background=colors[Math.floor(Math.random()*colors.length)];
-    el.style.animationDuration=(1.5+Math.random()*2)+'s';
-    el.style.animationDelay=(Math.random()*1.2)+'s';
-    el.style.borderRadius=Math.random()>.5?'50%':'2px';
-    document.body.appendChild(el);
-    el.addEventListener('animationend',()=>el.remove());
+function goldenRain() {
+  const colors = ['#f0c898', '#d4956b', '#e8b0b0', '#c8e8b0', '#e8c8f0', '#fff'];
+  for (let i = 0; i < 50; i++) {
+    const g = document.createElement('div');
+    g.className = 'grain';
+    g.style.left = Math.random() * 100 + 'vw';
+    g.style.top = -10 + 'px';
+    g.style.height = (12 + Math.random() * 20) + 'px';
+    g.style.background = colors[Math.floor(Math.random() * colors.length)];
+    g.style.animationDuration = (1.2 + Math.random() * 1.8) + 's';
+    g.style.animationDelay = (Math.random() * 1.5) + 's';
+    document.body.appendChild(g);
+    g.addEventListener('animationend', () => g.remove());
   }
 }
 
-/* ── transiciones ── */
-function goScene(n){
-  if(transitioning)return;
-  transitioning=true;
-  document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));
-  setTimeout(()=>{
-    document.getElementById('scene'+n).classList.add('active');
-    scene=n;
-    transitioning=false;
-  },400);
-}
-
-/* ── escena 1: sobre ── */
-document.getElementById('envelopeWrap').addEventListener('click',function(e){
-  if(scene!==1||transitioning)return;
-  const env=document.getElementById('envelope');
-  env.classList.add('open');
-
-  const rect=env.getBoundingClientRect();
-  sparkles(rect.left+rect.width/2,rect.top+rect.height/2,12);
-
-  setTimeout(()=>{
-    goScene(2);
-    setTimeout(()=>{
-      document.getElementById('nameReveal').classList.add('show');
-      const nr=document.getElementById('nameReveal');
-      const r2=nr.getBoundingClientRect();
-      sparkles(r2.left+r2.width/2,r2.top+r2.height/2,10);
-      setTimeout(()=>{
-        document.getElementById('nameLine').classList.add('show');
-      },600);
-      setTimeout(()=>{
-        goScene(3);
-        initPhrases();
-      },2600);
-    },500);
-  },1200);
+/* ── escena 1 ── */
+document.getElementById('flame').addEventListener('click', function (e) {
+  if (sc !== 1 || lock) return;
+  ripple(e);
+  const rect = this.getBoundingClientRect();
+  burst(rect.left + rect.width / 2, rect.top + rect.height / 2, 18);
+  setTimeout(() => {
+    go(2);
+    setTimeout(() => {
+      document.getElementById('gName').classList.add('in');
+      const nr = document.getElementById('gName').getBoundingClientRect();
+      burst(nr.left + nr.width / 2, nr.top + nr.height / 2, 12);
+      setTimeout(() => document.getElementById('gSub').classList.add('in'), 700);
+      setTimeout(() => { go(3); startCards(); }, 3000);
+    }, 600);
+  }, 800);
 });
 
-/* ── escena 3: frases ── */
-function initPhrases(){
-  const container=document.getElementById('phraseContainer');
-  const dotsWrap=document.getElementById('phraseDots');
-  container.innerHTML='';
-  dotsWrap.innerHTML='';
-
-  phrases.forEach((_,i)=>{
-    const dot=document.createElement('div');
-    dot.className='phrase-dot';
-    dotsWrap.appendChild(dot);
-  });
-
-  currentPhrase=-1;
-  nextPhrase();
+/* ── escena 3 ── */
+function startCards() {
+  ci = -1;
+  document.getElementById('cardStage').innerHTML = '';
+  document.getElementById('cardBar').style.width = '0%';
+  nextCard();
 }
 
-function nextPhrase(){
-  if(currentPhrase>=phrases.length-1){
-    setTimeout(()=>{
-      goScene(4);
-      showFinal();
-    },300);
+function nextCard() {
+  if (ci >= phrases.length - 1) {
+    setTimeout(() => { go(4); showFinal(); }, 400);
     return;
   }
 
-  const container=document.getElementById('phraseContainer');
-  const dots=document.querySelectorAll('.phrase-dot');
-
-  const prev=container.querySelector('.phrase.enter');
-  if(prev){
-    prev.classList.remove('enter');
-    prev.classList.add('exit');
-    prev.addEventListener('animationend',()=>prev.remove(),{once:true});
+  const stage = document.getElementById('cardStage');
+  const prev = stage.querySelector('.card.in');
+  if (prev) {
+    prev.classList.remove('in');
+    prev.classList.add('out');
+    prev.addEventListener('animationend', () => prev.remove(), { once: true });
   }
 
-  currentPhrase++;
+  ci++;
+  const c = document.createElement('div');
+  c.className = 'card';
+  const t = document.createElement('div');
+  t.className = 'card-text';
+  t.style.color = phrases[ci].color;
+  t.innerHTML = phrases[ci].text.replace(/\n/g, '<br>');
+  c.appendChild(t);
+  stage.appendChild(c);
+  requestAnimationFrame(() => c.classList.add('in'));
 
-  const el=document.createElement('div');
-  el.className='phrase';
-  el.style.color=phrases[currentPhrase].color;
-  el.innerHTML=phrases[currentPhrase].text.replace(/\n/g,'<br>');
-  container.appendChild(el);
-
-  requestAnimationFrame(()=>el.classList.add('enter'));
-
-  dots.forEach((d,i)=>d.classList.toggle('active',i===currentPhrase));
+  document.getElementById('cardCount').textContent =
+    String(ci + 1).padStart(2, '0') + ' · ' + String(phrases.length).padStart(2, '0');
+  document.getElementById('cardBar').style.width =
+    ((ci + 1) / phrases.length * 100) + '%';
 }
 
-document.getElementById('scene3').addEventListener('click',function(){
-  if(scene!==3||transitioning)return;
-  nextPhrase();
+document.getElementById('s3').addEventListener('click', function (e) {
+  if (sc !== 3 || lock) return;
+  ripple(e);
+  nextCard();
 });
 
-/* ── escena 4: final ── */
-function showFinal(){
-  confetti();
-  setTimeout(()=>{
-    document.getElementById('finalEmoji').classList.add('show');
-  },200);
-  setTimeout(()=>{
-    document.getElementById('finalText').classList.add('show');
-  },600);
-  setTimeout(()=>{
-    document.getElementById('finalName').classList.add('show');
-  },1000);
-  setTimeout(()=>{
-    document.getElementById('replayBtn').classList.add('show');
-    confetti();
-  },1500);
+/* ── escena 4 ── */
+function showFinal() {
+  goldenRain();
+  setTimeout(() => document.getElementById('fLine').classList.add('in'), 300);
+  setTimeout(() => document.getElementById('fSig').classList.add('in'), 900);
+  setTimeout(() => {
+    document.getElementById('fBtn').classList.add('in');
+    goldenRain();
+  }, 1400);
 }
 
 /* ── replay ── */
-document.getElementById('replayBtn').addEventListener('click',function(){
-  if(transitioning)return;
-
-  document.getElementById('envelope').classList.remove('open');
-  document.getElementById('nameReveal').classList.remove('show');
-  document.getElementById('nameLine').classList.remove('show');
-  document.getElementById('finalEmoji').classList.remove('show');
-  document.getElementById('finalText').classList.remove('show');
-  document.getElementById('finalName').classList.remove('show');
-  document.getElementById('replayBtn').classList.remove('show');
-  document.getElementById('phraseContainer').innerHTML='';
-  document.getElementById('phraseDots').innerHTML='';
-  document.getElementById('phraseTap').style.display='';
-  currentPhrase=-1;
-
-  goScene(1);
+document.getElementById('fBtn').addEventListener('click', function () {
+  if (lock) return;
+  ['gName', 'gSub'].forEach(id => document.getElementById(id).classList.remove('in'));
+  ['fLine', 'fSig', 'fBtn'].forEach(id => document.getElementById(id).classList.remove('in'));
+  document.getElementById('cardStage').innerHTML = '';
+  ci = -1;
+  go(1);
 });
 
-/* ── cambiar color de fondo suavemente ── */
-const bgColors=['#0a0a1a','#0d0a1a','#0a0d1a','#10081a','#0a1018'];
-let bgIdx=0;
-setInterval(()=>{
-  bgIdx=(bgIdx+1)%bgColors.length;
-  document.body.style.background=bgColors[bgIdx];
-},8000);
-document.body.style.transition='background 4s ease';
+/* ── touch ripple global ── */
+document.addEventListener('touchstart', function (e) {
+  if (sc === 1 || sc === 4) return;
+  ripple(e);
+}, { passive: true });
 </script>
 </body>
 </html>
