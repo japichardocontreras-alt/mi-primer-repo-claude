@@ -8,3 +8,6 @@ dist-ssr
 *.tsbuildinfo
 vite.config.js
 vite.config.d.ts
+
+# HTML autocontenido generado por inline-build.mjs
+cotizador-standalone.html
