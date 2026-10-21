@@ -16,7 +16,7 @@ Sistema administrativo y operativo de Mudanzas Metepec: **solicitud → cotizaci
 | 3 | Confirmación, agenda, asignación de unidades y personal | ✅ Entregada y probada |
 | 4 | Servicios realizados y cierre operativo | ✅ Entregada y probada |
 | 5 | Personal y nómina por servicio | ✅ Entregada y probada |
-| 6 | Flotilla, kilometraje, mantenimiento, depreciación | Pendiente |
+| 6 | Flotilla, kilometraje, mantenimiento, depreciación | ✅ Entregada y probada |
 | 7 | Finanzas y gastos | Pendiente |
 | 8 | Dashboard de resultados | Pendiente |
 | 9 | Integración, pruebas del flujo completo | Pendiente |
@@ -87,3 +87,8 @@ Inicie sesión con `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD`; el sistema pedir�
 
 * **Automatizadas (8 nuevas, 71 en total):** cortes semanal (lunes–domingo), quincenal y mensual; tarifas con vigencia e historial; flujo completo servicio $300 + bono $500 + 3 h × $80 − deducción $100 = devengado $940, anticipo $200, corte con neto $740, pagado = devengado, saldo $0; no se puede volver a pagar lo mismo; cancelar el pago regresa conceptos y anticipo; tres pagos simultáneos del mismo corte (solo uno); anticipos mayores a lo devengado; corte liquidado solo con anticipo ($0 en efectivo); anticipo aplicado no se cancela suelto; sueldo base una vez por periodo y según tipo de pago; cancelación de conceptos; reglas de signo en la base de datos; estado de cuenta por periodo.
 * **Recorrido en navegador (12 comprobaciones):** tarifas, pago propuesto al asignar, cierre que genera nómina, bono/horas extra/deducción/anticipo, corte con neto, recibo imprimible, resumen mensual y Excel, sin doble pago, cancelación, permisos del rol Administrativo, vista móvil.
+
+## Pruebas de la Fase 6
+
+* **Automatizadas (8 nuevas, 79 en total):** depreciación lineal ($600,000 − $120,000 en 5 años = $8,000/mes, inicio el mes siguiente a la compra, tope al terminar la vida útil) y por kilómetro ($1.20/km, tope en la base); registro mensual idempotente con ambos métodos y km del mes tomados de las lecturas; identificador y placas únicos; km inicial bloqueado con historial; lecturas que retroceden o contradicen lecturas posteriores; no se puede mandar a taller una unidad con servicios programados; costo de mantenimiento registrado una sola vez como gasto de la unidad y cancelación que revierte el gasto; alertas por km, por fecha y de documentos, donde el mantenimiento más reciente sustituye al anterior; notificaciones sin duplicar; seguro como gasto y su cancelación; combustible fuera de servicio.
+* **Recorrido en navegador (13 comprobaciones):** unidades iniciales, ficha editable y depreciación, alta de la unidad de 3.5 t, mantenimiento con alerta, documentos con alerta, lecturas de odómetro con confirmación, combustible, historial de servicios desde los cierres y revisión de inconsistencias, panel de alertas, depreciación mensual, notificaciones, permisos del rol Administrativo, vista móvil.

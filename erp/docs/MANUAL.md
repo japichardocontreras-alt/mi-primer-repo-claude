@@ -1,6 +1,6 @@
 # Manual básico de uso — MUDANZAS METEPEC | ERP
 
-> Este manual crece con cada fase. Versión actual: Fases 1 a 5.
+> Este manual crece con cada fase. Versión actual: Fases 1 a 6.
 
 ## 1. Acceso
 1. Abra la dirección del sistema e ingrese su correo y contraseña.
@@ -114,6 +114,19 @@ Después del cierre puede **agregar gastos** al servicio (si ya existe uno igual
 * **Nómina y cortes:** por periodo, lo devengado y pagado de cada colaborador y su saldo pendiente; exportación a Excel con detalle.
 
 **Correcciones:** un concepto por pagar se cancela con motivo; un pago se cancela con motivo y sus conceptos y anticipos regresan a pendientes. Nada se borra.
+
+## 6 septies. Flotilla
+* **Flotilla:** lista de unidades con placas, estado, km actual, servicios del mes, valor contable y alertas. **Nueva unidad** para agregar camionetas (p. ej. la de 3.5 t cuando se incorpore). Para retirar una unidad, cambie su estado a **Baja** (se conserva el historial; «Mostrar también unidades dadas de baja»).
+* **Ficha de la unidad** (pestañas):
+  * **Servicios:** historial automático desde los cierres: fecha, folio, origen, destino, km, ingreso atribuido y gastos asociados.
+  * **Kilometraje:** todas las lecturas (servicios, mantenimientos, combustible y manuales). No se sobrescriben. Se señalan **inconsistencias** (km que retroceden o km sin registrar entre un recorrido y el siguiente). Una lectura menor a la anterior pide confirmación.
+  * **Mantenimiento:** cambio de aceite, afinación, frenos, suspensión, llantas, reparaciones, servicio general u otros, con fecha, km, proveedor, costo y **próximo mantenimiento** (fecha y/o km). El costo se registra automáticamente como gasto de flotilla (una sola vez).
+  * **Documentos:** seguro, verificación, tenencia, tarjeta de circulación y otros, con vencimiento y pago (el pago se registra como gasto).
+  * **Combustible:** cargas fuera de servicio (las de un servicio se capturan en su cierre) y rendimiento real km/L.
+  * **Depreciación:** lineal por tiempo y por kilómetro (base, anual, mensual, por km, acumulada y valor contable).
+  * **Datos de la unidad:** marca, modelo, año, placas, serie, capacidad, adquisición, valor residual, vida útil (años y km), km inicial, rendimiento estimado, GPS y estado.
+* **Alertas:** mantenimientos próximos o vencidos (por fecha o por km) y documentos por vencer, con la anticipación definida en Configuración → Alertas. Aparecen en Flotilla, en Inicio y en las notificaciones.
+* **Depreciación mensual** (administrador): en Flotilla, «Calcular y registrar» guarda la depreciación del mes de todas las unidades; puede recalcularse sin duplicar. No es salida de efectivo y se reporta aparte de los gastos.
 
 ## 7. Configuración (administrador)
 * **General:** datos de la empresa, parámetros operativos (tiempos de preparación y regreso, vigencia de cotizaciones), alertas y parámetros financieros.

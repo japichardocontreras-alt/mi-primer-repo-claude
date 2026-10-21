@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client";
 import type { Db } from "../db";
 import { mexicoMonthRange, mexicoParts, mexicoLocalToUtc } from "../format";
-import { getSetting } from "../settings";
+import { fleetAlerts } from "../domain/fleet";
 
 const OPEN_REQUEST_STATUSES = ["NUEVA", "INFORMACION_INCOMPLETA", "PENDIENTE_COTIZAR", "COTIZACION_ENVIADA", "PENDIENTE_CONFIRMACION"] as const;
 
@@ -26,8 +26,6 @@ export async function homeSummary(db: Db, now = new Date()) {
   const month = mexicoMonthRange(p.year, p.month);
   const endOfToday = mexicoLocalToUtc(p.year, p.month, p.day + 1);
   const in7days = new Date(now.getTime() + 7 * 86400_000);
-  const alertas = await getSetting(db, "alertas");
-  const docLimit = new Date(Date.UTC(p.year, p.month - 1, p.day + alertas.diasAvisoDocumentos));
 
   const [requestsMonth, followUps, followUpList, upcoming, activeVehicles, docsExpiring, servicesMonth] = await Promise.all([
     db.request.count({ where: { registeredAt: { gte: month.start, lt: month.end } } }),
@@ -45,7 +43,7 @@ export async function homeSummary(db: Db, now = new Date()) {
       take: 8,
     }),
     db.vehicle.count({ where: { active: true, status: "ACTIVA" } }),
-    db.vehicleDocument.count({ where: { expiresAt: { lte: docLimit }, vehicle: { active: true } } }),
+    fleetAlerts(db).then((a) => a.length),
     db.service.count({ where: { status: "FINALIZADO", actualEnd: { gte: month.start, lt: month.end } } }),
   ]);
 

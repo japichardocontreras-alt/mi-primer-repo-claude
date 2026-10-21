@@ -30,11 +30,11 @@ export default async function InicioPage() {
         <Stat label="Seguimientos pendientes hoy" value={s.followUps} icon={<PhoneCall className="h-5 w-5" />} tone={s.followUps ? "warn" : "neutral"} />
         <Stat label="Servicios próximos 7 días" value={s.upcoming.length} icon={<CalendarClock className="h-5 w-5" />} />
         <Stat label="Servicios realizados del mes" value={s.servicesMonth} icon={<CalendarClock className="h-5 w-5" />} tone="good" />
-        <Stat label="Unidades activas" value={s.activeVehicles} icon={<Truck className="h-5 w-5" />} hint={s.docsExpiring ? `${s.docsExpiring} documento(s) por vencer` : "Sin documentos por vencer"} />
+        <Stat label="Unidades activas" value={s.activeVehicles} icon={<Truck className="h-5 w-5" />} hint={s.docsExpiring ? `${s.docsExpiring} alerta(s) de mantenimiento o documentos` : "Sin alertas de flotilla"} />
         {showMoney ? (
           <Stat label="Cuentas por cobrar" value={formatMXN(receivable)} icon={<Wallet className="h-5 w-5" />} hint="Precio contratado − cobros recibidos" />
         ) : (
-          <Stat label="Documentos por vencer" value={s.docsExpiring} icon={<FileWarning className="h-5 w-5" />} tone={s.docsExpiring ? "warn" : "neutral"} />
+          <Stat label="Alertas de flotilla" value={s.docsExpiring} icon={<FileWarning className="h-5 w-5" />} tone={s.docsExpiring ? "warn" : "neutral"} />
         )}
       </div>
 

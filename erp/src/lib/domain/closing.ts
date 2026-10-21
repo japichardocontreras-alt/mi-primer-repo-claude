@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { Prisma } from "@prisma/client";
 import { audit } from "../audit";
+import type { Db } from "../db";
 import { BusinessError } from "../errors";
 import { mexicoLocalToUtc, formatNumber } from "../format";
 import { money, optText } from "../validation";
@@ -221,7 +222,7 @@ const round = (n: number) => Math.round(n * 100) / 100;
  * Revisión de congruencia del odómetro de una unidad: lecturas que retroceden o huecos
  * entre el fin de un recorrido y el inicio del siguiente. No modifica nada.
  */
-export async function odometerIssues(tx: Tx, vehicleId: string, toleranceKm = ODOMETER_TOLERANCE_KM) {
+export async function odometerIssues(tx: Db, vehicleId: string, toleranceKm = ODOMETER_TOLERANCE_KM) {
   const rs = await tx.odometerReading.findMany({ where: { vehicleId }, include: { service: { select: { folio: true } } }, orderBy: [{ readingAt: "asc" }, { createdAt: "asc" }] });
   const out: { at: Date; folio: string | null; previous: number; current: number; type: "RETROCESO" | "HUECO" }[] = [];
   for (let i = 1; i < rs.length; i++) {

@@ -15,12 +15,14 @@ export default async function ErpLayout({ children }: { children: React.ReactNod
     orderBy: { createdAt: "desc" },
     take: 15,
   });
+  const unreadCount = await prisma.notification.count({ where: { OR: [{ userId: user.id }, { userId: null }], readAt: null } });
   const collapsed = (await cookies()).get("mm_sidebar")?.value === "1";
   return (
     <AppShell
       allowed={allowed}
       user={{ name: user.name, role: user.roleName }}
       initialCollapsed={collapsed}
+      unreadCount={unreadCount}
       notifications={notifications.map((n) => ({ id: n.id, title: n.title, body: n.body, link: n.link, read: !!n.readAt, createdAt: formatDateTime(n.createdAt) }))}
     >
       {children}

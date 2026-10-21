@@ -18,15 +18,15 @@ function useClickOutside(onOut: () => void) {
   return ref;
 }
 
-function Notifications({ items }: { items: ShellNotification[] }) {
+function Notifications({ items, unreadCount }: { items: ShellNotification[]; unreadCount: number }) {
   const [open, setOpen] = useState(false);
   const ref = useClickOutside(() => setOpen(false));
-  const unread = items.filter((n) => !n.read).length;
+  const unread = unreadCount;
   return (
     <div ref={ref} className="relative">
       <button onClick={() => setOpen(!open)} className="relative rounded-md p-2 text-neutral-600 hover:bg-neutral-100" aria-label="Notificaciones">
         <Bell className="h-5 w-5" />
-        {unread > 0 && <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand-600 px-1 text-[10px] font-bold text-white">{unread}</span>}
+        {unread > 0 && <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand-600 px-1 text-[10px] font-bold text-white">{unread > 99 ? "99+" : unread}</span>}
       </button>
       {open && (
         <div className="absolute right-0 top-11 z-40 w-80 max-w-[90vw] rounded-md border border-neutral-200 bg-white shadow-lg">
@@ -95,8 +95,8 @@ function UserMenu({ name, role }: { name: string; role: string }) {
   );
 }
 
-export function AppShell({ allowed, user, notifications, initialCollapsed, children }: {
-  allowed: string[]; user: { name: string; role: string }; notifications: ShellNotification[]; initialCollapsed: boolean; children: React.ReactNode;
+export function AppShell({ allowed, user, notifications, initialCollapsed, unreadCount, children }: {
+  allowed: string[]; user: { name: string; role: string }; notifications: ShellNotification[]; initialCollapsed: boolean; unreadCount: number; children: React.ReactNode;
 }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   return (
@@ -110,7 +110,7 @@ export function AppShell({ allowed, user, notifications, initialCollapsed, child
           </button>
           <GlobalSearch />
           <div className="ml-auto flex items-center gap-1 sm:gap-3">
-            <Notifications items={notifications} />
+            <Notifications items={notifications} unreadCount={unreadCount} />
             <UserMenu name={user.name} role={user.role} />
           </div>
         </header>
