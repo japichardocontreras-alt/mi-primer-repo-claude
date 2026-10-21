@@ -1,5 +1,7 @@
 # Mudanzas Metepec · Sitio web
 
+> **ERP:** el sistema administrativo **MUDANZAS METEPEC | ERP** está en la carpeta [`erp/`](erp/README.md).
+
 Sitio web profesional enfocado en **conversión** para Mudanzas Metepec — mudanzas, fletes y transporte en Metepec, Toluca, Estado de México y toda la República Mexicana.
 
 > **Slogan:** Conoce el arte de mudarte

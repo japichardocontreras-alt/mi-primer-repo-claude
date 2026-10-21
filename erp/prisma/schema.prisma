@@ -1,0 +1,1027 @@
+// =====================================================================
+//  MUDANZAS METEPEC | ERP — Esquema de base de datos (PostgreSQL)
+// ---------------------------------------------------------------------
+//  Principios:
+//   * Claves primarias internas UUID; folios visibles independientes.
+//   * Ningún movimiento financiero u operativo histórico se borra en
+//     cascada: las relaciones usan onDelete: Restrict y los registros se
+//     cancelan / desactivan (cancelledAt, active, deletedAt).
+//   * Importes en Decimal(12,2) (MXN). Fechas en timestamptz (UTC en BD,
+//     se presentan en America/Mexico_City).
+//   * Campos `version` para control de concurrencia optimista.
+// =====================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------
+//  SEGURIDAD: usuarios, roles, permisos, sesiones, auditoría
+// ---------------------------------------------------------------------
+
+model Role {
+  id          String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  key         String           @unique // ADMINISTRADOR, ADMINISTRATIVO, ...
+  name        String
+  description String?
+  isSystem    Boolean          @default(false)
+  createdAt   DateTime         @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime         @updatedAt @db.Timestamptz(3)
+  permissions RolePermission[]
+  users       User[]
+
+  @@map("roles")
+}
+
+model Permission {
+  id          String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  key         String           @unique // p.ej. "solicitudes.editar"
+  module      String
+  description String
+  roles       RolePermission[]
+  users       UserPermission[]
+
+  @@map("permissions")
+}
+
+model RolePermission {
+  roleId       String     @db.Uuid
+  permissionId String     @db.Uuid
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+  @@map("role_permissions")
+}
+
+/// Permisos adicionales (granted=true) o revocados (granted=false) por usuario.
+model UserPermission {
+  userId       String     @db.Uuid
+  permissionId String     @db.Uuid
+  granted      Boolean
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([userId, permissionId])
+  @@map("user_permissions")
+}
+
+model User {
+  id                 String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email              String           @unique
+  name               String
+  passwordHash       String
+  roleId             String           @db.Uuid
+  role               Role             @relation(fields: [roleId], references: [id], onDelete: Restrict)
+  active             Boolean          @default(true)
+  mustChangePassword Boolean          @default(false)
+  failedLogins       Int              @default(0)
+  lockedUntil        DateTime?        @db.Timestamptz(3)
+  lastLoginAt        DateTime?        @db.Timestamptz(3)
+  createdAt          DateTime         @default(now()) @db.Timestamptz(3)
+  updatedAt          DateTime         @updatedAt @db.Timestamptz(3)
+  version            Int              @default(1)
+  sessions           Session[]
+  permissions        UserPermission[]
+  auditLogs          AuditLog[]
+  notifications      Notification[]
+  worker             Worker?
+
+  @@map("users")
+}
+
+model Session {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  /// SHA-256 del token; el token en claro solo vive en la cookie httpOnly.
+  tokenHash  String    @unique
+  userId     String    @db.Uuid
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt  DateTime  @default(now()) @db.Timestamptz(3)
+  lastSeenAt DateTime  @default(now()) @db.Timestamptz(3)
+  expiresAt  DateTime  @db.Timestamptz(3)
+  revokedAt  DateTime? @db.Timestamptz(3)
+  ip         String?
+  userAgent  String?
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model AuditLog {
+  id        BigInt   @id @default(autoincrement())
+  userId    String?  @db.Uuid
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    String // CREAR, EDITAR, ELIMINAR, LOGIN, CONFIRMAR, OVERRIDE, ...
+  entity    String // nombre de la entidad (Solicitud, Servicio, ...)
+  entityId  String?
+  summary   String?
+  before    Json?
+  after     Json?
+  ip        String?
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+
+  @@index([entity, entityId])
+  @@index([createdAt])
+  @@index([userId])
+  @@map("audit_logs")
+}
+
+model Notification {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String?   @db.Uuid // null = para todos los usuarios con acceso
+  user      User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  title     String
+  body      String?
+  link      String?
+  /// Clave para no duplicar alertas automáticas (p.ej. "doc-vence:<id>:2026-10")
+  dedupeKey String?   @unique
+  readAt    DateTime? @db.Timestamptz(3)
+  createdAt DateTime  @default(now()) @db.Timestamptz(3)
+
+  @@index([userId, readAt])
+  @@map("notifications")
+}
+
+/// Configuración general clave/valor (datos de empresa, márgenes, reglas de asignación de costos, etc.)
+model Setting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+  updatedBy String?  @db.Uuid
+
+  @@map("settings")
+}
+
+/// Consecutivos de folios generados en el backend (atómicos por prefijo y año).
+model FolioCounter {
+  prefix String
+  year   Int
+  value  Int    @default(0)
+
+  @@id([prefix, year])
+  @@map("folio_counters")
+}
+
+// ---------------------------------------------------------------------
+//  COMERCIAL: clientes, direcciones, solicitudes, cotizaciones, seguimiento
+// ---------------------------------------------------------------------
+
+enum ContactChannel {
+  WHATSAPP
+  TELEFONO
+  CORREO
+  FACEBOOK
+  INSTAGRAM
+  SITIO_WEB
+  RECOMENDACION
+  PRESENCIAL
+  OTRO
+}
+
+enum ServiceType {
+  LOCAL
+  FORANEO
+  FLETE
+  OTRO
+}
+
+enum PackageType {
+  ESTANDAR
+  SUPERIOR
+  COMPLETO
+  PERSONALIZADO
+}
+
+enum RequestStatus {
+  NUEVA
+  INFORMACION_INCOMPLETA
+  PENDIENTE_COTIZAR
+  COTIZACION_ENVIADA
+  PENDIENTE_CONFIRMACION
+  CONFIRMADA
+  NO_CONCRETADA
+  CANCELADA
+}
+
+model Client {
+  id              String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code            String          @unique // CLI-000001
+  name            String
+  phone           String
+  /// Solo dígitos, para búsqueda y detección de duplicados.
+  phoneNormalized String
+  email           String?
+  channel         ContactChannel?
+  notes           String?
+  active          Boolean         @default(true)
+  createdById     String?         @db.Uuid
+  createdAt       DateTime        @default(now()) @db.Timestamptz(3)
+  updatedAt       DateTime        @updatedAt @db.Timestamptz(3)
+  version         Int             @default(1)
+  addresses       Address[]
+  requests        Request[]
+  services        Service[]
+
+  @@index([phoneNormalized])
+  @@index([name])
+  @@map("clients")
+}
+
+model Address {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  clientId         String?   @db.Uuid
+  client           Client?   @relation(fields: [clientId], references: [id], onDelete: Restrict)
+  street           String?
+  extNumber        String?
+  intNumber        String?
+  neighborhood     String?
+  municipality     String?
+  state            String?
+  postalCode       String?
+  references       String?
+  floor            Int?
+  hasElevator      Boolean?
+  accessConditions String?
+  latitude         Decimal?  @db.Decimal(9, 6)
+  longitude        Decimal?  @db.Decimal(9, 6)
+  createdAt        DateTime  @default(now()) @db.Timestamptz(3)
+  requestsOrigin   Request[] @relation("RequestOrigin")
+  requestsDest     Request[] @relation("RequestDestination")
+  servicesOrigin   Service[] @relation("ServiceOrigin")
+  servicesDest     Service[] @relation("ServiceDestination")
+
+  @@map("addresses")
+}
+
+model Request {
+  id                   String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  folio                String         @unique // SOL-2026-000001 (inmutable)
+  clientId             String         @db.Uuid
+  client               Client         @relation(fields: [clientId], references: [id], onDelete: Restrict)
+  registeredAt         DateTime       @default(now()) @db.Timestamptz(3)
+  channel              ContactChannel @default(WHATSAPP)
+  tentativeDate        DateTime?      @db.Date
+  tentativeTime        String? // HH:mm
+  serviceType          ServiceType
+  originAddressId      String?        @db.Uuid
+  originAddress        Address?       @relation("RequestOrigin", fields: [originAddressId], references: [id], onDelete: Restrict)
+  destinationAddressId String?        @db.Uuid
+  destinationAddress   Address?       @relation("RequestDestination", fields: [destinationAddressId], references: [id], onDelete: Restrict)
+  inventorySummary     String?
+  itemsDescription     String?
+  observations         String?
+  specialManeuvers     String?
+  needsPacking         Boolean        @default(false)
+  suggestedVehicleId   String?        @db.Uuid
+  suggestedVehicle     Vehicle?       @relation(fields: [suggestedVehicleId], references: [id], onDelete: Restrict)
+  package              PackageType?
+  status               RequestStatus  @default(NUEVA)
+  lastContactAt        DateTime?      @db.Timestamptz(3)
+  nextContactAt        DateTime?      @db.Timestamptz(3)
+  lostReason           String?
+  cancelReason         String?
+  // --- Preparación para el cotizador futuro ---
+  estimatedKm          Decimal?       @db.Decimal(10, 2)
+  estimatedVolumeM3    Decimal?       @db.Decimal(10, 2)
+  requiredStaff        Int?
+  estimatedExpenses    Decimal?       @db.Decimal(12, 2)
+  /// Versión de cotización vigente (la más reciente se identifica aquí).
+  currentQuoteId       String?        @unique @db.Uuid
+  currentQuote         Quote?         @relation("CurrentQuote", fields: [currentQuoteId], references: [id], onDelete: Restrict)
+  createdById          String?        @db.Uuid
+  createdAt            DateTime       @default(now()) @db.Timestamptz(3)
+  updatedAt            DateTime       @updatedAt @db.Timestamptz(3)
+  version              Int            @default(1)
+  quotes               Quote[]        @relation("RequestQuotes")
+  events               RequestEvent[]
+  service              Service?
+  attachments          Attachment[]
+
+  @@index([status])
+  @@index([registeredAt])
+  @@index([clientId])
+  @@index([nextContactAt])
+  @@map("requests")
+}
+
+enum QuoteSource {
+  MANUAL
+  CALCULADO
+}
+
+/// Versiones de cotización. Nunca se editan: cada cambio de precio crea una nueva versión.
+model Quote {
+  id               String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  requestId        String      @db.Uuid
+  request          Request     @relation("RequestQuotes", fields: [requestId], references: [id], onDelete: Restrict)
+  versionNumber    Int
+  source           QuoteSource @default(MANUAL)
+  manualPrice      Decimal     @db.Decimal(12, 2)
+  /// Reservado para el cotizador inteligente.
+  calculatedPrice  Decimal?    @db.Decimal(12, 2)
+  /// Precio final autorizado (por defecto igual al manual).
+  finalPrice       Decimal     @db.Decimal(12, 2)
+  includesVat      Boolean     @default(false)
+  quotedAt         DateTime    @default(now()) @db.Timestamptz(3)
+  validUntil       DateTime?   @db.Date
+  notes            String?
+  /// Entradas y salida del cotizador (reservado).
+  calculatorInput  Json?
+  calculatorOutput Json?
+  calculatorVer    String?
+  createdById      String?     @db.Uuid
+  createdAt        DateTime    @default(now()) @db.Timestamptz(3)
+  currentFor       Request?    @relation("CurrentQuote")
+
+  @@unique([requestId, versionNumber])
+  @@map("quotes")
+}
+
+enum RequestEventType {
+  CREADA
+  CAMBIO_ESTADO
+  CONTACTO
+  NOTA
+  COTIZACION
+  EDICION
+  CONVERSION
+}
+
+/// Historial comercial: contactos, notas, cambios de estado y de precio.
+model RequestEvent {
+  id            String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  requestId     String           @db.Uuid
+  request       Request          @relation(fields: [requestId], references: [id], onDelete: Restrict)
+  type          RequestEventType
+  fromStatus    RequestStatus?
+  toStatus      RequestStatus?
+  contactAt     DateTime?        @db.Timestamptz(3)
+  nextContactAt DateTime?        @db.Timestamptz(3)
+  notes         String?
+  data          Json?
+  createdById   String?          @db.Uuid
+  createdAt     DateTime         @default(now()) @db.Timestamptz(3)
+
+  @@index([requestId, createdAt])
+  @@map("request_events")
+}
+
+// ---------------------------------------------------------------------
+//  OPERACIÓN: servicios, asignaciones, reprogramaciones
+// ---------------------------------------------------------------------
+
+enum ServiceStatus {
+  POR_PROGRAMAR
+  PROGRAMADO
+  CONFIRMADO
+  EN_PROCESO
+  FINALIZADO
+  INCIDENCIA
+  CANCELADO
+}
+
+enum CollectionStatus {
+  PENDIENTE
+  PARCIAL
+  LIQUIDADO
+}
+
+model Service {
+  id                    String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  folio                 String              @unique // MM-2026-000001
+  /// Una solicitud solo puede generar un servicio (UNIQUE evita duplicados).
+  requestId             String?             @unique @db.Uuid
+  request               Request?            @relation(fields: [requestId], references: [id], onDelete: Restrict)
+  clientId              String              @db.Uuid
+  client                Client              @relation(fields: [clientId], references: [id], onDelete: Restrict)
+  status                ServiceStatus       @default(POR_PROGRAMAR)
+  serviceType           ServiceType
+  package               PackageType?
+  scheduledStart        DateTime?           @db.Timestamptz(3)
+  estimatedEnd          DateTime?           @db.Timestamptz(3)
+  /// Minutos de preparación antes de la salida y de regreso a base después del fin.
+  prepMinutes           Int                 @default(30)
+  returnMinutes         Int                 @default(60)
+  originAddressId       String?             @db.Uuid
+  originAddress         Address?            @relation("ServiceOrigin", fields: [originAddressId], references: [id], onDelete: Restrict)
+  destinationAddressId  String?             @db.Uuid
+  destinationAddress    Address?            @relation("ServiceDestination", fields: [destinationAddressId], references: [id], onDelete: Restrict)
+  contractedPrice       Decimal             @db.Decimal(12, 2)
+  includesVat           Boolean             @default(false)
+  inventory             String?
+  observations          String?
+  cancelReason          String?
+  cancelledAt           DateTime?           @db.Timestamptz(3)
+  // --- Cierre operativo ---
+  actualStart           DateTime?           @db.Timestamptz(3)
+  actualEnd             DateTime?           @db.Timestamptz(3)
+  incidents             String?
+  closingNotes          String?
+  deliveryEvidence      String?
+  operationalClosedAt   DateTime?           @db.Timestamptz(3)
+  operationalClosedById String?             @db.Uuid
+  // --- Cierre financiero (independiente del operativo) ---
+  collectionStatus      CollectionStatus    @default(PENDIENTE)
+  financialClosedAt     DateTime?           @db.Timestamptz(3)
+  createdById           String?             @db.Uuid
+  createdAt             DateTime            @default(now()) @db.Timestamptz(3)
+  updatedAt             DateTime            @updatedAt @db.Timestamptz(3)
+  version               Int                 @default(1)
+  vehicles              ServiceVehicle[]
+  staff                 ServiceStaff[]
+  reschedules           ServiceReschedule[]
+  overrides             ConflictOverride[]  @relation("OverrideService")
+  payments              Payment[]
+  expenses              Expense[]
+  odometerReadings      OdometerReading[]
+  fuelLogs              FuelLog[]
+  payrollEntries        PayrollEntry[]
+  attachments           Attachment[]
+
+  @@index([status])
+  @@index([scheduledStart])
+  @@index([clientId])
+  @@map("services")
+}
+
+model ServiceVehicle {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  serviceId String   @db.Uuid
+  service   Service  @relation(fields: [serviceId], references: [id], onDelete: Restrict)
+  vehicleId String   @db.Uuid
+  vehicle   Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Restrict)
+  isPrimary Boolean  @default(true)
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+
+  @@unique([serviceId, vehicleId])
+  @@index([vehicleId])
+  @@map("service_vehicles")
+}
+
+enum StaffRole {
+  CHOFER
+  AYUDANTE
+  OTRO
+}
+
+model ServiceStaff {
+  id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  serviceId    String        @db.Uuid
+  service      Service       @relation(fields: [serviceId], references: [id], onDelete: Restrict)
+  workerId     String        @db.Uuid
+  worker       Worker        @relation(fields: [workerId], references: [id], onDelete: Restrict)
+  role         StaffRole
+  /// Pago pactado para este servicio (se toma de la tarifa configurable, editable).
+  agreedPay    Decimal       @db.Decimal(12, 2)
+  participated Boolean       @default(true)
+  createdAt    DateTime      @default(now()) @db.Timestamptz(3)
+  payrollEntry PayrollEntry?
+
+  @@unique([serviceId, workerId])
+  @@index([workerId])
+  @@map("service_staff")
+}
+
+/// Historial de reprogramaciones (fecha, horario, unidad o personal).
+model ServiceReschedule {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  serviceId   String   @db.Uuid
+  service     Service  @relation(fields: [serviceId], references: [id], onDelete: Restrict)
+  before      Json
+  after       Json
+  reason      String?
+  createdById String?  @db.Uuid
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+
+  @@index([serviceId])
+  @@map("service_reschedules")
+}
+
+enum ConflictType {
+  UNIDAD
+  PERSONAL
+}
+
+/// Autorización excepcional de un empalme de horarios (solo administrador).
+model ConflictOverride {
+  id                   String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  serviceId            String       @db.Uuid
+  service              Service      @relation("OverrideService", fields: [serviceId], references: [id], onDelete: Restrict)
+  type                 ConflictType
+  resourceId           String       @db.Uuid // vehicleId o workerId
+  conflictingServiceId String       @db.Uuid
+  reason               String
+  authorizedById       String       @db.Uuid
+  createdAt            DateTime     @default(now()) @db.Timestamptz(3)
+
+  @@index([serviceId])
+  @@map("conflict_overrides")
+}
+
+// ---------------------------------------------------------------------
+//  PERSONAL Y NÓMINA (control administrativo interno)
+// ---------------------------------------------------------------------
+
+enum WorkerPosition {
+  CHOFER
+  AYUDANTE
+  ADMINISTRACION
+  OTRO
+}
+
+enum PayType {
+  POR_SERVICIO
+  SEMANAL
+  QUINCENAL
+  MENSUAL
+  MIXTO
+}
+
+model Worker {
+  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code           String           @unique // EMP-0001
+  fullName       String
+  phone          String?
+  position       WorkerPosition
+  hireDate       DateTime?        @db.Date
+  active         Boolean          @default(true)
+  baseSalary     Decimal          @default(0) @db.Decimal(12, 2)
+  payType        PayType          @default(POR_SERVICIO)
+  notes          String?
+  /// Reservado para módulo legal (IMSS/ISR/CFDI): NSS, RFC, CURP, etc.
+  legalData      Json?
+  userId         String?          @unique @db.Uuid
+  user           User?            @relation(fields: [userId], references: [id], onDelete: SetNull)
+  createdAt      DateTime         @default(now()) @db.Timestamptz(3)
+  updatedAt      DateTime         @updatedAt @db.Timestamptz(3)
+  version        Int              @default(1)
+  assignments    ServiceStaff[]
+  payrollEntries PayrollEntry[]
+  payments       PayrollPayment[]
+  attachments    Attachment[]
+
+  @@map("workers")
+}
+
+/// Tarifas configurables de pago por servicio (tipo de servicio × rol).
+model PayRate {
+  id            String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  serviceType   ServiceType
+  role          StaffRole
+  amount        Decimal     @db.Decimal(12, 2)
+  effectiveFrom DateTime    @db.Date
+  createdAt     DateTime    @default(now()) @db.Timestamptz(3)
+
+  @@unique([serviceType, role, effectiveFrom])
+  @@map("pay_rates")
+}
+
+enum PayrollEntryKind {
+  SERVICIO
+  SUELDO_BASE
+  BONO
+  HORAS_EXTRA
+  DEDUCCION
+  ANTICIPO_NOMINA
+  OTRO
+}
+
+enum PayrollEntryStatus {
+  GENERADO
+  PAGADO
+  CANCELADO
+}
+
+/// Devengos y deducciones. Un pago por servicio queda ligado 1:1 a su asignación (sin duplicados).
+model PayrollEntry {
+  id             String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  workerId       String             @db.Uuid
+  worker         Worker             @relation(fields: [workerId], references: [id], onDelete: Restrict)
+  serviceId      String?            @db.Uuid
+  service        Service?           @relation(fields: [serviceId], references: [id], onDelete: Restrict)
+  serviceStaffId String?            @unique @db.Uuid
+  serviceStaff   ServiceStaff?      @relation(fields: [serviceStaffId], references: [id], onDelete: Restrict)
+  kind           PayrollEntryKind
+  concept        String
+  date           DateTime           @db.Date
+  /// Positivo = devengo; negativo = deducción / anticipo descontado.
+  amount         Decimal            @db.Decimal(12, 2)
+  status         PayrollEntryStatus @default(GENERADO)
+  paymentId      String?            @db.Uuid
+  payment        PayrollPayment?    @relation(fields: [paymentId], references: [id], onDelete: Restrict)
+  notes          String?
+  createdById    String?            @db.Uuid
+  createdAt      DateTime           @default(now()) @db.Timestamptz(3)
+
+  @@index([workerId, date])
+  @@index([serviceId])
+  @@map("payroll_entries")
+}
+
+enum PeriodType {
+  SEMANAL
+  QUINCENAL
+  MENSUAL
+}
+
+/// Pago efectivamente entregado a un trabajador (flujo de efectivo de nómina).
+model PayrollPayment {
+  id          String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  folio       String         @unique // NOM-2026-000001
+  workerId    String         @db.Uuid
+  worker      Worker         @relation(fields: [workerId], references: [id], onDelete: Restrict)
+  periodType  PeriodType?
+  periodStart DateTime?      @db.Date
+  periodEnd   DateTime?      @db.Date
+  paidAt      DateTime       @db.Timestamptz(3)
+  amount      Decimal        @db.Decimal(12, 2)
+  method      PaymentMethod
+  reference   String?
+  notes       String?
+  cancelledAt DateTime?      @db.Timestamptz(3)
+  createdById String?        @db.Uuid
+  createdAt   DateTime       @default(now()) @db.Timestamptz(3)
+  entries     PayrollEntry[]
+
+  @@index([workerId, paidAt])
+  @@map("payroll_payments")
+}
+
+// ---------------------------------------------------------------------
+//  FLOTILLA
+// ---------------------------------------------------------------------
+
+enum VehicleStatus {
+  ACTIVA
+  EN_TALLER
+  FUERA_DE_SERVICIO
+  BAJA
+}
+
+model Vehicle {
+  id                  String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code                String              @unique // identificador visible, p.ej. "F350-1"
+  name                String
+  brand               String?
+  model               String?
+  year                Int?
+  plates              String?
+  vin                 String?
+  capacity            String?
+  acquisitionDate     DateTime?           @db.Date
+  acquisitionPrice    Decimal?            @db.Decimal(12, 2)
+  residualValue       Decimal?            @db.Decimal(12, 2)
+  usefulLifeYears     Int?
+  usefulLifeKm        Int?
+  initialOdometer     Int                 @default(0)
+  /// Caché del último odómetro registrado (la fuente de verdad es odometer_readings).
+  currentOdometer     Int                 @default(0)
+  estimatedKmPerLiter Decimal?            @db.Decimal(6, 2)
+  gps                 String?
+  status              VehicleStatus       @default(ACTIVA)
+  active              Boolean             @default(true)
+  notes               String?
+  createdAt           DateTime            @default(now()) @db.Timestamptz(3)
+  updatedAt           DateTime            @updatedAt @db.Timestamptz(3)
+  version             Int                 @default(1)
+  services            ServiceVehicle[]
+  suggestedIn         Request[]
+  odometerReadings    OdometerReading[]
+  fuelLogs            FuelLog[]
+  maintenances        Maintenance[]
+  documents           VehicleDocument[]
+  depreciation        DepreciationEntry[]
+  expenses            Expense[]
+  movements           FinancialMovement[]
+  attachments         Attachment[]
+
+  @@map("vehicles")
+}
+
+enum OdometerSource {
+  SERVICIO_INICIO
+  SERVICIO_FIN
+  MANTENIMIENTO
+  COMBUSTIBLE
+  MANUAL
+}
+
+/// Lecturas de odómetro inmutables (nunca se sobrescriben).
+model OdometerReading {
+  id          String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  vehicleId   String         @db.Uuid
+  vehicle     Vehicle        @relation(fields: [vehicleId], references: [id], onDelete: Restrict)
+  serviceId   String?        @db.Uuid
+  service     Service?       @relation(fields: [serviceId], references: [id], onDelete: Restrict)
+  readingAt   DateTime       @db.Timestamptz(3)
+  odometer    Int
+  source      OdometerSource
+  notes       String?
+  createdById String?        @db.Uuid
+  createdAt   DateTime       @default(now()) @db.Timestamptz(3)
+
+  @@index([vehicleId, readingAt])
+  @@map("odometer_readings")
+}
+
+model FuelLog {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  vehicleId String   @db.Uuid
+  vehicle   Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Restrict)
+  serviceId String?  @db.Uuid
+  service   Service? @relation(fields: [serviceId], references: [id], onDelete: Restrict)
+  date      DateTime @db.Timestamptz(3)
+  liters    Decimal  @db.Decimal(10, 2)
+  odometer  Int?
+  station   String?
+  /// El importe se registra una sola vez como gasto (expenses); aquí solo se liga.
+  expenseId String?  @unique @db.Uuid
+  expense   Expense? @relation(fields: [expenseId], references: [id], onDelete: Restrict)
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+
+  @@index([vehicleId, date])
+  @@map("fuel_logs")
+}
+
+enum MaintenanceType {
+  CAMBIO_ACEITE
+  AFINACION
+  FRENOS
+  SUSPENSION
+  LLANTAS
+  REPARACION
+  SERVICIO_GENERAL
+  OTRO
+}
+
+model Maintenance {
+  id           String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  vehicleId    String          @db.Uuid
+  vehicle      Vehicle         @relation(fields: [vehicleId], references: [id], onDelete: Restrict)
+  type         MaintenanceType
+  date         DateTime        @db.Date
+  odometer     Int?
+  description  String?
+  provider     String?
+  cost         Decimal         @default(0) @db.Decimal(12, 2)
+  nextDate     DateTime?       @db.Date
+  nextOdometer Int?
+  /// Gasto ligado (el costo se contabiliza en expenses, no aquí).
+  expenseId    String?         @unique @db.Uuid
+  expense      Expense?        @relation(fields: [expenseId], references: [id], onDelete: Restrict)
+  createdById  String?         @db.Uuid
+  createdAt    DateTime        @default(now()) @db.Timestamptz(3)
+  attachments  Attachment[]
+
+  @@index([vehicleId, date])
+  @@map("maintenances")
+}
+
+enum VehicleDocumentType {
+  SEGURO
+  VERIFICACION
+  TENENCIA
+  TARJETA_CIRCULACION
+  OTRO
+}
+
+model VehicleDocument {
+  id          String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  vehicleId   String              @db.Uuid
+  vehicle     Vehicle             @relation(fields: [vehicleId], references: [id], onDelete: Restrict)
+  type        VehicleDocumentType
+  description String?
+  number      String?
+  provider    String?
+  issuedAt    DateTime?           @db.Date
+  expiresAt   DateTime?           @db.Date
+  amount      Decimal?            @db.Decimal(12, 2)
+  paidAt      DateTime?           @db.Date
+  expenseId   String?             @unique @db.Uuid
+  expense     Expense?            @relation(fields: [expenseId], references: [id], onDelete: Restrict)
+  createdAt   DateTime            @default(now()) @db.Timestamptz(3)
+  attachments Attachment[]
+
+  @@index([expiresAt])
+  @@map("vehicle_documents")
+}
+
+enum DepreciationMethod {
+  LINEAL_TIEMPO
+  POR_KILOMETRO
+}
+
+/// Depreciación mensual registrada (no es salida de efectivo; se reporta aparte de los gastos).
+model DepreciationEntry {
+  id        String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  vehicleId String             @db.Uuid
+  vehicle   Vehicle            @relation(fields: [vehicleId], references: [id], onDelete: Restrict)
+  year      Int
+  month     Int
+  method    DepreciationMethod
+  amount    Decimal            @db.Decimal(12, 2)
+  basis     Json? // parámetros usados en el cálculo
+  createdAt DateTime           @default(now()) @db.Timestamptz(3)
+
+  @@unique([vehicleId, year, month, method])
+  @@map("depreciation_entries")
+}
+
+// ---------------------------------------------------------------------
+//  FINANZAS
+// ---------------------------------------------------------------------
+
+enum PaymentMethod {
+  EFECTIVO
+  TRANSFERENCIA
+  TARJETA
+  DEPOSITO
+  CHEQUE
+  OTRO
+}
+
+enum PaymentKind {
+  ANTICIPO
+  PAGO_FINAL
+  PARCIAL
+  REEMBOLSO
+}
+
+/// Cobros a clientes. Admite múltiples movimientos por servicio.
+model Payment {
+  id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  folio        String        @unique // COB-2026-000001
+  serviceId    String        @db.Uuid
+  service      Service       @relation(fields: [serviceId], references: [id], onDelete: Restrict)
+  kind         PaymentKind
+  receivedAt   DateTime      @db.Timestamptz(3)
+  /// Positivo; un REEMBOLSO se registra positivo y se resta en los cálculos.
+  amount       Decimal       @db.Decimal(12, 2)
+  method       PaymentMethod
+  reference    String?
+  notes        String?
+  cancelledAt  DateTime?     @db.Timestamptz(3)
+  cancelReason String?
+  createdById  String?       @db.Uuid
+  createdAt    DateTime      @default(now()) @db.Timestamptz(3)
+  attachments  Attachment[]
+
+  @@index([serviceId])
+  @@index([receivedAt])
+  @@map("payments")
+}
+
+enum ExpenseGroup {
+  DIRECTO // ligado a un servicio
+  FIJO // estructura mensual
+  FLOTILLA // mantenimiento, documentos, combustible no ligado a servicio
+  EXTRAORDINARIO
+}
+
+model ExpenseCategory {
+  id        String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  key       String             @unique
+  name      String
+  group     ExpenseGroup
+  parentId  String?            @db.Uuid
+  parent    ExpenseCategory?   @relation("CategoryTree", fields: [parentId], references: [id], onDelete: Restrict)
+  children  ExpenseCategory[]  @relation("CategoryTree")
+  isSystem  Boolean            @default(false)
+  active    Boolean            @default(true)
+  createdAt DateTime           @default(now()) @db.Timestamptz(3)
+  expenses  Expense[]
+  recurring RecurringExpense[]
+
+  @@map("expense_categories")
+}
+
+model Expense {
+  id              String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  folio           String            @unique // GAS-2026-000001
+  categoryId      String            @db.Uuid
+  category        ExpenseCategory   @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  serviceId       String?           @db.Uuid
+  service         Service?          @relation(fields: [serviceId], references: [id], onDelete: Restrict)
+  vehicleId       String?           @db.Uuid
+  vehicle         Vehicle?          @relation(fields: [vehicleId], references: [id], onDelete: Restrict)
+  /// Fecha contable (devengo).
+  date            DateTime          @db.Date
+  /// Fecha de pago (flujo de efectivo). Null = por pagar.
+  paidAt          DateTime?         @db.Date
+  subtotal        Decimal           @db.Decimal(12, 2)
+  vatAmount       Decimal           @default(0) @db.Decimal(12, 2)
+  total           Decimal           @db.Decimal(12, 2)
+  supplier        String?
+  description     String
+  method          PaymentMethod?
+  reference       String?
+  recurringId     String?           @db.Uuid
+  recurring       RecurringExpense? @relation(fields: [recurringId], references: [id], onDelete: Restrict)
+  /// Periodo "YYYY-MM" para gastos recurrentes; UNIQUE(recurringId, period) evita duplicados.
+  recurringPeriod String?
+  cancelledAt     DateTime?         @db.Timestamptz(3)
+  cancelReason    String?
+  createdById     String?           @db.Uuid
+  createdAt       DateTime          @default(now()) @db.Timestamptz(3)
+  fuelLog         FuelLog?
+  maintenance     Maintenance?
+  vehicleDocument VehicleDocument?
+  attachments     Attachment[]
+
+  @@unique([recurringId, recurringPeriod])
+  @@index([date])
+  @@index([serviceId])
+  @@index([vehicleId])
+  @@map("expenses")
+}
+
+model RecurringExpense {
+  id          String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  categoryId  String          @db.Uuid
+  category    ExpenseCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  description String
+  amount      Decimal         @db.Decimal(12, 2)
+  includesVat Boolean         @default(false)
+  dayOfMonth  Int             @default(1)
+  startDate   DateTime        @db.Date
+  endDate     DateTime?       @db.Date
+  active      Boolean         @default(true)
+  createdAt   DateTime        @default(now()) @db.Timestamptz(3)
+  expenses    Expense[]
+
+  @@map("recurring_expenses")
+}
+
+enum MovementType {
+  PRESTAMO_RECIBIDO
+  APORTACION_CAPITAL
+  COMPRA_ACTIVO
+  PAGO_FINANCIAMIENTO
+  INGRESO_EXTRAORDINARIO
+  GASTO_EXTRAORDINARIO
+  RETIRO_SOCIOS
+}
+
+/// Movimientos que NO son ventas ni gastos operativos ordinarios.
+model FinancialMovement {
+  id              String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  folio           String       @unique // MOV-2026-000001
+  type            MovementType
+  date            DateTime     @db.Date
+  amount          Decimal      @db.Decimal(12, 2)
+  /// Para PAGO_FINANCIAMIENTO: porción de intereses (gasto) vs capital (no gasto).
+  interestPortion Decimal?     @db.Decimal(12, 2)
+  description     String
+  reference       String?
+  vehicleId       String?      @db.Uuid
+  vehicle         Vehicle?     @relation(fields: [vehicleId], references: [id], onDelete: Restrict)
+  cancelledAt     DateTime?    @db.Timestamptz(3)
+  createdById     String?      @db.Uuid
+  createdAt       DateTime     @default(now()) @db.Timestamptz(3)
+
+  @@index([date])
+  @@map("financial_movements")
+}
+
+// ---------------------------------------------------------------------
+//  ARCHIVOS ADJUNTOS (almacenamiento privado; solo se sirven con sesión)
+// ---------------------------------------------------------------------
+
+model Attachment {
+  id            String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  storageKey    String           @unique
+  fileName      String
+  mimeType      String
+  sizeBytes     Int
+  category      String? // FOTO, VIDEO, EVIDENCIA, COMPROBANTE, DOCUMENTO
+  description   String?
+  requestId     String?          @db.Uuid
+  request       Request?         @relation(fields: [requestId], references: [id], onDelete: Restrict)
+  serviceId     String?          @db.Uuid
+  service       Service?         @relation(fields: [serviceId], references: [id], onDelete: Restrict)
+  vehicleId     String?          @db.Uuid
+  vehicle       Vehicle?         @relation(fields: [vehicleId], references: [id], onDelete: Restrict)
+  maintenanceId String?          @db.Uuid
+  maintenance   Maintenance?     @relation(fields: [maintenanceId], references: [id], onDelete: Restrict)
+  documentId    String?          @db.Uuid
+  document      VehicleDocument? @relation(fields: [documentId], references: [id], onDelete: Restrict)
+  expenseId     String?          @db.Uuid
+  expense       Expense?         @relation(fields: [expenseId], references: [id], onDelete: Restrict)
+  paymentId     String?          @db.Uuid
+  payment       Payment?         @relation(fields: [paymentId], references: [id], onDelete: Restrict)
+  workerId      String?          @db.Uuid
+  worker        Worker?          @relation(fields: [workerId], references: [id], onDelete: Restrict)
+  uploadedById  String?          @db.Uuid
+  createdAt     DateTime         @default(now()) @db.Timestamptz(3)
+  deletedAt     DateTime?        @db.Timestamptz(3)
+
+  @@index([requestId])
+  @@index([serviceId])
+  @@map("attachments")
+}

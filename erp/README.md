@@ -1,0 +1,68 @@
+# MUDANZAS METEPEC | ERP
+
+Sistema administrativo y operativo de Mudanzas Metepec: **solicitud → cotización manual → confirmación → agenda → servicio → nómina / flotilla / finanzas → resultados**.
+
+* Arquitectura y modelo de datos: [`docs/ARQUITECTURA.md`](docs/ARQUITECTURA.md)
+* Respaldos: [`docs/RESPALDOS.md`](docs/RESPALDOS.md)
+* Despliegue: [`docs/DESPLIEGUE.md`](docs/DESPLIEGUE.md)
+
+## Estado por fases
+
+| Fase | Contenido | Estado |
+|---|---|---|
+| 1 | Arquitectura, base de datos completa, autenticación, permisos, diseño, navegación, configuración, auditoría, respaldos | ✅ Entregada y probada |
+| 2 | Clientes, solicitudes, cotizaciones manuales, seguimiento comercial | Pendiente |
+| 3 | Confirmación, agenda, asignación de unidades y personal | Pendiente |
+| 4 | Servicios realizados y cierre operativo | Pendiente |
+| 5 | Personal y nómina por servicio | Pendiente |
+| 6 | Flotilla, kilometraje, mantenimiento, depreciación | Pendiente |
+| 7 | Finanzas y gastos | Pendiente |
+| 8 | Dashboard de resultados | Pendiente |
+| 9 | Integración, pruebas del flujo completo | Pendiente |
+| 10 | Producción y manual de uso | Pendiente |
+
+Los módulos pendientes muestran un aviso «se entrega en la Fase N»; no contienen botones ni datos simulados.
+
+## Instalación local
+
+Requisitos: Node.js 22, PostgreSQL 16.
+
+```bash
+cd erp
+cp .env.example .env                     # edite las variables
+createdb erp && createdb erp_test        # base real y base de pruebas
+npm install
+npx prisma migrate deploy
+npm run db:seed                          # catálogos + administrador inicial
+npm run dev                              # http://localhost:3000
+```
+Inicie sesión con `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD`; el sistema pedirá cambiar la contraseña.
+
+## Variables de entorno
+
+| Variable | Obligatoria | Descripción |
+|---|---|---|
+| `DATABASE_URL` | Sí | Conexión PostgreSQL de la base real. |
+| `TEST_DATABASE_URL` | Para pruebas | Base exclusiva de pruebas; su nombre debe contener `test`. Las pruebas vacían sus tablas. |
+| `SESSION_TTL_HOURS` | No (12) | Duración de la sesión. |
+| `STORAGE_DIR` | No (`./storage`) | Carpeta privada de archivos adjuntos. |
+| `SEED_ADMIN_EMAIL`, `SEED_ADMIN_NAME`, `SEED_ADMIN_PASSWORD` | Solo primer arranque | Administrador inicial (se crea solo si no hay usuarios). |
+| `PG_DUMP_PATH` | No (`pg_dump`) | Ruta de `pg_dump` para descargar respaldos. |
+| `INSECURE_COOKIES` | No | `1` solo para pruebas locales en producción sin HTTPS. Nunca en un servidor real. |
+
+## Comandos
+
+| Comando | Uso |
+|---|---|
+| `npm run dev` | Desarrollo |
+| `npm run build` / `npm start` | Compilar / ejecutar |
+| `npm run typecheck` | Verificación de tipos |
+| `npm test` | Pruebas automatizadas (usa `TEST_DATABASE_URL`) |
+| `npx prisma migrate deploy` | Aplicar migraciones |
+| `npm run db:seed` | Catálogos (idempotente) |
+| `./scripts/backup.sh` / `./scripts/restore.sh` | Respaldo / recuperación |
+
+## Pruebas de la Fase 1
+
+* **Automatizadas (29, Vitest, contra PostgreSQL real):** folios (formato, año en hora de México, 40 transacciones simultáneas sin duplicados, sin huecos tras error); contraseñas; inicio de sesión, bloqueo, sesiones revocadas/expiradas/alteradas, usuarios inactivos; permisos por rol y ajustes individuales; integridad (un servicio por solicitud, folios únicos, sin borrado en cascada, tablas inmutables, CHECK de importes y horarios, gastos recurrentes no duplicables); cuentas por cobrar con anticipo, pago final, cobro cancelado y servicio cancelado; formatos MXN y zona horaria.
+* **Recorrido en navegador (Chromium):** redirección sin sesión, error de contraseña, cambio obligatorio de contraseña, indicadores en cero, búsqueda global, barra lateral contraíble con preferencia persistente, parámetros persistentes, alta de usuario y rechazo de duplicado, cierre de sesión, menú y bloqueo de páginas/API según permisos, menú móvil, auditoría y descarga de respaldo válido.
