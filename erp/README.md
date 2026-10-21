@@ -14,7 +14,7 @@ Sistema administrativo y operativo de Mudanzas Metepec: **solicitud → cotizaci
 | 1 | Arquitectura, base de datos completa, autenticación, permisos, diseño, navegación, configuración, auditoría, respaldos | ✅ Entregada y probada |
 | 2 | Clientes, solicitudes, cotizaciones manuales, seguimiento comercial | ✅ Entregada y probada |
 | 3 | Confirmación, agenda, asignación de unidades y personal | ✅ Entregada y probada |
-| 4 | Servicios realizados y cierre operativo | Pendiente |
+| 4 | Servicios realizados y cierre operativo | ✅ Entregada y probada |
 | 5 | Personal y nómina por servicio | Pendiente |
 | 6 | Flotilla, kilometraje, mantenimiento, depreciación | Pendiente |
 | 7 | Finanzas y gastos | Pendiente |
@@ -77,3 +77,8 @@ Inicie sesión con `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD`; el sistema pedir�
 
 * **Automatizadas (12 nuevas, 57 en total):** conversión de solicitud a servicio MM con hora de México, vínculo con solicitud y direcciones sin copiarlas; una solicitud no genera dos servicios aunque tres usuarios confirmen a la vez; «Por programar» sin fecha; empalme de unidad con márgenes de preparación y regreso (14:00 bloquea, 14:30 se permite); doble asignación de personal con otra unidad; servicios que cruzan medianoche y de 30 horas; cancelados liberan la unidad; autorización excepcional solo de administrador, con motivo y en auditoría; dos usuarios asignando la misma unidad a la vez (solo uno lo logra); reprogramación que conserva folio, cobros e historial antes/después; transiciones de estado y motivo obligatorio; cobros anticipo $2,000 → parcial, pago final $2,500 → liquidado, sobrepago rechazado, cancelación de cobro.
 * **Recorrido en navegador (15 comprobaciones):** alta de personal, confirmación con F350, chofer y 2 ayudantes (pago total calculado), solicitud vinculada y sin segunda confirmación, anticipo y saldo, empalme de unidad y de personal bloqueados, autorización del administrador, servicio nocturno que bloquea la madrugada, reprogramación, cancelación que libera la unidad, calendario mensual/semanal/lista, ficha del chofer, rol Administrativo sin autorización de empalmes, vista móvil.
+
+## Pruebas de la Fase 4
+
+* **Automatizadas (6 nuevas, 63 en total):** cierre que en una sola transacción deja el servicio «Finalizado», guarda lecturas de odómetro inmutables y actualiza la unidad, registra combustible (litros en bitácora, importe solo en gastos), casetas, estacionamientos, viáticos y extras como gastos del folio, y genera el pago de nómina de chofer y ayudantes ($700) — con el cobro todavía parcial; margen directo $4,500 − $1,370 − $700 = $2,430; tres cierres simultáneos aplican uno solo sin duplicar pagos ni gastos; pago solo a participantes con importe; huecos y retrocesos de odómetro exigen confirmación (y motivo si retrocede); validación de horarios y unidades; gasto duplicado detectado, confirmación y cancelación sin borrar; IVA desglosado.
+* **Recorrido en navegador (13 comprobaciones):** confirmación con cuadrilla y anticipo, validación de km, confirmación de kilometraje no congruente, cierre con evidencia fotográfica y cifras correctas, pago final → liquidado, gasto duplicado y cancelación, servicios realizados con totales, Excel, servicio finalizado no reprogramable ni cerrable dos veces, historial del chofer, vista móvil.

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, MessageCircle, ClipboardList, FileText, Film, Image as ImageIcon, Paperclip, AlertTriangle } from "lucide-react";
+import { ArrowLeft, MessageCircle, ClipboardList, FileText, Film, Image as ImageIcon, Paperclip, AlertTriangle, CheckCircle2 } from "lucide-react";
 import { prisma } from "@/lib/db";
 import { requirePermission, can } from "@/lib/auth/server";
 import { SERVICE_STATUS, STAFF_ROLE, STATUS_TRANSITIONS, paymentTotals, type ServiceStatusKey } from "@/lib/domain/services";
@@ -21,6 +21,11 @@ import { ConflictPanel } from "@/components/forms/conflict-panel";
 import { ServiceStatusForm } from "@/components/forms/service-status-form";
 import { cancelPaymentAction, changeStatusAction, registerPaymentAction, scheduleServiceAction, updateServiceAction, uploadServiceFilesAction } from "../actions";
 import { removeAttachmentAction } from "@/app/(erp)/solicitudes/actions";
+import { addServiceExpenseAction, cancelExpenseAction } from "@/app/(erp)/servicios/actions";
+import { serviceEconomics } from "@/lib/domain/closing";
+import { PAYMENT_METHOD } from "@/lib/domain/expenses";
+import { formatDateOnly, formatNumber } from "@/lib/format";
+import { DuplicateExpenseConfirm } from "@/components/forms/duplicate-expense-confirm";
 
 export const metadata = { title: "Servicio" };
 
@@ -43,10 +48,10 @@ const mxLocal = (d: Date) => {
   return { date: `${p.year}-${pad(p.month)}-${pad(p.day)}`, time: `${pad(p.hour)}:${pad(p.minute)}`, dt: `${p.year}-${pad(p.month)}-${pad(p.day)}T${pad(p.hour)}:${pad(p.minute)}` };
 };
 
-export default async function ServicioDetalle({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ confirmado?: string }> }) {
+export default async function ServicioDetalle({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ confirmado?: string; cerrado?: string }> }) {
   const user = await requirePermission("agenda.ver");
   const { id } = await params;
-  const { confirmado } = await searchParams;
+  const { confirmado, cerrado } = await searchParams;
   if (!/^[0-9a-f-]{36}$/i.test(id)) notFound();
   const s = await prisma.service.findUnique({
     where: { id },
@@ -58,11 +63,16 @@ export default async function ServicioDetalle({ params, searchParams }: { params
     },
   });
   if (!s) notFound();
-  const [totals, crew, logs] = await Promise.all([
+  const [totals, crew, logs, eco, allExpenses, readings, directCats] = await Promise.all([
     paymentTotals(prisma, s.id),
     crewOptions(prisma, s.serviceType),
     prisma.auditLog.findMany({ where: { entity: "Servicio", entityId: s.id }, include: { user: true }, orderBy: { createdAt: "desc" }, take: 50 }),
+    serviceEconomics(prisma, id),
+    prisma.expense.findMany({ where: { serviceId: id }, include: { category: true, fuelLog: true }, orderBy: { createdAt: "asc" } }),
+    prisma.odometerReading.findMany({ where: { serviceId: id }, include: { vehicle: true }, orderBy: { readingAt: "asc" } }),
+    prisma.expenseCategory.findMany({ where: { group: "DIRECTO", active: true }, orderBy: { name: "asc" } }),
   ]);
+  const payroll = await prisma.payrollEntry.findMany({ where: { serviceId: id }, include: { worker: true } });
   const names = new Map<string, string>([...crew.vehicles.map((v) => [v.id, v.name] as const), ...crew.workers.map((w) => [w.id, w.name] as const)]);
   for (const v of s.vehicles) names.set(v.vehicleId, v.vehicle.name);
   for (const x of s.staff) names.set(x.workerId, x.worker.fullName);
@@ -80,11 +90,18 @@ export default async function ServicioDetalle({ params, searchParams }: { params
   const files = [...s.attachments.map((a) => ({ ...a, from: "Servicio" })), ...(s.request?.attachments ?? []).map((a) => ({ ...a, from: "Solicitud" }))];
   const col = COLLECTION[s.collectionStatus];
   const choferes = s.staff.filter((x) => x.role === "CHOFER");
+  const closable = ["PROGRAMADO", "CONFIRMADO", "EN_PROCESO", "INCIDENCIA"].includes(s.status) && can(user, "servicios.cerrar");
+  const kmRows = s.vehicles.map((v) => {
+    const a = readings.find((r) => r.vehicleId === v.vehicleId && r.source === "SERVICIO_INICIO");
+    const b = readings.find((r) => r.vehicleId === v.vehicleId && r.source === "SERVICIO_FIN");
+    return { name: v.vehicle.name, start: a?.odometer, end: b?.odometer };
+  });
   const ayudantes = s.staff.filter((x) => x.role !== "CHOFER");
 
   return (
     <>
       <Link href="/agenda" className="mb-3 inline-flex items-center gap-1 text-sm text-neutral-600 hover:text-neutral-900"><ArrowLeft className="h-4 w-4" /> Agenda</Link>
+      {cerrado && <div className="mb-4 rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">Cierre operativo registrado: el servicio pasó a «Servicios realizados» y se actualizaron flotilla, gastos y nómina.</div>}
       {confirmado && <div className="mb-4 rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">Servicio <b>{s.folio}</b> creado y agregado a la agenda.</div>}
       <PageHeader
         eyebrow={`${SERVICE_TYPE[s.serviceType]}${s.package ? ` · Paquete ${PACKAGE[s.package]}` : ""}`}
@@ -94,6 +111,7 @@ export default async function ServicioDetalle({ params, searchParams }: { params
           <>
             <a href={`https://wa.me/${wa}`} target="_blank" rel="noopener noreferrer" className={buttonClass("outline")}><MessageCircle className="h-4 w-4" /> WhatsApp</a>
             {s.request && <Link href={`/solicitudes/${s.request.id}`} className={buttonClass("outline")}><ClipboardList className="h-4 w-4" /> Solicitud {s.request.folio}</Link>}
+            {closable && <Link href={`/agenda/${s.id}/cierre`} className={buttonClass("primary")}><CheckCircle2 className="h-4 w-4" /> Registrar cierre operativo</Link>}
           </>
         }
       />
@@ -119,6 +137,88 @@ export default async function ServicioDetalle({ params, searchParams }: { params
               </dl>
             </CardBody>
           </Card>
+
+          {s.status === "FINALIZADO" && (
+            <Card>
+              <CardHeader title="Cierre operativo" description={`Registrado ${formatDateTime(s.operationalClosedAt)}`} />
+              <CardBody className="space-y-5">
+                <dl className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                  <Item label="Inicio real">{formatDateTime(s.actualStart)}</Item>
+                  <Item label="Fin real">{formatDateTime(s.actualEnd)}</Item>
+                  <Item label="Km recorridos">{`${formatNumber(eco.km)} km`}</Item>
+                  <Item label="Kilometraje">{kmRows.map((k) => `${k.name}: ${k.start !== undefined ? formatNumber(k.start) : "—"} → ${k.end !== undefined ? formatNumber(k.end) : "—"}`).join("\n")}</Item>
+                  <div className="col-span-2"><Item label="Evidencia de entrega">{s.deliveryEvidence}</Item></div>
+                  <div className="col-span-2"><Item label="Observaciones del cierre">{s.closingNotes}</Item></div>
+                </dl>
+                <div className="grid grid-cols-2 gap-3 rounded-md bg-neutral-50 p-4 text-sm sm:grid-cols-4">
+                  <div><p className="text-xs text-neutral-500">Precio contratado</p><p className="font-semibold tabular-nums">{formatMXN(eco.price)}</p></div>
+                  <div><p className="text-xs text-neutral-500">Gastos directos</p><p className="font-semibold tabular-nums">− {formatMXN(eco.direct)}</p></div>
+                  <div><p className="text-xs text-neutral-500">Pago a personal</p><p className="font-semibold tabular-nums">− {formatMXN(eco.labor)}</p></div>
+                  <div><p className="text-xs text-neutral-500">Margen directo</p><p className={`font-semibold tabular-nums ${eco.margin >= 0 ? "text-emerald-700" : "text-red-700"}`}>{formatMXN(eco.margin)}</p></div>
+                  <p className="col-span-2 text-[11px] text-neutral-500 sm:col-span-4">Margen directo = precio − gastos ligados al folio − pagos de nómina del servicio. No incluye gastos fijos ni depreciación (se asignan en Resultados).</p>
+                </div>
+                {payroll.length > 0 && (
+                  <div>
+                    <p className="mb-1 text-xs font-medium uppercase tracking-wide text-neutral-500">Pagos generados en nómina</p>
+                    <ul className="text-sm">{payroll.map((p) => <li key={p.id} className="flex justify-between border-b border-neutral-100 py-1"><span>{p.worker.fullName} · <span className="text-neutral-500">{p.status === "GENERADO" ? "por pagar" : p.status.toLowerCase()}</span></span><span className="tabular-nums">{formatMXN(p.amount)}</span></li>)}</ul>
+                  </div>
+                )}
+              </CardBody>
+            </Card>
+          )}
+
+          {(allExpenses.length > 0 || s.status === "FINALIZADO") && (
+            <Card>
+              <CardHeader title="Gastos directos del servicio" description={`${formatMXN(eco.direct)} vigentes · ligados al folio ${s.folio}`} />
+              {allExpenses.length > 0 && (
+                <Table>
+                  <thead><tr><Th>Folio</Th><Th>Fecha</Th><Th>Concepto</Th><Th className="text-right">Importe</Th><Th></Th></tr></thead>
+                  <tbody>
+                    {allExpenses.map((e) => (
+                      <Tr key={e.id} className={e.cancelledAt ? "opacity-60" : ""}>
+                        <Td className="whitespace-nowrap text-xs">{e.folio}</Td>
+                        <Td className="whitespace-nowrap text-xs">{formatDateOnly(e.date)}</Td>
+                        <Td>{e.category.name}<span className="block text-xs text-neutral-500">{e.description}{e.fuelLog ? ` · ${formatNumber(e.fuelLog.liters)} L` : ""}{e.cancelledAt ? ` · Cancelado: ${e.cancelReason}` : ""}</span></Td>
+                        <Td className={`whitespace-nowrap text-right tabular-nums ${e.cancelledAt ? "line-through" : ""}`}>{formatMXN(e.total)}</Td>
+                        <Td>
+                          {!e.cancelledAt && can(user, "finanzas.gastos") && (
+                            <details>
+                              <summary className="cursor-pointer text-xs text-neutral-500 hover:text-red-700">Cancelar</summary>
+                              <ActionForm action={cancelExpenseAction.bind(null, e.id, s.id)} className="mt-1 space-y-1">
+                                <Input name="cancelReason" placeholder="Motivo" aria-label="Motivo" className="h-8 w-40 text-xs" />
+                                <SubmitButton size="sm" variant="danger" confirmText={`¿Cancelar el gasto ${e.folio}?`}>Cancelar gasto</SubmitButton>
+                              </ActionForm>
+                            </details>
+                          )}
+                        </Td>
+                      </Tr>
+                    ))}
+                  </tbody>
+                </Table>
+              )}
+              {can(user, "servicios.cerrar") && s.status !== "CANCELADO" && (
+                <CardBody className="border-t border-neutral-100">
+                  <ActionForm action={addServiceExpenseAction.bind(null, s.id)} resetOnSuccess>
+                    <div className="grid gap-3 sm:grid-cols-5">
+                      <FormField name="categoryKey" label="Categoría">
+                        <Select id="categoryKey" name="categoryKey" defaultValue="OTROS_DIRECTOS">{directCats.map((c) => <option key={c.id} value={c.key}>{c.name}</option>)}</Select>
+                      </FormField>
+                      <FormField name="description" label="Descripción" className="sm:col-span-2"><Input id="description" name="description" /></FormField>
+                      <FormField name="total" label="Importe"><Input id="total" name="total" inputMode="decimal" className="text-right" /></FormField>
+                      <FormField name="date" label="Fecha"><Input id="date" name="date" type="date" defaultValue={(s.actualStart ? mxLocal(s.actualStart) : now).date} /></FormField>
+                      <FormField name="method" label="Pagado con">
+                        <Select id="method" name="method" defaultValue="EFECTIVO">{Object.entries(PAYMENT_METHOD).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</Select>
+                      </FormField>
+                      <FormField name="vatAmount" label="IVA incluido ($)" hint="Opcional"><Input id="vatAmount" name="vatAmount" inputMode="decimal" className="text-right" /></FormField>
+                      <FormField name="supplier" label="Proveedor" className="sm:col-span-2"><Input id="supplier" name="supplier" /></FormField>
+                    </div>
+                    <DuplicateExpenseConfirm />
+                    <div className="mt-3"><SubmitButton size="sm" variant="outline">Agregar gasto</SubmitButton></div>
+                  </ActionForm>
+                </CardBody>
+              )}
+            </Card>
+          )}
 
           <Card>
             <CardHeader title="Ruta" />
@@ -202,7 +302,7 @@ export default async function ServicioDetalle({ params, searchParams }: { params
         <div className="space-y-6">
           {canProgram && transitions.length > 0 && (
             <Card>
-              <CardHeader title="Estado operativo" description="«Finalizado» se registra con el cierre operativo (Fase 4)." />
+              <CardHeader title="Estado operativo" description="Para finalizar use «Registrar cierre operativo»." />
               <CardBody><ServiceStatusForm action={changeStatusAction.bind(null, s.id)} version={s.version} options={transitions} /></CardBody>
             </Card>
           )}

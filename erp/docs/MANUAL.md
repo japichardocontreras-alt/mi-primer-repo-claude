@@ -1,6 +1,6 @@
 # Manual básico de uso — MUDANZAS METEPEC | ERP
 
-> Este manual crece con cada fase. Versión actual: Fases 1 a 3.
+> Este manual crece con cada fase. Versión actual: Fases 1 a 4.
 
 ## 1. Acceso
 1. Abra la dirección del sistema e ingrese su correo y contraseña.
@@ -71,6 +71,25 @@ Si la fecha se deja vacía, el servicio queda **«Por programar»** (aparece en 
 * **Reprogramar / cambiar asignación:** cambie fecha, horario, unidad o personal y escriba el motivo. Se conserva el mismo folio y los cobros; el cambio queda en el historial con el antes y el después.
 * **Estado operativo:** Por programar → Programado → Confirmado → En proceso; Incidencia (pide descripción); Cancelado (pide motivo; libera unidad y personal y se conserva en el historial). «Finalizado» se registra con el cierre operativo (Fase 4).
 * **Cobros:** registre anticipo, pagos parciales, pago final o reembolso (fecha, método, referencia). El sistema no permite cobrar más que el saldo. Un cobro erróneo se **cancela** con motivo (no se borra). El estado de cobro pasa a «Cobro parcial» o «Liquidado» automáticamente.
+
+## 6 quinquies. Cierre operativo y servicios realizados
+1. Al terminar la mudanza, en la ficha del servicio → **Registrar cierre operativo**.
+2. Capture **inicio y fin reales**; por cada unidad, **km inicial** (se propone la última lectura) y **km final**, y si cargó **combustible**, litros e importe.
+3. **Casetas, estacionamientos, viáticos** y hasta 3 **gastos adicionales**; indique con qué se pagaron.
+4. **Personal participante:** desmarque a quien no asistió y ajuste el pago si cambió.
+5. **Evidencia de entrega**, **incidencias**, observaciones y fotos.
+6. **Registrar cierre.** El servicio pasa a **Finalizado** y automáticamente:
+   * la unidad recibe su registro de kilometraje (no se puede modificar después);
+   * los gastos quedan ligados al folio;
+   * cada participante recibe su pago por servicio en nómina («por pagar»).
+
+Si el km inicial no coincide con la última lectura de la unidad (más de 30 km de diferencia o menor), el sistema lo señala y pide confirmarlo; si retrocede, también pide explicar el motivo en las observaciones.
+
+El **cobro es independiente**: puede cerrar un servicio con saldo pendiente y registrar el pago después; al cubrirse el total cambia a «Liquidado».
+
+Después del cierre puede **agregar gastos** al servicio (si ya existe uno igual, el sistema pide confirmar) y **cancelar** un gasto erróneo con motivo (no se borra).
+
+**Servicios realizados:** lista por mes con km, precio, saldo, gastos directos, pago a personal y **margen directo** (precio − gastos del folio − pagos de nómina del servicio), totales y exportación a Excel. El margen directo aún no descuenta gastos fijos ni depreciación; eso se calcula en Resultados (Fase 8).
 
 ## 6 quater. Personal
 * **Personal y nómina → Nuevo colaborador:** nombre, teléfono, puesto (chofer, ayudante, administración, otro), fecha de ingreso, tipo de pago, sueldo base, activo.
