@@ -19,6 +19,21 @@ Fuente única de cálculo: `src/lib/finance/results.ts` (lo usan Finanzas y Resu
 | **Flujo de efectivo** | (cobros − reembolsos + préstamos + aportaciones + ingresos extraordinarios) − (gastos pagados en el periodo con IVA + nómina entregada + compras de activo + pagos de financiamiento + gastos extraordinarios + retiros de socios) | |
 | **IVA (informativo)** | En cobros: cobrado de servicios con IVA × tasa ÷ (1 + tasa). En gastos: IVA capturado de gastos pagados | |
 
+## Indicadores comerciales y por unidad (Resultados)
+Fuente: `src/lib/finance/dashboard.ts`, verificado en `tests/resultados.test.ts`.
+
+| Indicador | Fórmula |
+|---|---|
+| **Solicitudes recibidas** | Solicitudes con fecha de registro en el periodo |
+| **Cotizaciones enviadas** | De esas, las que tienen al menos una versión de precio |
+| **Conversión comercial** | Solicitudes confirmadas ÷ recibidas (ambas del periodo) |
+| **Servicios confirmados / realizados / cancelados** | Por fecha de creación / inicio real (finalizados) / fecha de cancelación |
+| **Ticket promedio** | Ventas netas ÷ servicios con venta en el periodo |
+| **Resultado de la unidad** | Motor con filtro de unidad: ingresos, gastos directos, flotilla, nómina del servicio y depreciación de la unidad. Un servicio con varias unidades se reparte en partes iguales |
+| **Costos compartidos** | Gastos fijos + nómina no ligada a servicios (sueldo base, bonos, etc.) |
+| **Asignación** | Costos compartidos × peso de la unidad ÷ suma de pesos. Peso según criterio: ingresos, kilómetros, servicios realizados o partes iguales (unidades activas). Si la suma de pesos es cero, el importe se muestra «sin asignar» |
+| **Utilidad de la unidad** | Resultado operativo de la unidad − costos compartidos asignados |
+
 ## Reglas para no contar dos veces
 * El costo de **mantenimiento, documentos y combustible** existe solo como gasto; sus bitácoras no tienen importe propio.
 * La **nómina** cuenta como gasto cuando se **devenga**; lo **pagado** solo afecta el flujo de efectivo. El gasto «Sueldos fijos» es únicamente para sueldos fuera del módulo de nómina.

@@ -138,6 +138,14 @@ Después del cierre puede **agregar gastos** al servicio (si ya existe uno igual
 * **Otros movimientos:** préstamos recibidos, aportaciones de capital, compras de activo, pagos de financiamiento (indicando la parte de intereses), ingresos y gastos extraordinarios y retiros de socios. No se consideran ventas ni gastos operativos; sí afectan el flujo de efectivo (los intereses sí son gasto).
 * **Categorías** (administrador): cree categorías propias indicando su grupo (directo, fijo, flotilla, extraordinario); las del sistema no se desactivan.
 
+## 6 nonies. Resultados (dashboard)
+* Requiere el permiso de Resultados (por omisión, solo el administrador).
+* **Filtros** en una fila: vista por **año** o por **mes**, unidad y tipo de servicio; pulse «Aplicar». Al elegir una unidad, todo el tablero se limita a ella.
+* **Indicadores:** solicitudes recibidas, cotizaciones enviadas, servicios confirmados, realizados y cancelados, conversión comercial, ventas netas, ingresos cobrados, cuentas por cobrar, gastos directos, gastos fijos, nómina, depreciación, utilidad estimada, margen, flujo de efectivo y ticket promedio. Un guion «—» significa que el indicador no se puede calcular (p. ej. margen sin ventas), no que valga cero.
+* **Gráficas:** ventas y costos por mes, utilidad mensual (los meses con pérdida aparecen por debajo de la línea cero), servicios realizados, conversión comercial, ingresos y rentabilidad por unidad, distribución de gastos y comparativo de periodos. Pase el cursor (o toque) para ver el importe; «Ver datos en tabla» muestra las cifras exactas.
+* **Resultados por unidad:** ingresos, costos de operación, depreciación, costos compartidos asignados y utilidad de cada camioneta. Los costos compartidos (gastos fijos y nómina no ligada a servicios) se reparten con el criterio de Configuración → General → Finanzas.
+* **Exportar:** «Excel» descarga indicadores, serie mensual, unidades y gastos por categoría; «Reporte PDF» abre una versión imprimible (use «Guardar como PDF» del navegador).
+
 ## 7. Configuración (administrador)
 * **General:** datos de la empresa, parámetros operativos (tiempos de preparación y regreso, vigencia de cotizaciones), alertas y parámetros financieros.
 * **Usuarios:** alta, edición, desactivación, restablecer contraseña y cerrar sesiones.

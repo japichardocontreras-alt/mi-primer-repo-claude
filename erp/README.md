@@ -19,7 +19,7 @@ Sistema administrativo y operativo de Mudanzas Metepec: **solicitud → cotizaci
 | 5 | Personal y nómina por servicio | ✅ Entregada y probada |
 | 6 | Flotilla, kilometraje, mantenimiento, depreciación | ✅ Entregada y probada |
 | 7 | Finanzas y gastos | ✅ Entregada y probada |
-| 8 | Dashboard de resultados | Pendiente |
+| 8 | Dashboard de resultados | ✅ Entregada y probada |
 | 9 | Integración, pruebas del flujo completo | Pendiente |
 | 10 | Producción y manual de uso | Pendiente |
 
@@ -98,3 +98,8 @@ Inicie sesión con `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD`; el sistema pedir�
 
 * **Automatizadas (4 nuevas, 83 en total):** caso obligatorio completo del mes — servicio $4,500 con anticipo $2,000 y pago final $2,500, gastos del cierre $1,370, nómina $700 (devengada y pagada), renta recurrente $8,000 (por pagar y luego pagada), software $1,160 con $160 de IVA, depreciación $8,000 (estimada y luego registrada), préstamo $50,000, compra de activo $30,000 y pago de financiamiento $5,000 con $800 de intereses: ventas netas $4,500, cuentas por cobrar $0, resultado operativo −$14,570, utilidad −$15,370, flujo +$8,270, IVA acreditable $160; resultados por unidad; servicio con IVA (ventas netas $5,000 de $5,800, IVA en cobros $620.69); cancelaciones de cobros, gastos y movimientos; mes sin actividad en cero; recurrentes sin duplicar (incluso 3 generaciones simultáneas) y con vigencia; gastos generales duplicados y por folio.
 * **Recorrido en navegador (11 comprobaciones):** mes vacío en cero, gasto con IVA por pagar, duplicado, marcar pagado, recurrente sin duplicar, préstamo/financiamiento/cancelación, resumen con cifras exactas (el préstamo no es venta), cobros y cuentas por cobrar, Excel, categorías, permisos, vista móvil.
+
+## Pruebas de la Fase 8
+
+* **Automatizadas (3 nuevas, 86 en total):** embudo comercial (recibidas → cotizadas → confirmadas, no concretadas, en seguimiento y conversión); resultados por unidad con asignación de costos compartidos por ingresos, kilómetros, servicios y partes iguales — la suma de lo asignado cuadra con el total y, si la base del criterio es cero, el importe queda «sin asignar»; serie mensual del año con el mismo motor de cálculo que Finanzas.
+* **Recorrido en navegador (12 comprobaciones):** los 17 indicadores, 6 gráficas con tooltip en MXN y tabla de datos, resultados por unidad y comparativo contra el año anterior, filtro por camioneta, vista mensual con filtro por tipo de servicio, periodo sin datos en cero con gráficas vacías (sin datos simulados), Excel (4 hojas) y reporte PDF, el rol Administrativo sin acceso, vista móvil sin desbordamiento, sin errores de JavaScript.
