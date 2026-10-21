@@ -2,9 +2,10 @@ import { NextResponse, type NextRequest } from "next/server";
 import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth/server";
 import { normalizePhone } from "@/lib/format";
+import { safeRoute } from "@/lib/api";
 
 /** Búsqueda global por folio, cliente o teléfono. Respeta los permisos de cada módulo. */
-export async function GET(req: NextRequest) {
+async function handleGet(req: NextRequest) {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
   const q = (req.nextUrl.searchParams.get("q") ?? "").trim().slice(0, 80);
@@ -36,3 +37,5 @@ export async function GET(req: NextRequest) {
   }
   return NextResponse.json({ results });
 }
+
+export const GET = safeRoute(handleGet);

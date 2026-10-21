@@ -112,6 +112,13 @@ Cliente ─┬─< Solicitud (SOL-AAAA-######) ─┬─< Quote (versiones de pr
 * Encabezados de seguridad (`X-Frame-Options`, `nosniff`, `Referrer-Policy`). Archivos adjuntos en carpeta privada (`STORAGE_DIR`), servidos solo con sesión (Fase 2).
 * Sin credenciales en el código: todo vía variables de entorno (`.env.example`).
 
+## 7 bis. Fallas de conexión
+* **Lecturas:** el cliente de Prisma (`src/lib/db.ts`) reintenta automáticamente las consultas de lectura cuando la conexión se cerró (p. ej. tras reiniciar PostgreSQL) o el servidor no respondió. Las **escrituras nunca se reintentan solas**.
+* **Server actions:** `toActionError` traduce fallas de conexión a «No hay conexión con la base de datos…» (código `DB_UNAVAILABLE`). Como cada operación es una transacción, una falla no deja datos a medias.
+* **Formularios:** `ActionForm` captura errores de red (servidor inaccesible o sin internet) y muestra un aviso sin borrar lo capturado.
+* **Páginas:** `app/error.tsx`, `app/(erp)/error.tsx` y `global-error.tsx` muestran una pantalla en español con «Reintentar» y la referencia del error; `not-found.tsx` para registros inexistentes.
+* **API:** `safeRoute` (`src/lib/api.ts`) responde 503 en español si la base no está disponible; `/api/health` responde 503 para el monitoreo.
+
 ## 8. Cotizador futuro
 
 `src/lib/pricing/engine.ts` define la interfaz `PricingEngine`. Hoy opera `ManualPricingEngine` (no calcula). La solicitud ya guarda unidad propuesta, km estimados, volumen, personal requerido, paquete, gastos estimados; cada versión de cotización guarda `manualPrice`, `calculatedPrice` (reservado), `finalPrice` (autorizado), `calculatorInput/Output/Ver`. Conectar el cotizador consiste en implementar otra clase de esa interfaz; no requiere cambiar tablas ni pantallas existentes.

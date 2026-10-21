@@ -6,6 +6,7 @@ import { loadDashboard, parseDashboardParams } from "@/lib/finance/dashboard-pag
 import { MONTHS_ES, formatDateTime } from "@/lib/format";
 import { xlsxResponse } from "@/lib/export/excel";
 import { audit } from "@/lib/audit";
+import { safeRoute } from "@/lib/api";
 
 export const runtime = "nodejs";
 const MONEY = '"$"#,##0.00';
@@ -21,7 +22,7 @@ function sheet(wb: ExcelJS.Workbook, name: string, title: string, headers: strin
   moneyCols.forEach((c) => (ws.getColumn(c).numFmt = MONEY));
 }
 
-export async function GET(req: NextRequest) {
+async function handleGet(req: NextRequest) {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
   if (!user.permissions.has("resultados.ver") || !user.permissions.has("exportar")) return NextResponse.json({ error: "Sin permiso" }, { status: 403 });
@@ -34,7 +35,7 @@ export async function GET(req: NextRequest) {
     ["Servicios realizados", c.serviciosRealizados], ["Servicios cancelados", c.serviciosCancelados], ["Conversión comercial (%)", c.conversion === null ? null : Math.round(c.conversion * 1000) / 10],
     ["Ventas pactadas", r.ventas.pactadas], ["Ventas netas (sin IVA)", r.ventas.netas], ["Ingresos cobrados", r.cobranza.neto], ["Cuentas por cobrar", r.cobranza.cuentasPorCobrar],
     ["Gastos directos", r.gastos.directos], ["Gastos de flotilla", r.gastos.flotilla], ["Gastos fijos", r.gastos.fijos], ["Nómina devengada", r.nomina.devengada],
-    ["Depreciación", r.depreciacion.monto], ["Resultado operativo", r.resultadoOperativo], ["Ingresos extraordinarios", r.otros.ingresosExtra],
+    ["Depreciación", r.depreciacion.monto], ["Resultado operativo", r.resultadoOperativo], ["Anticipos retenidos por cancelación", r.otros.anticiposRetenidos], ["Ingresos extraordinarios", r.otros.ingresosExtra],
     ["Gastos extraordinarios", r.gastos.extraordinarios], ["Intereses", r.otros.intereses], ["Utilidad estimada", r.utilidad],
     ["Margen (%)", r.margen === null ? null : Math.round(r.margen * 1000) / 10], ["Flujo: entradas", r.flujo.entradas], ["Flujo: salidas", r.flujo.salidas], ["Flujo neto", r.flujo.neto],
   ], [2]);
@@ -46,3 +47,5 @@ export async function GET(req: NextRequest) {
   await audit(prisma, { userId: user.id, action: "EXPORTAR", entity: "Resultados", summary: d.label });
   return xlsxResponse(Buffer.from(await wb.xlsx.writeBuffer()), `resultados-${prm.vista === "mes" ? `${prm.year}-${String(prm.month).padStart(2, "0")}` : prm.year}.xlsx`);
 }
+
+export const GET = safeRoute(handleGet);

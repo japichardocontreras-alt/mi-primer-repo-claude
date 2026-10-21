@@ -5,10 +5,11 @@ import { monthParam } from "@/lib/queries/period";
 import { mexicoMonthRange } from "@/lib/format";
 import { buildWorkbook, excelLocal, xlsxResponse } from "@/lib/export/excel";
 import { audit } from "@/lib/audit";
+import { safeRoute } from "@/lib/api";
 
 export const runtime = "nodejs";
 
-export async function GET(req: NextRequest) {
+async function handleGet(req: NextRequest) {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
   if (!user.permissions.has("finanzas.ver") || !user.permissions.has("exportar")) return NextResponse.json({ error: "Sin permiso" }, { status: 403 });
@@ -26,3 +27,5 @@ export async function GET(req: NextRequest) {
   await audit(prisma, { userId: user.id, action: "EXPORTAR", entity: "Cobro", summary: `${rows.length} cobros ${mp.key}` });
   return xlsxResponse(buf, `cobros-${mp.key}.xlsx`);
 }
+
+export const GET = safeRoute(handleGet);

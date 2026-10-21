@@ -3,11 +3,12 @@ import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth/server";
 import { readStoredFile } from "@/lib/storage";
 import type { PermissionKey } from "@/lib/auth/permissions";
+import { safeRoute } from "@/lib/api";
 
 export const runtime = "nodejs";
 
 /** Sirve un archivo privado solo si el usuario puede ver el registro al que pertenece. */
-export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+async function handleGet(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
   const { id } = await params;
@@ -41,3 +42,5 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
     },
   });
 }
+
+export const GET = safeRoute(handleGet);

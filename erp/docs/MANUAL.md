@@ -146,6 +146,11 @@ Después del cierre puede **agregar gastos** al servicio (si ya existe uno igual
 * **Resultados por unidad:** ingresos, costos de operación, depreciación, costos compartidos asignados y utilidad de cada camioneta. Los costos compartidos (gastos fijos y nómina no ligada a servicios) se reparten con el criterio de Configuración → General → Finanzas.
 * **Exportar:** «Excel» descarga indicadores, serie mensual, unidades y gastos por categoría; «Reporte PDF» abre una versión imprimible (use «Guardar como PDF» del navegador).
 
+## 6 decies. Si se pierde la conexión
+* **Al guardar un formulario:** si aparece «No se pudo comunicar con el servidor» o «No hay conexión con la base de datos», **no se guardó nada** y lo que capturó sigue en pantalla. Espere un momento y pulse de nuevo el botón de guardar.
+* **Al abrir una página:** si aparece «No se pudo cargar esta página», pulse **Reintentar** cuando se restablezca la conexión; no necesita volver a iniciar sesión.
+* Si el problema continúa, avise al administrador con la **Referencia** que muestra la pantalla (sirve para encontrar el detalle en el registro del servidor).
+
 ## 7. Configuración (administrador)
 * **General:** datos de la empresa, parámetros operativos (tiempos de preparación y regreso, vigencia de cotizaciones), alertas y parámetros financieros.
 * **Usuarios:** alta, edición, desactivación, restablecer contraseña y cerrar sesiones.

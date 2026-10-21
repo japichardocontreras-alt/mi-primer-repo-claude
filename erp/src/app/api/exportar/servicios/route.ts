@@ -5,10 +5,11 @@ import { completedServices, type CompletedFilters } from "@/lib/queries/complete
 import { SERVICE_TYPE, fullAddress } from "@/lib/domain/labels";
 import { buildWorkbook, excelLocal, xlsxResponse } from "@/lib/export/excel";
 import { audit } from "@/lib/audit";
+import { safeRoute } from "@/lib/api";
 
 export const runtime = "nodejs";
 
-export async function GET(req: NextRequest) {
+async function handleGet(req: NextRequest) {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
   if (!user.permissions.has("servicios.ver") || !user.permissions.has("exportar")) return NextResponse.json({ error: "Sin permiso" }, { status: 403 });
@@ -35,3 +36,5 @@ export async function GET(req: NextRequest) {
   await audit(prisma, { userId: user.id, action: "EXPORTAR", entity: "Servicio", summary: `${rows.length} servicios realizados`, after: f });
   return xlsxResponse(buf, "servicios-realizados.xlsx");
 }
+
+export const GET = safeRoute(handleGet);

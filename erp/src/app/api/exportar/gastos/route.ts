@@ -5,11 +5,12 @@ import { getCurrentUser } from "@/lib/auth/server";
 import { monthParam } from "@/lib/queries/period";
 import { buildWorkbook, xlsxResponse } from "@/lib/export/excel";
 import { audit } from "@/lib/audit";
+import { safeRoute } from "@/lib/api";
 
 export const runtime = "nodejs";
 const GROUP: Record<string, string> = { DIRECTO: "Directo", FIJO: "Fijo", FLOTILLA: "Flotilla", EXTRAORDINARIO: "Extraordinario" };
 
-export async function GET(req: NextRequest) {
+async function handleGet(req: NextRequest) {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
   if (!user.permissions.has("finanzas.ver") || !user.permissions.has("exportar")) return NextResponse.json({ error: "Sin permiso" }, { status: 403 });
@@ -35,3 +36,5 @@ export async function GET(req: NextRequest) {
   await audit(prisma, { userId: user.id, action: "EXPORTAR", entity: "Gasto", summary: `${rows.length} gastos ${mp.key}` });
   return xlsxResponse(buf, `gastos-${mp.key}.xlsx`);
 }
+
+export const GET = safeRoute(handleGet);

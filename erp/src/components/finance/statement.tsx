@@ -26,6 +26,7 @@ export function IncomeStatement({ r }: { r: PeriodResults }) {
         <Line label="Nómina devengada" value={r.nomina.devengada} negative indent hint={`Por servicio ${formatMXN(r.nomina.servicios)}`} />
         <Line label={`Depreciación${r.depreciacion.estimada ? " (estimada)" : ""}`} value={r.depreciacion.monto} negative indent hint={r.depreciacion.metodo === "LINEAL_TIEMPO" ? "Lineal por tiempo" : "Por kilómetro"} />
         <Line label="Resultado operativo" value={r.resultadoOperativo} strong />
+        {r.otros.anticiposRetenidos > 0 && <Line label="Anticipos retenidos por cancelación" value={r.otros.anticiposRetenidos} indent hint="Cobrado y no reembolsado de servicios cancelados" />}
         <Line label="Ingresos extraordinarios" value={r.otros.ingresosExtra} indent />
         <Line label="Gastos extraordinarios" value={r.gastos.extraordinarios} negative indent />
         <Line label="Intereses de financiamiento" value={r.otros.intereses} negative indent />

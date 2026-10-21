@@ -22,7 +22,10 @@
  * DEPRECIACIÓN = registros mensuales del método configurado; si un mes no se ha registrado, se calcula con los
  *   mismos parámetros y se marca como «estimada». No es salida de efectivo.
  * RESULTADO OPERATIVO = ventas netas − directos − flotilla − fijos − nómina − depreciación.
- * UTILIDAD ESTIMADA   = resultado operativo + ingresos extraordinarios − gastos extraordinarios − intereses de financiamiento.
+ * ANTICIPOS RETENIDOS = de los servicios cancelados en el periodo, lo cobrado y no reembolsado (sin IVA si se pactó con IVA).
+ *   Es ingreso (no venta): el efectivo ya contó en cobranza el día que se recibió. Un reembolso registrado
+ *   después recalcula el mes de la cancelación.
+ * UTILIDAD ESTIMADA   = resultado operativo + anticipos retenidos + ingresos extraordinarios − gastos extraordinarios − intereses.
  * MARGEN              = utilidad estimada ÷ ventas netas.
  * FLUJO DE EFECTIVO   = (cobros − reembolsos + préstamos + aportaciones + ingresos extraordinarios)
  *                     − (gastos pagados en el periodo, con IVA + nómina entregada + compras de activo
@@ -85,6 +88,16 @@ export async function periodResults(db: Db, p: Period, f: ResultFilters = {}) {
     cuentasPorCobrar += Math.max(0, num(s.contractedPrice) - paid) * share(s);
   }
 
+  const cancelled = await db.service.findMany({
+    where: { status: "CANCELADO", cancelledAt: { gte: p.start, lt: p.end }, ...(f.serviceType ? { serviceType: f.serviceType } : {}), ...(f.vehicleId ? { vehicles: { some: { vehicleId: f.vehicleId } } } : {}) },
+    include: { vehicles: true, payments: { where: { cancelledAt: null } } },
+  });
+  let anticiposRetenidos = 0;
+  for (const s of cancelled) {
+    const kept = Math.max(0, s.payments.reduce((a, x) => a + (x.kind === "REEMBOLSO" ? -1 : 1) * num(x.amount), 0)) * share(s);
+    anticiposRetenidos += s.includesVat ? kept / (1 + tasaIva) : kept;
+  }
+
   // ---------------- Gastos (devengo por fecha contable; sin IVA)
   const expenses = await db.expense.findMany({
     where: {
@@ -138,7 +151,7 @@ export async function periodResults(db: Db, p: Period, f: ResultFilters = {}) {
 
   const costosOperativos = gastos.directos + gastos.flotilla + gastos.fijos + nomina + depreciacion;
   const resultadoOperativo = ventasNetas - costosOperativos;
-  const utilidad = resultadoOperativo + ingresosExtra - gastosExtra - intereses;
+  const utilidad = resultadoOperativo + anticiposRetenidos + ingresosExtra - gastosExtra - intereses;
 
   const entradas = cobrado - reembolsos + mv("PRESTAMO_RECIBIDO") + mv("APORTACION_CAPITAL") + ingresosExtra;
   const salidas = gastosPagados + nominaPagada + mv("COMPRA_ACTIVO") + mv("PAGO_FINANCIAMIENTO") + mv("GASTO_EXTRAORDINARIO") + mv("RETIRO_SOCIOS");
@@ -149,7 +162,7 @@ export async function periodResults(db: Db, p: Period, f: ResultFilters = {}) {
     gastos: { directos: r2(gastos.directos), flotilla: r2(gastos.flotilla), fijos: r2(gastos.fijos), extraordinarios: r2(gastosExtra), porCategoria: [...porCategoria.values()].map((c) => ({ ...c, amount: r2(c.amount) })).sort((a, b) => b.amount - a.amount) },
     nomina: { devengada: r2(nomina), servicios: r2(nominaServicios), pagada: r2(nominaPagada) },
     depreciacion: { monto: r2(depreciacion), estimada: depreciacionEstimada, metodo: metodoDepreciacion },
-    otros: { prestamos: r2(mv("PRESTAMO_RECIBIDO")), aportaciones: r2(mv("APORTACION_CAPITAL")), comprasActivo: r2(mv("COMPRA_ACTIVO")), pagosFinanciamiento: r2(mv("PAGO_FINANCIAMIENTO")), intereses: r2(intereses), ingresosExtra: r2(ingresosExtra), retiros: r2(mv("RETIRO_SOCIOS")) },
+    otros: { prestamos: r2(mv("PRESTAMO_RECIBIDO")), aportaciones: r2(mv("APORTACION_CAPITAL")), comprasActivo: r2(mv("COMPRA_ACTIVO")), pagosFinanciamiento: r2(mv("PAGO_FINANCIAMIENTO")), intereses: r2(intereses), anticiposRetenidos: r2(anticiposRetenidos), ingresosExtra: r2(ingresosExtra), retiros: r2(mv("RETIRO_SOCIOS")) },
     resultadoOperativo: r2(resultadoOperativo),
     utilidad: r2(utilidad),
     margen: ventasNetas > 0 ? utilidad / ventasNetas : null,

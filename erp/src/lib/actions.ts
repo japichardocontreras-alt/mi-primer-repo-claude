@@ -2,11 +2,14 @@ import { Prisma } from "@prisma/client";
 import { ZodError } from "zod";
 import { PermissionError, BusinessError } from "./errors";
 import type { ActionState } from "./action-state";
+import { isConnectionError } from "./db-errors";
 
 export type { ActionState } from "./action-state";
 export { BusinessError } from "./errors";
+export { isConnectionError };
 
 
+const DB_DOWN = "No hay conexión con la base de datos. No se guardaron cambios; intente de nuevo en unos momentos.";
 /** Traduce cualquier error a un mensaje claro para el usuario (sin filtrar detalles internos). */
 export function toActionError(e: unknown): ActionState {
   const at = Date.now();
@@ -25,8 +28,9 @@ export function toActionError(e: unknown): ActionState {
     if (e.code === "P2003") return { ok: false, message: "No se puede completar: el registro está relacionado con otros datos.", at };
     if (e.code === "P2025") return { ok: false, message: "El registro no existe o fue modificado por otro usuario. Recargue la página.", at };
   }
-  if (e instanceof Prisma.PrismaClientInitializationError) {
-    return { ok: false, message: "No hay conexión con la base de datos. Intente de nuevo en unos momentos.", at };
+  if (isConnectionError(e)) {
+    console.error("[ERP] Sin conexión con la base de datos:", (e as Error).message);
+    return { ok: false, message: DB_DOWN, code: "DB_UNAVAILABLE", at };
   }
   console.error("[ERP] Error no controlado:", e);
   return { ok: false, message: "Ocurrió un error inesperado. No se guardaron cambios.", at };

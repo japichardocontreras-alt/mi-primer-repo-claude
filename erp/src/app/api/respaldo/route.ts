@@ -4,12 +4,13 @@ import { prisma } from "@/lib/db";
 import { getCurrentUser, clientIp } from "@/lib/auth/server";
 import { audit } from "@/lib/audit";
 import { mexicoParts } from "@/lib/format";
+import { safeRoute } from "@/lib/api";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 /** Descarga un respaldo completo con pg_dump (solo usuarios con permiso de respaldos). */
-export async function GET() {
+async function handleGet() {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
   if (!user.permissions.has("config.respaldos")) return NextResponse.json({ error: "Sin permiso" }, { status: 403 });
@@ -51,3 +52,5 @@ export async function GET() {
     },
   });
 }
+
+export const GET = safeRoute(handleGet);

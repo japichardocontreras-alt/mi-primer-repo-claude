@@ -7,10 +7,11 @@ import { payrollSummary } from "@/lib/queries/payroll";
 import { buildWorkbook, xlsxResponse } from "@/lib/export/excel";
 import { audit } from "@/lib/audit";
 import ExcelJS from "exceljs";
+import { safeRoute } from "@/lib/api";
 
 export const runtime = "nodejs";
 
-export async function GET(req: NextRequest) {
+async function handleGet(req: NextRequest) {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
   if (!user.permissions.has("nomina.ver") || !user.permissions.has("exportar")) return NextResponse.json({ error: "Sin permiso" }, { status: 403 });
@@ -36,3 +37,5 @@ export async function GET(req: NextRequest) {
   await audit(prisma, { userId: user.id, action: "EXPORTAR", entity: "Nomina", summary: period.label });
   return xlsxResponse(Buffer.from(await wb.xlsx.writeBuffer()), `nomina-${period.startIso}.xlsx`);
 }
+
+export const GET = safeRoute(handleGet);

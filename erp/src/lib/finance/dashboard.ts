@@ -11,7 +11,7 @@
  *   Costos compartidos = gastos fijos + nómina no ligada a servicios (sueldo base, bonos, etc.).
  *   Se asignan con el criterio configurado: INGRESOS | KILOMETROS | SERVICIOS | PARTES_IGUALES.
  *   Si la base del criterio es cero (p. ej. sin km), quedan «sin asignar» y se muestran aparte.
- *   Utilidad estimada de la unidad = resultado operativo de la unidad − costos compartidos asignados.
+ *   Utilidad estimada de la unidad = resultado operativo de la unidad + anticipos retenidos − costos compartidos asignados.
  */
 import type { Db } from "../db";
 import { getSetting } from "../settings";
@@ -90,8 +90,8 @@ export async function vehicleResults(db: Db, p: Period, global: PeriodResults) {
       id: x.v.id, name: x.v.name, active: x.v.active, servicios: x.servicios, km: x.km,
       ingresos: x.r.ventas.netas, gastosDirectos: x.r.gastos.directos, flotilla: x.r.gastos.flotilla, nomina: x.r.nomina.devengada,
       costosOperacion, depreciacion: x.r.depreciacion.monto, compartidos: asignado,
-      utilidad: r2(x.r.resultadoOperativo - asignado),
-      margen: x.r.ventas.netas > 0 ? (x.r.resultadoOperativo - asignado) / x.r.ventas.netas : null,
+      utilidad: r2(x.r.resultadoOperativo + x.r.otros.anticiposRetenidos - asignado),
+      margen: x.r.ventas.netas > 0 ? (x.r.resultadoOperativo + x.r.otros.anticiposRetenidos - asignado) / x.r.ventas.netas : null,
     };
   });
   return { rows: result, shared, unassigned: totalW > 0 ? 0 : shared, criterio: criterioAsignacionFijos };

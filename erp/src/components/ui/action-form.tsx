@@ -25,7 +25,14 @@ export function ActionForm({
   onSuccess?: () => void;
   messagePosition?: "top" | "bottom";
 }) {
-  const [state, formAction, actionPending] = useActionState(action, initialState);
+  const [state, formAction, actionPending] = useActionState(async (prev: ActionState, fd: FormData) => {
+    try {
+      return await action(prev, fd);
+    } catch (e) {
+      if (isNavigation(e)) throw e;
+      return connectionFailure();
+    }
+  }, initialState);
   const [transitionPending, startTransition] = useTransition();
   const pending = actionPending || transitionPending;
   const ref = useRef<HTMLFormElement>(null);
@@ -60,6 +67,25 @@ export function ActionForm({
       </form>
     </ActionFormContext.Provider>
   );
+}
+
+/** Redirecciones de Next (redirect/notFound) deben seguir su curso. */
+function isNavigation(e: unknown) {
+  const d = (e as { digest?: unknown } | null)?.digest;
+  return typeof d === "string" && (d.startsWith("NEXT_REDIRECT") || d.startsWith("NEXT_HTTP_ERROR_FALLBACK") || d === "NEXT_NOT_FOUND");
+}
+
+/** La petición no llegó o la respuesta del servidor no fue válida: lo capturado se conserva para reintentar. */
+function connectionFailure(): ActionState {
+  const offline = typeof navigator !== "undefined" && navigator.onLine === false;
+  return {
+    ok: false,
+    code: "CONNECTION",
+    at: Date.now(),
+    message: offline
+      ? "Sin conexión a internet. Lo capturado se conserva; vuelva a intentar cuando se restablezca."
+      : "No se pudo comunicar con el servidor. Lo capturado se conserva; vuelva a intentar en unos momentos.",
+  };
 }
 
 export function FormField({ name, ...p }: Omit<React.ComponentProps<typeof Field>, "error"> & { name: string }) {

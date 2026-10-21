@@ -6,10 +6,11 @@ import { CHANNEL, PACKAGE, REQUEST_STATUS, SERVICE_TYPE, fullAddress } from "@/l
 import { buildWorkbook, excelLocal, xlsxResponse } from "@/lib/export/excel";
 import { mexicoParts } from "@/lib/format";
 import { audit } from "@/lib/audit";
+import { safeRoute } from "@/lib/api";
 
 export const runtime = "nodejs";
 
-export async function GET(req: NextRequest) {
+async function handleGet(req: NextRequest) {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
   if (!user.permissions.has("solicitudes.ver") || !user.permissions.has("exportar")) return NextResponse.json({ error: "Sin permiso" }, { status: 403 });
@@ -43,3 +44,5 @@ export async function GET(req: NextRequest) {
   const p = mexicoParts();
   return xlsxResponse(buf, `solicitudes-${p.year}${String(p.month).padStart(2, "0")}${String(p.day).padStart(2, "0")}.xlsx`);
 }
+
+export const GET = safeRoute(handleGet);

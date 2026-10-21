@@ -14,7 +14,8 @@ Fuente única de cálculo: `src/lib/finance/results.ts` (lo usan Finanzas y Resu
 | **Nómina** | Σ devengos vigentes del periodo (servicio, sueldo base, bonos, horas extra, otros − deducciones) | `payroll_entries` |
 | **Depreciación** | Registros del mes con el método configurado; si no hay registro, se calcula y se marca «estimada» | `depreciation_entries` |
 | **Resultado operativo** | Ventas netas − directos − flotilla − fijos − nómina − depreciación | |
-| **Utilidad estimada** | Resultado operativo + ingresos extraordinarios − gastos extraordinarios − intereses de financiamiento | |
+| **Anticipos retenidos** | De los servicios cancelados en el periodo: cobrado − reembolsado (sin IVA si se pactó con IVA). Es ingreso, no venta; el efectivo ya contó el día del cobro. Un reembolso posterior recalcula el mes de la cancelación | `services`, `payments` |
+| **Utilidad estimada** | Resultado operativo + anticipos retenidos + ingresos extraordinarios − gastos extraordinarios − intereses de financiamiento | |
 | **Margen de utilidad** | Utilidad estimada ÷ ventas netas | |
 | **Flujo de efectivo** | (cobros − reembolsos + préstamos + aportaciones + ingresos extraordinarios) − (gastos pagados en el periodo con IVA + nómina entregada + compras de activo + pagos de financiamiento + gastos extraordinarios + retiros de socios) | |
 | **IVA (informativo)** | En cobros: cobrado de servicios con IVA × tasa ÷ (1 + tasa). En gastos: IVA capturado de gastos pagados | |
@@ -32,7 +33,7 @@ Fuente: `src/lib/finance/dashboard.ts`, verificado en `tests/resultados.test.ts`
 | **Resultado de la unidad** | Motor con filtro de unidad: ingresos, gastos directos, flotilla, nómina del servicio y depreciación de la unidad. Un servicio con varias unidades se reparte en partes iguales |
 | **Costos compartidos** | Gastos fijos + nómina no ligada a servicios (sueldo base, bonos, etc.) |
 | **Asignación** | Costos compartidos × peso de la unidad ÷ suma de pesos. Peso según criterio: ingresos, kilómetros, servicios realizados o partes iguales (unidades activas). Si la suma de pesos es cero, el importe se muestra «sin asignar» |
-| **Utilidad de la unidad** | Resultado operativo de la unidad − costos compartidos asignados |
+| **Utilidad de la unidad** | Resultado operativo de la unidad + anticipos retenidos − costos compartidos asignados |
 
 ## Reglas para no contar dos veces
 * El costo de **mantenimiento, documentos y combustible** existe solo como gasto; sus bitácoras no tienen importe propio.

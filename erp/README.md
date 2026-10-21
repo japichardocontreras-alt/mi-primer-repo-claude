@@ -20,7 +20,7 @@ Sistema administrativo y operativo de Mudanzas Metepec: **solicitud → cotizaci
 | 6 | Flotilla, kilometraje, mantenimiento, depreciación | ✅ Entregada y probada |
 | 7 | Finanzas y gastos | ✅ Entregada y probada |
 | 8 | Dashboard de resultados | ✅ Entregada y probada |
-| 9 | Integración, pruebas del flujo completo | Pendiente |
+| 9 | Integración, pruebas del flujo completo | ✅ Entregada y probada |
 | 10 | Producción y manual de uso | Pendiente |
 
 Los módulos pendientes muestran un aviso «se entrega en la Fase N»; no contienen botones ni datos simulados.
@@ -60,6 +60,7 @@ Inicie sesión con `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD`; el sistema pedir�
 | `npm run build` / `npm start` | Compilar / ejecutar |
 | `npm run typecheck` | Verificación de tipos |
 | `npm test` | Pruebas automatizadas (usa `TEST_DATABASE_URL`) |
+| `npm run e2e:reset` / `npm run e2e` | Recorrido integral en navegador sobre una base aislada (ver `e2e/README.md`) |
 | `npx prisma migrate deploy` | Aplicar migraciones |
 | `npm run db:seed` | Catálogos (idempotente) |
 | `./scripts/backup.sh` / `./scripts/restore.sh` | Respaldo / recuperación |
@@ -103,3 +104,12 @@ Inicie sesión con `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD`; el sistema pedir�
 
 * **Automatizadas (3 nuevas, 86 en total):** embudo comercial (recibidas → cotizadas → confirmadas, no concretadas, en seguimiento y conversión); resultados por unidad con asignación de costos compartidos por ingresos, kilómetros, servicios y partes iguales — la suma de lo asignado cuadra con el total y, si la base del criterio es cero, el importe queda «sin asignar»; serie mensual del año con el mismo motor de cálculo que Finanzas.
 * **Recorrido en navegador (12 comprobaciones):** los 17 indicadores, 6 gráficas con tooltip en MXN y tabla de datos, resultados por unidad y comparativo contra el año anterior, filtro por camioneta, vista mensual con filtro por tipo de servicio, periodo sin datos en cero con gráficas vacías (sin datos simulados), Excel (4 hojas) y reporte PDF, el rol Administrativo sin acceso, vista móvil sin desbordamiento, sin errores de JavaScript.
+
+## Pruebas de la Fase 9
+
+Matriz completa de escenarios en [`docs/PRUEBAS.md`](docs/PRUEBAS.md).
+
+* **Automatizadas (10 nuevas, 96 en total):** flujo obligatorio completo en un solo caso (cliente → solicitud $4,500 → servicio con unidad, chofer y 2 ayudantes → anticipo $2,000 → cierre con 45 km y $1,370 de gastos → pago de $700 al personal → pago final $2,500 → liquidado) verificando agenda, cobranza, flotilla, nómina, finanzas, resultados por unidad, serie mensual, embudo y auditoría; servicio cancelado con anticipo (no es venta ni cuenta por cobrar; lo retenido es ingreso; reembolso parcial); reprogramación a otro mes; dos cobros simultáneos del saldo; pagos parciales en varios meses; revisión de que todas las server actions y APIs validan sesión/permiso; BD inaccesible → mensaje claro.
+* **Recorrido en navegador sobre base aislada (19 comprobaciones):** el flujo completo por pantallas, Finanzas y Resultados con las mismas cifras, permisos del Administrativo (páginas y API 403), sin red, base de datos detenida y recuperada, registro inexistente.
+* **Regresión:** se repitieron los recorridos de las Fases 2 a 8 (95 comprobaciones), todos correctos.
+* **Correcciones de esta fase:** anticipos no reembolsados de servicios cancelados ahora cuentan en la utilidad; reintento automático de lecturas tras un reinicio de PostgreSQL (antes la primera consulta fallaba); pantallas de error y «No encontrado» en español con «Reintentar»; formularios que conservan lo capturado y avisan si se pierde la conexión; exportaciones que responden 503 en español si la base no está disponible.
