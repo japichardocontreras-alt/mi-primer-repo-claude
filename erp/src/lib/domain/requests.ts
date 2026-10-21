@@ -274,7 +274,7 @@ export async function addFollowUp(tx: Tx, actorId: string, requestId: string, f:
   const req = await lockRequest(tx, requestId);
   if (req.status === "CONFIRMADA") throw new BusinessError("La solicitud ya fue confirmada; el seguimiento continúa en el servicio.");
   if (f.newStatus === "CONFIRMADA") {
-    throw new BusinessError("La confirmación se realiza con «Confirmar y convertir en servicio» (Fase 3), para generar el folio de servicio y la agenda.");
+    throw new BusinessError("La confirmación se realiza con «Confirmar y convertir en servicio», que genera el folio de servicio y lo coloca en la agenda.");
   }
   if (f.nextContactAt && f.contactAt && f.nextContactAt <= f.contactAt) {
     throw new BusinessError("La próxima fecha de contacto debe ser posterior al contacto registrado.");

@@ -15,7 +15,7 @@ export const NAV: NavItem[] = [
   { key: "agenda", href: "/agenda", label: "Agenda de servicios", permission: "agenda.ver", phase: 3 },
   { key: "servicios", href: "/servicios", label: "Servicios realizados", permission: "servicios.ver", phase: 4 },
   { key: "clientes", href: "/clientes", label: "Clientes", permission: "clientes.ver", phase: 2 },
-  { key: "personal", href: "/personal", label: "Personal y nómina", permission: "personal.ver", phase: 5 },
+  { key: "personal", href: "/personal", label: "Personal y nómina", permission: "personal.ver", phase: 3 },
   { key: "flotilla", href: "/flotilla", label: "Flotilla", permission: "flotilla.ver", phase: 6 },
   { key: "finanzas", href: "/finanzas", label: "Finanzas y administración", permission: "finanzas.ver", phase: 7 },
   { key: "resultados", href: "/resultados", label: "Resultados", permission: "resultados.ver", phase: 8 },
@@ -23,4 +23,4 @@ export const NAV: NavItem[] = [
 ];
 
 /** Fase actualmente implementada (se incrementa con cada entrega). */
-export const CURRENT_PHASE = 2;
+export const CURRENT_PHASE = 3;

@@ -46,7 +46,7 @@ export function FollowUpForm({ action, current, nowLocal }: { action: (p: Action
       {status === "CANCELADA" && (
         <FormField name="cancelReason" label="Motivo de la cancelación" required><Textarea id="cancelReason" name="cancelReason" rows={2} /></FormField>
       )}
-      <p className="text-xs text-neutral-500">La confirmación (conversión a servicio con folio MM y agenda) se habilita en la Fase 3.</p>
+      <p className="text-xs text-neutral-500">Para confirmar use «Confirmar y convertir en servicio» (genera el folio MM y lo coloca en la agenda).</p>
       <SubmitButton size="sm">Registrar seguimiento</SubmitButton>
     </ActionForm>
   );

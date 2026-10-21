@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
       where: { OR: [{ folio: { contains: q, mode: "insensitive" } }, { client: { name: { contains: q, mode: "insensitive" } } }, ...(phone ? [{ client: { phoneNormalized: { contains: phone } } }] : [])] },
       include: { client: true }, take: 6, orderBy: { createdAt: "desc" },
     });
-    results.push(...svcs.map((s) => ({ type: "Servicio", id: s.id, title: s.folio, subtitle: `${s.client.name} · ${s.client.phone}`, href: `/agenda?q=${encodeURIComponent(s.folio)}` })));
+    results.push(...svcs.map((s) => ({ type: "Servicio", id: s.id, title: s.folio, subtitle: `${s.client.name} · ${s.client.phone}`, href: `/agenda/${s.id}` })));
   }
   return NextResponse.json({ results });
 }

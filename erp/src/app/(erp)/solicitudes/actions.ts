@@ -139,9 +139,11 @@ export async function uploadRequestFilesAction(requestId: string, _prev: ActionS
 /** Retira un adjunto (borrado lógico; el archivo se conserva para auditoría). */
 export async function removeAttachmentAction(attachmentId: string, _prev: ActionState): Promise<ActionState> {
   try {
-    const user = await assertPermission("solicitudes.editar");
+    const current = await prisma.attachment.findUniqueOrThrow({ where: { id: attachmentId } });
+    const user = await assertPermission(current.serviceId ? "agenda.programar" : "solicitudes.editar");
     await withTransaction(async (tx) => {
       const a = await tx.attachment.update({ where: { id: attachmentId }, data: { deletedAt: new Date() } });
+      if (a.serviceId) revalidatePath(`/agenda/${a.serviceId}`);
       await audit(tx, { userId: user.id, action: "RETIRAR_ADJUNTO", entity: "Archivo", entityId: a.id, summary: a.fileName });
       if (a.requestId) revalidatePath(`/solicitudes/${a.requestId}`);
     });

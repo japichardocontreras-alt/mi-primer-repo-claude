@@ -1,6 +1,6 @@
 # Manual básico de uso — MUDANZAS METEPEC | ERP
 
-> Este manual crece con cada fase. Versión actual: Fases 1 y 2.
+> Este manual crece con cada fase. Versión actual: Fases 1 a 3.
 
 ## 1. Acceso
 1. Abra la dirección del sistema e ingrese su correo y contraseña.
@@ -52,7 +52,30 @@ En **Solicitudes**:
 * Filtros por texto, estado, tipo y fechas de registro; botón **Excel** para exportar lo filtrado.
 * En **Inicio** aparecen los seguimientos pendientes del día.
 
-> La **confirmación** de una solicitud (que genera el folio de servicio MM-AAAA-000000 y la coloca en la agenda) se habilita en la Fase 3.
+## 6 bis. Confirmar: de solicitud a servicio
+1. En la ficha de la solicitud → **Confirmar y convertir en servicio**.
+2. Revise el **precio contratado** (se toma de la última cotización).
+3. Indique **fecha, hora de inicio y duración estimada**. El sistema muestra el fin estimado y el periodo en que la unidad y el personal quedan ocupados (incluye **preparación** antes de salir y **regreso a base** después). Si el servicio termina al día siguiente se indica «continúa otro día».
+4. Elija **unidad** y **personal** (chofer, ayudantes) con el **pago por servicio** de cada uno.
+5. **Confirmar servicio:** se genera el folio **MM-AAAA-000000**, la solicitud pasa a «Confirmada» y el servicio aparece en la agenda. Una solicitud solo puede convertirse una vez.
+
+Si la fecha se deja vacía, el servicio queda **«Por programar»** (aparece en el panel derecho de la agenda).
+
+**Empalmes:** si la unidad o alguien del personal ya tiene otro servicio en ese horario, el sistema lo impide y dice con qué folio choca. Cambie horario, unidad o personal. Solo un **administrador** puede autorizarlo de forma excepcional, escribiendo el motivo (queda en auditoría y en el historial del servicio).
+
+## 6 ter. Agenda
+* **Mes**, **Semana** y **Lista**; flechas para navegar y botón **Hoy**. Cada camioneta tiene un color.
+* Filtros por unidad y estado; «Incluir cancelados».
+* Los servicios de varios días aparecen en cada día que ocupan.
+* **Ficha del servicio:** resumen (inicio, fin, unidad, precio, anticipo, cobrado, saldo, chofer, ayudantes), ruta, inventario y observaciones, archivos (incluye los de la solicitud), historial.
+* **Reprogramar / cambiar asignación:** cambie fecha, horario, unidad o personal y escriba el motivo. Se conserva el mismo folio y los cobros; el cambio queda en el historial con el antes y el después.
+* **Estado operativo:** Por programar → Programado → Confirmado → En proceso; Incidencia (pide descripción); Cancelado (pide motivo; libera unidad y personal y se conserva en el historial). «Finalizado» se registra con el cierre operativo (Fase 4).
+* **Cobros:** registre anticipo, pagos parciales, pago final o reembolso (fecha, método, referencia). El sistema no permite cobrar más que el saldo. Un cobro erróneo se **cancela** con motivo (no se borra). El estado de cobro pasa a «Cobro parcial» o «Liquidado» automáticamente.
+
+## 6 quater. Personal
+* **Personal y nómina → Nuevo colaborador:** nombre, teléfono, puesto (chofer, ayudante, administración, otro), fecha de ingreso, tipo de pago, sueldo base, activo.
+* La ficha muestra los servicios en los que ha participado. Las bajas se marcan como **inactivo** (no se borran).
+* El cálculo de nómina por servicio, bonos, deducciones y cortes llega en la Fase 5.
 
 ## 7. Configuración (administrador)
 * **General:** datos de la empresa, parámetros operativos (tiempos de preparación y regreso, vigencia de cotizaciones), alertas y parámetros financieros.

@@ -13,7 +13,7 @@ Sistema administrativo y operativo de Mudanzas Metepec: **solicitud → cotizaci
 |---|---|---|
 | 1 | Arquitectura, base de datos completa, autenticación, permisos, diseño, navegación, configuración, auditoría, respaldos | ✅ Entregada y probada |
 | 2 | Clientes, solicitudes, cotizaciones manuales, seguimiento comercial | ✅ Entregada y probada |
-| 3 | Confirmación, agenda, asignación de unidades y personal | Pendiente |
+| 3 | Confirmación, agenda, asignación de unidades y personal | ✅ Entregada y probada |
 | 4 | Servicios realizados y cierre operativo | Pendiente |
 | 5 | Personal y nómina por servicio | Pendiente |
 | 6 | Flotilla, kilometraje, mantenimiento, depreciación | Pendiente |
@@ -72,3 +72,8 @@ Inicie sesión con `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD`; el sistema pedir�
 
 * **Automatizadas (16 nuevas, 45 en total):** conversión y validación de formularios (direcciones, importes `$4,500.00`, horas, C.P.); clientes con código CLI, detección de teléfono duplicado con o sin `+52`, concurrencia optimista y eliminación solo sin historial; solicitud con cliente nuevo y precio $4,500 (folio, versión 1, historial, notificación, auditoría); solicitud sin precio; recotización que conserva la versión original; 5 recotizaciones simultáneas sin versiones duplicadas; 20 solicitudes simultáneas con folios consecutivos; seguimiento con próxima fecha, contacto vencido, solicitud no concretada que permanece en el historial, reapertura; bloqueo de la confirmación manual (llega con la Fase 3); edición que registra solo diferencias y rechaza versiones viejas; búsqueda por folio, nombre, teléfono y municipio.
 * **Recorrido en navegador (19 comprobaciones):** alta de cliente, duplicado detectado sin perder lo capturado, validación de la solicitud mostrando todos los errores a la vez, solicitud con cliente existente + precio $4,500 + fotografía, archivo servido solo con sesión, recotización a $4,800 conservando v1, seguimiento, edición, edición simultánea de dos usuarios, cotización imprimible/PDF, solicitud no concretada con motivo obligatorio, vistas «En seguimiento» / «Historial», filtros, exportación a Excel, búsqueda global, ficha del cliente, vista móvil sin desbordamiento.
+
+## Pruebas de la Fase 3
+
+* **Automatizadas (12 nuevas, 57 en total):** conversión de solicitud a servicio MM con hora de México, vínculo con solicitud y direcciones sin copiarlas; una solicitud no genera dos servicios aunque tres usuarios confirmen a la vez; «Por programar» sin fecha; empalme de unidad con márgenes de preparación y regreso (14:00 bloquea, 14:30 se permite); doble asignación de personal con otra unidad; servicios que cruzan medianoche y de 30 horas; cancelados liberan la unidad; autorización excepcional solo de administrador, con motivo y en auditoría; dos usuarios asignando la misma unidad a la vez (solo uno lo logra); reprogramación que conserva folio, cobros e historial antes/después; transiciones de estado y motivo obligatorio; cobros anticipo $2,000 → parcial, pago final $2,500 → liquidado, sobrepago rechazado, cancelación de cobro.
+* **Recorrido en navegador (15 comprobaciones):** alta de personal, confirmación con F350, chofer y 2 ayudantes (pago total calculado), solicitud vinculada y sin segunda confirmación, anticipo y saldo, empalme de unidad y de personal bloqueados, autorización del administrador, servicio nocturno que bloquea la madrugada, reprogramación, cancelación que libera la unidad, calendario mensual/semanal/lista, ficha del chofer, rol Administrativo sin autorización de empalmes, vista móvil.

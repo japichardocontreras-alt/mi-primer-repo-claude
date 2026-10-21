@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Pencil, Printer, MessageCircle, Paperclip, FileText, Film, Image as ImageIcon } from "lucide-react";
+import { ArrowLeft, Pencil, Printer, MessageCircle, Paperclip, FileText, Film, Image as ImageIcon, CalendarCheck } from "lucide-react";
 import { prisma } from "@/lib/db";
 import { requirePermission, can } from "@/lib/auth/server";
 import { CHANNEL, EVENT_TYPE, PACKAGE, REQUEST_STATUS, SERVICE_TYPE, fullAddress, type RequestStatusKey } from "@/lib/domain/labels";
@@ -50,7 +50,7 @@ async function load(id: string) {
   const r = await prisma.request.findUnique({
     where: { id },
     include: {
-      client: true, originAddress: true, destinationAddress: true, suggestedVehicle: true, currentQuote: true,
+      client: true, originAddress: true, destinationAddress: true, suggestedVehicle: true, currentQuote: true, service: true,
       quotes: { orderBy: { versionNumber: "desc" } },
       events: { orderBy: { createdAt: "desc" } },
       attachments: { where: { deletedAt: null }, orderBy: { createdAt: "desc" } },
@@ -94,7 +94,12 @@ export default async function SolicitudDetalle({ params, searchParams }: { param
           <>
             <a href={`https://wa.me/${wa}`} target="_blank" rel="noopener noreferrer" className={buttonClass("outline")}><MessageCircle className="h-4 w-4" /> WhatsApp</a>
             {q && <Link href={`/imprimir/cotizacion/${r.id}`} target="_blank" className={buttonClass("outline")}><Printer className="h-4 w-4" /> Cotización PDF</Link>}
-            {canEdit && r.status !== "CONFIRMADA" && <Link href={`/solicitudes/${r.id}/editar`} className={buttonClass("secondary")}><Pencil className="h-4 w-4" /> Editar</Link>}
+            {canEdit && r.status !== "CONFIRMADA" && <Link href={`/solicitudes/${r.id}/editar`} className={buttonClass("outline")}><Pencil className="h-4 w-4" /> Editar</Link>}
+            {r.service ? (
+              <Link href={`/agenda/${r.service.id}`} className={buttonClass("secondary")}><CalendarCheck className="h-4 w-4" /> Servicio {r.service.folio}</Link>
+            ) : can(user, "solicitudes.confirmar") && !closed ? (
+              <Link href={`/solicitudes/${r.id}/confirmar`} className={buttonClass("primary")}><CalendarCheck className="h-4 w-4" /> Confirmar y convertir en servicio</Link>
+            ) : null}
           </>
         }
       />

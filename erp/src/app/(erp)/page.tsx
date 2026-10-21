@@ -49,7 +49,7 @@ export default async function InicioPage() {
               <tbody>
                 {s.upcoming.map((x) => (
                   <Tr key={x.id}>
-                    <Td className="font-medium">{x.folio}</Td>
+                    <Td className="font-medium"><Link href={`/agenda/${x.id}`} className="hover:text-brand-600">{x.folio}</Link></Td>
                     <Td>{x.client.name}</Td>
                     <Td className="whitespace-nowrap">{formatDateTime(x.scheduledStart)}</Td>
                     <Td>{x.vehicles.map((v) => v.vehicle.name).join(", ") || "—"}</Td>
