@@ -11,7 +11,9 @@ const nextConfig: NextConfig = {
   output: "standalone",
   poweredByHeader: false,
   experimental: {
-    serverActions: { bodySizeLimit: "25mb" },
+    serverActions: { bodySizeLimit: "120mb" },
+    // El middleware también limita el cuerpo de la petición (10 MB por defecto).
+    middlewareClientMaxBodySize: "120mb",
   },
   async headers() {
     return [{ source: "/(.*)", headers: securityHeaders }];

@@ -23,4 +23,4 @@ export const NAV: NavItem[] = [
 ];
 
 /** Fase actualmente implementada (se incrementa con cada entrega). */
-export const CURRENT_PHASE = 1;
+export const CURRENT_PHASE = 2;

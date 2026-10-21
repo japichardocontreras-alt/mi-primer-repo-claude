@@ -68,7 +68,7 @@ export function Sidebar({ allowed, initialCollapsed }: { allowed: string[]; init
     document.cookie = `mm_sidebar=${v ? "1" : "0"}; path=/; max-age=31536000; samesite=lax`;
   };
   return (
-    <aside className={cn("hidden shrink-0 flex-col bg-ink transition-[width] duration-200 lg:flex", collapsed ? "w-[72px]" : "w-64")}>
+    <aside className={cn("hidden shrink-0 flex-col bg-ink transition-[width] duration-200 lg:flex print:!hidden", collapsed ? "w-[72px]" : "w-64")}>
       <Brand collapsed={collapsed} />
       <NavLinks allowed={allowed} collapsed={collapsed} />
       <button

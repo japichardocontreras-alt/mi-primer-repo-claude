@@ -19,7 +19,7 @@ export function toActionError(e: unknown): ActionState {
     return { ok: false, message: "Revise los campos marcados.", fieldErrors, at };
   }
   if (e instanceof PermissionError) return { ok: false, message: e.message, at };
-  if (e instanceof BusinessError) return { ok: false, message: e.message, at };
+  if (e instanceof BusinessError) return { ok: false, message: e.message, code: e.code, at };
   if (e instanceof Prisma.PrismaClientKnownRequestError) {
     if (e.code === "P2002") return { ok: false, message: "Ya existe un registro con ese valor único.", at };
     if (e.code === "P2003") return { ok: false, message: "No se puede completar: el registro está relacionado con otros datos.", at };

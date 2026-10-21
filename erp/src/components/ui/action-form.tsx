@@ -14,13 +14,15 @@ import { ActionFormContext } from "./action-form-context";
  * - Los hijos pueden ser JSX del servidor; los errores por campo se leen con <FormField>.
  */
 export function ActionForm({
-  action, children, className, resetOnSuccess, redirectTo, messagePosition = "bottom",
+  action, children, className, resetOnSuccess, redirectTo, onSuccess, messagePosition = "bottom",
 }: {
   action: (prev: ActionState, fd: FormData) => Promise<ActionState>;
   children: React.ReactNode;
   className?: string;
   resetOnSuccess?: boolean;
   redirectTo?: string;
+  /** Se ejecuta tras cada respuesta exitosa (p.ej. reiniciar estado local). */
+  onSuccess?: () => void;
   messagePosition?: "top" | "bottom";
 }) {
   const [state, formAction, actionPending] = useActionState(action, initialState);
@@ -32,9 +34,11 @@ export function ActionForm({
   useEffect(() => {
     if (!state.ok || !state.at) return;
     if (resetOnSuccess) ref.current?.reset();
+    onSuccess?.();
     if (redirectTo) router.push(redirectTo);
     else router.refresh();
-  }, [state, resetOnSuccess, redirectTo, router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state]);
 
   return (
     <ActionFormContext.Provider value={{ state, pending }}>

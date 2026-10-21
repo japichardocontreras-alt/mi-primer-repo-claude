@@ -104,7 +104,7 @@ export function AppShell({ allowed, user, notifications, initialCollapsed, child
       <Sidebar allowed={allowed} initialCollapsed={initialCollapsed} />
       <MobileNav allowed={allowed} open={mobileOpen} onClose={() => setMobileOpen(false)} />
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex h-16 shrink-0 items-center gap-3 border-b border-neutral-200 bg-white px-3 sm:px-6">
+        <header className="flex h-16 print:hidden shrink-0 items-center gap-3 border-b border-neutral-200 bg-white px-3 sm:px-6">
           <button onClick={() => setMobileOpen(true)} className="rounded-md p-2 text-neutral-600 hover:bg-neutral-100 lg:hidden" aria-label="Abrir menú">
             <Menu className="h-5 w-5" />
           </button>

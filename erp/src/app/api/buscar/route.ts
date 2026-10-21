@@ -18,14 +18,14 @@ export async function GET(req: NextRequest) {
       where: { OR: [{ name: { contains: q, mode: "insensitive" } }, { code: { contains: q, mode: "insensitive" } }, ...(phone ? [{ phoneNormalized: { contains: phone } }] : [])] },
       take: 6, orderBy: { name: "asc" },
     });
-    results.push(...clients.map((c) => ({ type: "Cliente", id: c.id, title: c.name, subtitle: `${c.code} · ${c.phone}`, href: `/clientes?q=${encodeURIComponent(c.code)}` })));
+    results.push(...clients.map((c) => ({ type: "Cliente", id: c.id, title: c.name, subtitle: `${c.code} · ${c.phone}`, href: `/clientes/${c.id}` })));
   }
   if (user.permissions.has("solicitudes.ver")) {
     const reqs = await prisma.request.findMany({
       where: { OR: [{ folio: { contains: q, mode: "insensitive" } }, { client: { name: { contains: q, mode: "insensitive" } } }, ...(phone ? [{ client: { phoneNormalized: { contains: phone } } }] : [])] },
       include: { client: true }, take: 6, orderBy: { registeredAt: "desc" },
     });
-    results.push(...reqs.map((r) => ({ type: "Solicitud", id: r.id, title: r.folio, subtitle: `${r.client.name} · ${r.client.phone}`, href: `/solicitudes?q=${encodeURIComponent(r.folio)}` })));
+    results.push(...reqs.map((r) => ({ type: "Solicitud", id: r.id, title: r.folio, subtitle: `${r.client.name} · ${r.client.phone}`, href: `/solicitudes/${r.id}` })));
   }
   if (user.permissions.has("agenda.ver")) {
     const svcs = await prisma.service.findMany({

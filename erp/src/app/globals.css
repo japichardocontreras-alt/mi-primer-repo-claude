@@ -17,6 +17,5 @@ body {
 }
 
 @media print {
-  aside, header { display: none !important; }
   main { overflow: visible !important; }
 }

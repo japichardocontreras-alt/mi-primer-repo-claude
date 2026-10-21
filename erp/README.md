@@ -5,13 +5,14 @@ Sistema administrativo y operativo de Mudanzas Metepec: **solicitud → cotizaci
 * Arquitectura y modelo de datos: [`docs/ARQUITECTURA.md`](docs/ARQUITECTURA.md)
 * Respaldos: [`docs/RESPALDOS.md`](docs/RESPALDOS.md)
 * Despliegue: [`docs/DESPLIEGUE.md`](docs/DESPLIEGUE.md)
+* Manual de uso: [`docs/MANUAL.md`](docs/MANUAL.md)
 
 ## Estado por fases
 
 | Fase | Contenido | Estado |
 |---|---|---|
 | 1 | Arquitectura, base de datos completa, autenticación, permisos, diseño, navegación, configuración, auditoría, respaldos | ✅ Entregada y probada |
-| 2 | Clientes, solicitudes, cotizaciones manuales, seguimiento comercial | Pendiente |
+| 2 | Clientes, solicitudes, cotizaciones manuales, seguimiento comercial | ✅ Entregada y probada |
 | 3 | Confirmación, agenda, asignación de unidades y personal | Pendiente |
 | 4 | Servicios realizados y cierre operativo | Pendiente |
 | 5 | Personal y nómina por servicio | Pendiente |
@@ -66,3 +67,8 @@ Inicie sesión con `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD`; el sistema pedir�
 
 * **Automatizadas (29, Vitest, contra PostgreSQL real):** folios (formato, año en hora de México, 40 transacciones simultáneas sin duplicados, sin huecos tras error); contraseñas; inicio de sesión, bloqueo, sesiones revocadas/expiradas/alteradas, usuarios inactivos; permisos por rol y ajustes individuales; integridad (un servicio por solicitud, folios únicos, sin borrado en cascada, tablas inmutables, CHECK de importes y horarios, gastos recurrentes no duplicables); cuentas por cobrar con anticipo, pago final, cobro cancelado y servicio cancelado; formatos MXN y zona horaria.
 * **Recorrido en navegador (Chromium):** redirección sin sesión, error de contraseña, cambio obligatorio de contraseña, indicadores en cero, búsqueda global, barra lateral contraíble con preferencia persistente, parámetros persistentes, alta de usuario y rechazo de duplicado, cierre de sesión, menú y bloqueo de páginas/API según permisos, menú móvil, auditoría y descarga de respaldo válido.
+
+## Pruebas de la Fase 2
+
+* **Automatizadas (16 nuevas, 45 en total):** conversión y validación de formularios (direcciones, importes `$4,500.00`, horas, C.P.); clientes con código CLI, detección de teléfono duplicado con o sin `+52`, concurrencia optimista y eliminación solo sin historial; solicitud con cliente nuevo y precio $4,500 (folio, versión 1, historial, notificación, auditoría); solicitud sin precio; recotización que conserva la versión original; 5 recotizaciones simultáneas sin versiones duplicadas; 20 solicitudes simultáneas con folios consecutivos; seguimiento con próxima fecha, contacto vencido, solicitud no concretada que permanece en el historial, reapertura; bloqueo de la confirmación manual (llega con la Fase 3); edición que registra solo diferencias y rechaza versiones viejas; búsqueda por folio, nombre, teléfono y municipio.
+* **Recorrido en navegador (19 comprobaciones):** alta de cliente, duplicado detectado sin perder lo capturado, validación de la solicitud mostrando todos los errores a la vez, solicitud con cliente existente + precio $4,500 + fotografía, archivo servido solo con sesión, recotización a $4,800 conservando v1, seguimiento, edición, edición simultánea de dos usuarios, cotización imprimible/PDF, solicitud no concretada con motivo obligatorio, vistas «En seguimiento» / «Historial», filtros, exportación a Excel, búsqueda global, ficha del cliente, vista móvil sin desbordamiento.

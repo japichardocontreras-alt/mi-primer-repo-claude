@@ -69,7 +69,7 @@ export default async function InicioPage() {
               <tbody>
                 {s.followUpList.map((r) => (
                   <Tr key={r.id}>
-                    <Td className="font-medium"><Link href={`/solicitudes`} className="hover:text-brand-600">{r.folio}</Link></Td>
+                    <Td className="font-medium"><Link href={`/solicitudes/${r.id}`} className="hover:text-brand-600">{r.folio}</Link></Td>
                     <Td>{r.client.name}</Td>
                     <Td>{r.client.phone}</Td>
                     <Td className="whitespace-nowrap">{formatDateTime(r.nextContactAt)}</Td>
