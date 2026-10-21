@@ -616,9 +616,16 @@ model PayrollEntry {
   paymentId      String?            @db.Uuid
   payment        PayrollPayment?    @relation(fields: [paymentId], references: [id], onDelete: Restrict)
   notes          String?
+  /// Horas (para horas extra).
+  hours          Decimal?           @db.Decimal(8, 2)
+  /// Clave de periodo (p. ej. "MENSUAL:2026-10-01") para conceptos periódicos: impide generar dos veces el sueldo base.
+  periodKey      String?
+  cancelledAt    DateTime?          @db.Timestamptz(3)
+  cancelReason   String?
   createdById    String?            @db.Uuid
   createdAt      DateTime           @default(now()) @db.Timestamptz(3)
 
+  @@unique([workerId, kind, periodKey])
   @@index([workerId, date])
   @@index([serviceId])
   @@map("payroll_entries")
@@ -630,24 +637,39 @@ enum PeriodType {
   MENSUAL
 }
 
+enum PayrollPaymentKind {
+  /// Pago de un corte (liquida devengos)
+  PAGO
+  /// Anticipo entregado antes del corte; se descuenta en el siguiente pago
+  ANTICIPO
+}
+
 /// Pago efectivamente entregado a un trabajador (flujo de efectivo de nómina).
 model PayrollPayment {
-  id          String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  folio       String         @unique // NOM-2026-000001
-  workerId    String         @db.Uuid
-  worker      Worker         @relation(fields: [workerId], references: [id], onDelete: Restrict)
-  periodType  PeriodType?
-  periodStart DateTime?      @db.Date
-  periodEnd   DateTime?      @db.Date
-  paidAt      DateTime       @db.Timestamptz(3)
-  amount      Decimal        @db.Decimal(12, 2)
-  method      PaymentMethod
-  reference   String?
-  notes       String?
-  cancelledAt DateTime?      @db.Timestamptz(3)
-  createdById String?        @db.Uuid
-  createdAt   DateTime       @default(now()) @db.Timestamptz(3)
-  entries     PayrollEntry[]
+  id           String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  folio        String             @unique // NOM-2026-000001
+  kind         PayrollPaymentKind @default(PAGO)
+  workerId     String             @db.Uuid
+  worker       Worker             @relation(fields: [workerId], references: [id], onDelete: Restrict)
+  /// Para anticipos: el pago de corte en el que se descontó.
+  appliedToId  String?            @db.Uuid
+  appliedTo    PayrollPayment?    @relation("AnticipoAplicado", fields: [appliedToId], references: [id], onDelete: Restrict)
+  advances     PayrollPayment[]   @relation("AnticipoAplicado")
+  /// Importe bruto de los devengos liquidados (para pagos de corte).
+  grossAmount  Decimal?           @db.Decimal(12, 2)
+  cancelReason String?
+  periodType   PeriodType?
+  periodStart  DateTime?          @db.Date
+  periodEnd    DateTime?          @db.Date
+  paidAt       DateTime           @db.Timestamptz(3)
+  amount       Decimal            @db.Decimal(12, 2)
+  method       PaymentMethod
+  reference    String?
+  notes        String?
+  cancelledAt  DateTime?          @db.Timestamptz(3)
+  createdById  String?            @db.Uuid
+  createdAt    DateTime           @default(now()) @db.Timestamptz(3)
+  entries      PayrollEntry[]
 
   @@index([workerId, paidAt])
   @@map("payroll_payments")

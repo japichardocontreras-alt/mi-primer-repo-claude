@@ -95,8 +95,8 @@ Cliente ─┬─< Solicitud (SOL-AAAA-######) ─┬─< Quote (versiones de pr
 | Ventas pactadas | `services.contractedPrice` (no cancelados) | Las cotizaciones (`quotes`) no son ventas. |
 | Ingresos cobrados | `payments` vigentes (reembolsos restan) | — |
 | Cuentas por cobrar | ventas pactadas − cobrado | — |
-| Nómina (devengo) | `payroll_entries` | No se captura como gasto en `expenses` (la categoría *Sueldos fijos* es solo para pagos fuera del módulo de nómina). |
-| Nómina (efectivo) | `payroll_payments` | Solo en flujo de efectivo. |
+| Nómina (devengo) | `payroll_entries` (un pago por servicio por asignación: `UNIQUE(serviceStaffId)`; sueldo base una vez por periodo: `UNIQUE(workerId, kind, periodKey)`) | No se captura como gasto en `expenses` (la categoría *Sueldos fijos* es solo para pagos fuera del módulo de nómina). |
+| Nómina (efectivo) | `payroll_payments` (anticipos y pagos de corte; neto = devengos liquidados − anticipos aplicados) | Solo en flujo de efectivo. Un devengo se liquida una sola vez (`paymentId`). |
 | Combustible / mantenimiento / documentos | `expenses` (el importe) | `fuel_logs`, `maintenances`, `vehicle_documents` solo guardan litros, km y fechas y se ligan al gasto con `expenseId UNIQUE`. |
 | Depreciación | `depreciation_entries` (no es efectivo) | Nunca se mezcla con gastos pagados. |
 | Préstamos, aportaciones, compra de activos | `financial_movements` | No son ventas ni gastos operativos; solo flujo de efectivo (los intereses de un financiamiento sí son gasto). |

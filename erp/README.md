@@ -15,7 +15,7 @@ Sistema administrativo y operativo de Mudanzas Metepec: **solicitud → cotizaci
 | 2 | Clientes, solicitudes, cotizaciones manuales, seguimiento comercial | ✅ Entregada y probada |
 | 3 | Confirmación, agenda, asignación de unidades y personal | ✅ Entregada y probada |
 | 4 | Servicios realizados y cierre operativo | ✅ Entregada y probada |
-| 5 | Personal y nómina por servicio | Pendiente |
+| 5 | Personal y nómina por servicio | ✅ Entregada y probada |
 | 6 | Flotilla, kilometraje, mantenimiento, depreciación | Pendiente |
 | 7 | Finanzas y gastos | Pendiente |
 | 8 | Dashboard de resultados | Pendiente |
@@ -82,3 +82,8 @@ Inicie sesión con `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD`; el sistema pedir�
 
 * **Automatizadas (6 nuevas, 63 en total):** cierre que en una sola transacción deja el servicio «Finalizado», guarda lecturas de odómetro inmutables y actualiza la unidad, registra combustible (litros en bitácora, importe solo en gastos), casetas, estacionamientos, viáticos y extras como gastos del folio, y genera el pago de nómina de chofer y ayudantes ($700) — con el cobro todavía parcial; margen directo $4,500 − $1,370 − $700 = $2,430; tres cierres simultáneos aplican uno solo sin duplicar pagos ni gastos; pago solo a participantes con importe; huecos y retrocesos de odómetro exigen confirmación (y motivo si retrocede); validación de horarios y unidades; gasto duplicado detectado, confirmación y cancelación sin borrar; IVA desglosado.
 * **Recorrido en navegador (13 comprobaciones):** confirmación con cuadrilla y anticipo, validación de km, confirmación de kilometraje no congruente, cierre con evidencia fotográfica y cifras correctas, pago final → liquidado, gasto duplicado y cancelación, servicios realizados con totales, Excel, servicio finalizado no reprogramable ni cerrable dos veces, historial del chofer, vista móvil.
+
+## Pruebas de la Fase 5
+
+* **Automatizadas (8 nuevas, 71 en total):** cortes semanal (lunes–domingo), quincenal y mensual; tarifas con vigencia e historial; flujo completo servicio $300 + bono $500 + 3 h × $80 − deducción $100 = devengado $940, anticipo $200, corte con neto $740, pagado = devengado, saldo $0; no se puede volver a pagar lo mismo; cancelar el pago regresa conceptos y anticipo; tres pagos simultáneos del mismo corte (solo uno); anticipos mayores a lo devengado; corte liquidado solo con anticipo ($0 en efectivo); anticipo aplicado no se cancela suelto; sueldo base una vez por periodo y según tipo de pago; cancelación de conceptos; reglas de signo en la base de datos; estado de cuenta por periodo.
+* **Recorrido en navegador (12 comprobaciones):** tarifas, pago propuesto al asignar, cierre que genera nómina, bono/horas extra/deducción/anticipo, corte con neto, recibo imprimible, resumen mensual y Excel, sin doble pago, cancelación, permisos del rol Administrativo, vista móvil.

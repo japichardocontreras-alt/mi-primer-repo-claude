@@ -1,6 +1,6 @@
 # Manual básico de uso — MUDANZAS METEPEC | ERP
 
-> Este manual crece con cada fase. Versión actual: Fases 1 a 4.
+> Este manual crece con cada fase. Versión actual: Fases 1 a 5.
 
 ## 1. Acceso
 1. Abra la dirección del sistema e ingrese su correo y contraseña.
@@ -94,7 +94,26 @@ Después del cierre puede **agregar gastos** al servicio (si ya existe uno igual
 ## 6 quater. Personal
 * **Personal y nómina → Nuevo colaborador:** nombre, teléfono, puesto (chofer, ayudante, administración, otro), fecha de ingreso, tipo de pago, sueldo base, activo.
 * La ficha muestra los servicios en los que ha participado. Las bajas se marcan como **inactivo** (no se borran).
-* El cálculo de nómina por servicio, bonos, deducciones y cortes llega en la Fase 5.
+
+## 6 sexies. Nómina (control administrativo interno)
+> No sustituye el cálculo legal de nómina (IMSS, ISR, CFDI, prestaciones).
+
+**Tarifas por servicio** (Personal y nómina → Tarifas): importe por tipo de servicio (local, foráneo, flete, otro) y rol (chofer, ayudante, otro), vigente desde una fecha. Al asignar personal a un servicio se propone esa tarifa (se puede ajustar). Cambiar una tarifa no altera servicios ya asignados.
+
+**Cómo se genera lo que se debe (devengado):**
+* **Pago por servicio:** automático al registrar el cierre operativo, para cada participante.
+* **Sueldo base:** en el corte, botón «Generar sueldo base» (una vez por periodo, según el tipo de pago del colaborador).
+* **Bonos, horas extra (horas × pago por hora), otros devengos y deducciones autorizadas:** en la ficha del colaborador.
+
+**Anticipos:** en la ficha, «Anticipo de nómina». Se entregan antes del corte y se descuentan automáticamente en el siguiente pago.
+
+**Corte y pago:** ficha → **Corte y pago** (o desde «Nómina y cortes»). Elija periodo (semanal, quincenal, mensual). Se marcan los conceptos por pagar del periodo y de periodos anteriores, y los anticipos pendientes; el sistema muestra total devengado, anticipos y **neto a pagar**. Al registrar el pago, los conceptos pasan a «Pagado» (no pueden pagarse otra vez) y puede imprimir el **recibo** para firma.
+
+**Consultas:**
+* Ficha del colaborador: total devengado, total pagado (incluye anticipos), saldo pendiente, conceptos, pagos y servicios.
+* **Nómina y cortes:** por periodo, lo devengado y pagado de cada colaborador y su saldo pendiente; exportación a Excel con detalle.
+
+**Correcciones:** un concepto por pagar se cancela con motivo; un pago se cancela con motivo y sus conceptos y anticipos regresan a pendientes. Nada se borra.
 
 ## 7. Configuración (administrador)
 * **General:** datos de la empresa, parámetros operativos (tiempos de preparación y regreso, vigencia de cotizaciones), alertas y parámetros financieros.

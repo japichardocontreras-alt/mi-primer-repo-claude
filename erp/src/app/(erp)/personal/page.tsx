@@ -11,6 +11,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { Badge } from "@/components/ui/badge";
 import { Select } from "@/components/ui/form";
 import { Button, buttonClass } from "@/components/ui/button";
+import { PersonalTabs } from "./tabs";
 
 export const metadata = { title: "Personal y nómina" };
 
@@ -28,9 +29,10 @@ export default async function PersonalPage({ searchParams }: { searchParams: Pro
     <>
       <PageHeader
         title="Personal y nómina"
-        description="Ficha de cada colaborador. El control de nómina por servicio (devengos, pagos, cortes) se entrega en la Fase 5."
+        description="Fichas de colaboradores, nómina por servicio, cortes y pagos. Control administrativo interno (no sustituye el cálculo legal de IMSS, ISR o CFDI)."
         actions={can(user, "personal.editar") ? <Link href="/personal/nuevo" className={buttonClass("primary")}><Plus className="h-4 w-4" /> Nuevo colaborador</Link> : undefined}
       />
+      <PersonalTabs active="personal" showPayroll={can(user, "nomina.ver")} showRates={can(user, "nomina.gestionar")} />
       <Card>
         <form className="flex flex-wrap gap-3 border-b border-neutral-100 px-5 py-4">
           <Select name="estado" defaultValue={estado} className="w-40" aria-label="Estado"><option value="activos">Activos</option><option value="bajas">Inactivos</option><option value="todos">Todos</option></Select>
