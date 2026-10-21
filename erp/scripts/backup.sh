@@ -20,6 +20,20 @@ pg_dump --format=custom --no-owner --no-privileges --file="$FILE.tmp" "$URL"
 mv "$FILE.tmp" "$FILE"
 # Verifica que el archivo sea legible antes de rotar los anteriores.
 pg_restore --list "$FILE" > /dev/null
-find "$BACKUP_DIR" -name 'erp-*.dump' -type f -mtime +"$KEEP_DAYS" -delete
+
+# Archivos adjuntos (fotos, documentos): la base guarda solo su referencia.
+if [[ -z "${STORAGE_DIR:-}" && -f .env ]]; then
+  STORAGE_DIR=$(grep -E '^STORAGE_DIR=' .env | head -1 | cut -d= -f2- | tr -d '"')
+fi
+STORAGE_DIR="${STORAGE_DIR:-./storage}"
+if [[ -d "$STORAGE_DIR" ]]; then
+  FILES="$BACKUP_DIR/erp-archivos-$STAMP.tar.gz"
+  tar -czf "$FILES.tmp" -C "$STORAGE_DIR" .
+  mv "$FILES.tmp" "$FILES"
+  tar -tzf "$FILES" > /dev/null
+  echo "[$(date -Iseconds)] Archivos OK: $FILES ($(du -h "$FILES" | cut -f1))"
+fi
+
+find "$BACKUP_DIR" \( -name 'erp-*.dump' -o -name 'erp-archivos-*.tar.gz' \) -type f -mtime +"$KEEP_DAYS" -delete
 
 echo "[$(date -Iseconds)] Respaldo OK: $FILE ($(du -h "$FILE" | cut -f1))"

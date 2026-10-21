@@ -2,11 +2,16 @@
 
 Sistema administrativo y operativo de Mudanzas Metepec: **solicitud → cotización manual → confirmación → agenda → servicio → nómina / flotilla / finanzas → resultados**.
 
-* Arquitectura y modelo de datos: [`docs/ARQUITECTURA.md`](docs/ARQUITECTURA.md)
-* Respaldos: [`docs/RESPALDOS.md`](docs/RESPALDOS.md)
-* Despliegue: [`docs/DESPLIEGUE.md`](docs/DESPLIEGUE.md)
-* Manual de uso: [`docs/MANUAL.md`](docs/MANUAL.md)
-* Fórmulas financieras: [`docs/FORMULAS.md`](docs/FORMULAS.md)
+## Documentación
+| Documento | Contenido |
+|---|---|
+| [`docs/MANUAL.md`](docs/MANUAL.md) | Manual de uso por módulo y flujo de trabajo diario |
+| [`docs/DESPLIEGUE.md`](docs/DESPLIEGUE.md) | Instalación en producción (servidor Linux o Docker), HTTPS, servicio, actualizaciones, monitoreo |
+| [`docs/VARIABLES.md`](docs/VARIABLES.md) | Todas las variables de entorno |
+| [`docs/RESPALDOS.md`](docs/RESPALDOS.md) | Respaldo automático (base + adjuntos) y recuperación |
+| [`docs/FORMULAS.md`](docs/FORMULAS.md) | Fórmulas financieras verificadas |
+| [`docs/ARQUITECTURA.md`](docs/ARQUITECTURA.md) | Tecnología, estructura, modelo de datos, integridad, seguridad |
+| [`docs/PRUEBAS.md`](docs/PRUEBAS.md) | Matriz de pruebas de los escenarios obligatorios |
 
 ## Estado por fases
 
@@ -21,9 +26,9 @@ Sistema administrativo y operativo de Mudanzas Metepec: **solicitud → cotizaci
 | 7 | Finanzas y gastos | ✅ Entregada y probada |
 | 8 | Dashboard de resultados | ✅ Entregada y probada |
 | 9 | Integración, pruebas del flujo completo | ✅ Entregada y probada |
-| 10 | Producción y manual de uso | Pendiente |
+| 10 | Producción y manual de uso | ✅ Entregada y probada |
 
-Los módulos pendientes muestran un aviso «se entrega en la Fase N»; no contienen botones ni datos simulados.
+Todos los módulos están operativos y conectados a la base de datos.
 
 ## Instalación local
 
@@ -32,7 +37,7 @@ Requisitos: Node.js 22, PostgreSQL 16.
 ```bash
 cd erp
 cp .env.example .env                     # edite las variables
-createdb erp && createdb erp_test        # base real y base de pruebas
+createdb erp && createdb erp_test        # base de trabajo y base de pruebas (separadas)
 npm install
 npx prisma migrate deploy
 npm run db:seed                          # catálogos + administrador inicial
@@ -42,22 +47,14 @@ Inicie sesión con `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD`; el sistema pedir�
 
 ## Variables de entorno
 
-| Variable | Obligatoria | Descripción |
-|---|---|---|
-| `DATABASE_URL` | Sí | Conexión PostgreSQL de la base real. |
-| `TEST_DATABASE_URL` | Para pruebas | Base exclusiva de pruebas; su nombre debe contener `test`. Las pruebas vacían sus tablas. |
-| `SESSION_TTL_HOURS` | No (12) | Duración de la sesión. |
-| `STORAGE_DIR` | No (`./storage`) | Carpeta privada de archivos adjuntos. |
-| `SEED_ADMIN_EMAIL`, `SEED_ADMIN_NAME`, `SEED_ADMIN_PASSWORD` | Solo primer arranque | Administrador inicial (se crea solo si no hay usuarios). |
-| `PG_DUMP_PATH` | No (`pg_dump`) | Ruta de `pg_dump` para descargar respaldos. |
-| `INSECURE_COOKIES` | No | `1` solo para pruebas locales en producción sin HTTPS. Nunca en un servidor real. |
+Ver [`docs/VARIABLES.md`](docs/VARIABLES.md). Mínimo: `DATABASE_URL`; para pruebas, `TEST_DATABASE_URL` (base distinta cuyo nombre contenga «test»).
 
 ## Comandos
 
 | Comando | Uso |
 |---|---|
 | `npm run dev` | Desarrollo |
-| `npm run build` / `npm start` | Compilar / ejecutar |
+| `npm run build` / `npm start` | Compilar / ejecutar en producción (servidor autónomo; ver `docs/DESPLIEGUE.md`) |
 | `npm run typecheck` | Verificación de tipos |
 | `npm test` | Pruebas automatizadas (usa `TEST_DATABASE_URL`) |
 | `npm run e2e:reset` / `npm run e2e` | Recorrido integral en navegador sobre una base aislada (ver `e2e/README.md`) |
@@ -113,3 +110,11 @@ Matriz completa de escenarios en [`docs/PRUEBAS.md`](docs/PRUEBAS.md).
 * **Recorrido en navegador sobre base aislada (19 comprobaciones):** el flujo completo por pantallas, Finanzas y Resultados con las mismas cifras, permisos del Administrativo (páginas y API 403), sin red, base de datos detenida y recuperada, registro inexistente.
 * **Regresión:** se repitieron los recorridos de las Fases 2 a 8 (95 comprobaciones), todos correctos.
 * **Correcciones de esta fase:** anticipos no reembolsados de servicios cancelados ahora cuentan en la utilidad; reintento automático de lecturas tras un reinicio de PostgreSQL (antes la primera consulta fallaba); pantallas de error y «No encontrado» en español con «Reintentar»; formularios que conservan lo capturado y avisan si se pierde la conexión; exportaciones que responden 503 en español si la base no está disponible.
+
+## Pruebas de la Fase 10
+
+* **Arranque de producción:** `npm run build` prepara el servidor autónomo de Next.js y `npm start` lo ejecuta (antes se usaba `next start`, que no corresponde a `output: "standalone"`). El arranque resuelve `STORAGE_DIR` contra la carpeta del proyecto para que los adjuntos no queden dentro de `.next` (se borrarían al recompilar) y se niega a iniciar sin `DATABASE_URL`.
+* **Verificado con el servidor de producción:** recorrido integral (19 comprobaciones, incluida la caída y recuperación de PostgreSQL) y recorrido de cierre con adjuntos (12 comprobaciones); el archivo subido quedó en `storage/`. Encabezados de seguridad presentes y estáticos servidos.
+* **Respaldos:** `backup.sh` ahora respalda también los adjuntos; respaldo y restauración en una base nueva comprobados (conteos y archivos).
+* **Automatizadas:** 96 pruebas correctas; compilación y verificación de tipos sin errores.
+* **No probado en este entorno:** la imagen Docker y `docker-compose.yml` (no hay Docker disponible), Caddy/Nginx y systemd (se entregan como archivos de configuración listos para usar).

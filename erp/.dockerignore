@@ -1,0 +1,10 @@
+node_modules
+.next
+.env
+.env.*
+!.env.example
+storage
+backups
+coverage
+e2e-capturas
+*.log

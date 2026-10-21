@@ -1,0 +1,26 @@
+# /etc/systemd/system/erp.service — ERP como servicio que se reinicia solo.
+# sudo systemctl daemon-reload && sudo systemctl enable --now erp
+[Unit]
+Description=MUDANZAS METEPEC | ERP
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+User=erp
+Group=erp
+WorkingDirectory=/opt/erp/erp
+Environment=NODE_ENV=production
+Environment=PORT=3000
+Environment=HOSTNAME=127.0.0.1
+# Las demás variables (DATABASE_URL, STORAGE_DIR…) se leen de /opt/erp/erp/.env (permisos 600, dueño erp)
+ExecStart=/usr/bin/node scripts/start.mjs
+Restart=always
+RestartSec=5
+# Endurecimiento básico
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ReadWritePaths=/opt/erp/erp /var/lib/erp /var/backups/erp
+
+[Install]
+WantedBy=multi-user.target

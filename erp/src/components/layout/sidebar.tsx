@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import { BrandMark } from "../brand-logo";
 import { cn } from "@/lib/utils";
-import { NAV, CURRENT_PHASE } from "@/lib/nav";
+import { NAV } from "@/lib/nav";
 
 const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   inicio: Home, solicitudes: ClipboardList, agenda: CalendarDays, servicios: ClipboardCheck, clientes: Users,
@@ -21,7 +21,6 @@ function NavLinks({ allowed, collapsed, onNavigate }: { allowed: string[]; colla
       {NAV.filter((n) => allowed.includes(n.key)).map((n) => {
         const Icon = ICONS[n.key];
         const active = n.href === "/" ? pathname === "/" : pathname.startsWith(n.href);
-        const pending = n.phase > CURRENT_PHASE;
         return (
           <Link
             key={n.key}
@@ -36,9 +35,6 @@ function NavLinks({ allowed, collapsed, onNavigate }: { allowed: string[]; colla
           >
             <Icon className={cn("h-[18px] w-[18px] shrink-0", active ? "text-white" : "text-neutral-400 group-hover:text-white")} />
             {!collapsed && <span className="flex-1 truncate">{n.label}</span>}
-            {!collapsed && pending && (
-              <span className="rounded bg-white/10 px-1.5 py-0.5 text-[10px] font-semibold text-neutral-400">F{n.phase}</span>
-            )}
           </Link>
         );
       })}

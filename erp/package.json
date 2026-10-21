@@ -5,8 +5,8 @@
   "description": "MUDANZAS METEPEC | ERP — sistema administrativo y operativo",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "build": "next build && node scripts/postbuild.mjs",
+    "start": "node scripts/start.mjs",
     "typecheck": "tsc --noEmit",
     "db:migrate": "prisma migrate deploy",
     "db:migrate:dev": "prisma migrate dev",

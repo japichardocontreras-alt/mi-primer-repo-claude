@@ -21,7 +21,7 @@ export const SERVICE_STATUS = {
 } as const;
 export type ServiceStatusKey = keyof typeof SERVICE_STATUS;
 
-/** Transiciones de estado permitidas manualmente en la agenda. FINALIZADO se registra con el cierre operativo (Fase 4). */
+/** Transiciones de estado permitidas manualmente en la agenda. FINALIZADO se registra con el cierre operativo. */
 export const STATUS_TRANSITIONS: Record<ServiceStatusKey, ServiceStatusKey[]> = {
   POR_PROGRAMAR: ["PROGRAMADO", "CANCELADO"],
   PROGRAMADO: ["CONFIRMADO", "EN_PROCESO", "POR_PROGRAMAR", "CANCELADO"],

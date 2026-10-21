@@ -1,6 +1,16 @@
 # Manual básico de uso — MUDANZAS METEPEC | ERP
 
-> Este manual crece con cada fase. Versión actual: Fases 1 a 7.
+Guía para el personal administrativo y el administrador. Las fórmulas financieras están en `FORMULAS.md`; la instalación, en `DESPLIEGUE.md`.
+
+## Flujo de trabajo diario
+1. Llega un mensaje por WhatsApp → **Solicitudes → Nueva solicitud** (sección 4).
+2. Se cotiza y se da seguimiento hasta que el cliente acepta (secciones 5 y 6).
+3. **Confirmar y convertir en servicio**: fecha, unidad y personal (sección 7). Registre el **anticipo** en la ficha del servicio.
+4. El día del servicio: **Agenda** (sección 8) → estado «En proceso».
+5. Al terminar: **Registrar cierre operativo** con kilometraje, gastos y personal que participó (sección 9).
+6. Cobre el saldo en la ficha del servicio → queda **Liquidado**.
+7. Pague al personal en **Personal y nómina** (sección 11).
+8. Revise **Finanzas** y **Resultados** (secciones 13 y 14).
 
 ## 1. Acceso
 1. Abra la dirección del sistema e ingrese su correo y contraseña.
@@ -52,7 +62,7 @@ En **Solicitudes**:
 * Filtros por texto, estado, tipo y fechas de registro; botón **Excel** para exportar lo filtrado.
 * En **Inicio** aparecen los seguimientos pendientes del día.
 
-## 6 bis. Confirmar: de solicitud a servicio
+## 7. Confirmar: de solicitud a servicio
 1. En la ficha de la solicitud → **Confirmar y convertir en servicio**.
 2. Revise el **precio contratado** (se toma de la última cotización).
 3. Indique **fecha, hora de inicio y duración estimada**. El sistema muestra el fin estimado y el periodo en que la unidad y el personal quedan ocupados (incluye **preparación** antes de salir y **regreso a base** después). Si el servicio termina al día siguiente se indica «continúa otro día».
@@ -63,16 +73,16 @@ Si la fecha se deja vacía, el servicio queda **«Por programar»** (aparece en 
 
 **Empalmes:** si la unidad o alguien del personal ya tiene otro servicio en ese horario, el sistema lo impide y dice con qué folio choca. Cambie horario, unidad o personal. Solo un **administrador** puede autorizarlo de forma excepcional, escribiendo el motivo (queda en auditoría y en el historial del servicio).
 
-## 6 ter. Agenda
+## 8. Agenda
 * **Mes**, **Semana** y **Lista**; flechas para navegar y botón **Hoy**. Cada camioneta tiene un color.
 * Filtros por unidad y estado; «Incluir cancelados».
 * Los servicios de varios días aparecen en cada día que ocupan.
 * **Ficha del servicio:** resumen (inicio, fin, unidad, precio, anticipo, cobrado, saldo, chofer, ayudantes), ruta, inventario y observaciones, archivos (incluye los de la solicitud), historial.
 * **Reprogramar / cambiar asignación:** cambie fecha, horario, unidad o personal y escriba el motivo. Se conserva el mismo folio y los cobros; el cambio queda en el historial con el antes y el después.
-* **Estado operativo:** Por programar → Programado → Confirmado → En proceso; Incidencia (pide descripción); Cancelado (pide motivo; libera unidad y personal y se conserva en el historial). «Finalizado» se registra con el cierre operativo (Fase 4).
+* **Estado operativo:** Por programar → Programado → Confirmado → En proceso; Incidencia (pide descripción); Cancelado (pide motivo; libera unidad y personal y se conserva en el historial). «Finalizado» se registra con el cierre operativo (sección 9).
 * **Cobros:** registre anticipo, pagos parciales, pago final o reembolso (fecha, método, referencia). El sistema no permite cobrar más que el saldo. Un cobro erróneo se **cancela** con motivo (no se borra). El estado de cobro pasa a «Cobro parcial» o «Liquidado» automáticamente.
 
-## 6 quinquies. Cierre operativo y servicios realizados
+## 9. Cierre operativo y servicios realizados
 1. Al terminar la mudanza, en la ficha del servicio → **Registrar cierre operativo**.
 2. Capture **inicio y fin reales**; por cada unidad, **km inicial** (se propone la última lectura) y **km final**, y si cargó **combustible**, litros e importe.
 3. **Casetas, estacionamientos, viáticos** y hasta 3 **gastos adicionales**; indique con qué se pagaron.
@@ -89,13 +99,13 @@ El **cobro es independiente**: puede cerrar un servicio con saldo pendiente y re
 
 Después del cierre puede **agregar gastos** al servicio (si ya existe uno igual, el sistema pide confirmar) y **cancelar** un gasto erróneo con motivo (no se borra).
 
-**Servicios realizados:** lista por mes con km, precio, saldo, gastos directos, pago a personal y **margen directo** (precio − gastos del folio − pagos de nómina del servicio), totales y exportación a Excel. El margen directo aún no descuenta gastos fijos ni depreciación; eso se calcula en Resultados (Fase 8).
+**Servicios realizados:** lista por mes con km, precio, saldo, gastos directos, pago a personal y **margen directo** (precio − gastos del folio − pagos de nómina del servicio), totales y exportación a Excel. El margen directo aún no descuenta gastos fijos ni depreciación; eso se calcula en Resultados (sección 14).
 
-## 6 quater. Personal
+## 10. Personal
 * **Personal y nómina → Nuevo colaborador:** nombre, teléfono, puesto (chofer, ayudante, administración, otro), fecha de ingreso, tipo de pago, sueldo base, activo.
 * La ficha muestra los servicios en los que ha participado. Las bajas se marcan como **inactivo** (no se borran).
 
-## 6 sexies. Nómina (control administrativo interno)
+## 11. Nómina (control administrativo interno)
 > No sustituye el cálculo legal de nómina (IMSS, ISR, CFDI, prestaciones).
 
 **Tarifas por servicio** (Personal y nómina → Tarifas): importe por tipo de servicio (local, foráneo, flete, otro) y rol (chofer, ayudante, otro), vigente desde una fecha. Al asignar personal a un servicio se propone esa tarifa (se puede ajustar). Cambiar una tarifa no altera servicios ya asignados.
@@ -115,7 +125,7 @@ Después del cierre puede **agregar gastos** al servicio (si ya existe uno igual
 
 **Correcciones:** un concepto por pagar se cancela con motivo; un pago se cancela con motivo y sus conceptos y anticipos regresan a pendientes. Nada se borra.
 
-## 6 septies. Flotilla
+## 12. Flotilla
 * **Flotilla:** lista de unidades con placas, estado, km actual, servicios del mes, valor contable y alertas. **Nueva unidad** para agregar camionetas (p. ej. la de 3.5 t cuando se incorpore). Para retirar una unidad, cambie su estado a **Baja** (se conserva el historial; «Mostrar también unidades dadas de baja»).
 * **Ficha de la unidad** (pestañas):
   * **Servicios:** historial automático desde los cierres: fecha, folio, origen, destino, km, ingreso atribuido y gastos asociados.
@@ -128,7 +138,7 @@ Después del cierre puede **agregar gastos** al servicio (si ya existe uno igual
 * **Alertas:** mantenimientos próximos o vencidos (por fecha o por km) y documentos por vencer, con la anticipación definida en Configuración → Alertas. Aparecen en Flotilla, en Inicio y en las notificaciones.
 * **Depreciación mensual** (administrador): en Flotilla, «Calcular y registrar» guarda la depreciación del mes de todas las unidades; puede recalcularse sin duplicar. No es salida de efectivo y se reporta aparte de los gastos.
 
-## 6 octies. Finanzas y administración
+## 13. Finanzas y administración
 * **Resumen del mes:** ventas pactadas y netas (sin IVA), ingresos cobrados, cuentas por cobrar, utilidad y margen, gastos, nómina, depreciación y flujo de efectivo; estado de resultados, flujo de efectivo, gastos por categoría e IVA informativo. Elija el mes con el selector. Las fórmulas están en `docs/FORMULAS.md`.
 * **Cobros y cuentas por cobrar:** todos los cobros del mes (se registran en la ficha de cada servicio) y los servicios con saldo, con su antigüedad. Exportación a Excel.
 * **Gastos:** registre gastos no ligados a una mudanza (o ligados por folio MM-…), con IVA desglosado si aplica, proveedor, referencia y unidad. Si no está pagado, desmarque «Ya está pagado»: queda **por pagar** y se marca pagado después (cuenta en el flujo hasta que se paga). Gastos duplicados se detectan. Un gasto erróneo se cancela con motivo.
@@ -138,7 +148,7 @@ Después del cierre puede **agregar gastos** al servicio (si ya existe uno igual
 * **Otros movimientos:** préstamos recibidos, aportaciones de capital, compras de activo, pagos de financiamiento (indicando la parte de intereses), ingresos y gastos extraordinarios y retiros de socios. No se consideran ventas ni gastos operativos; sí afectan el flujo de efectivo (los intereses sí son gasto).
 * **Categorías** (administrador): cree categorías propias indicando su grupo (directo, fijo, flotilla, extraordinario); las del sistema no se desactivan.
 
-## 6 nonies. Resultados (dashboard)
+## 14. Resultados (dashboard)
 * Requiere el permiso de Resultados (por omisión, solo el administrador).
 * **Filtros** en una fila: vista por **año** o por **mes**, unidad y tipo de servicio; pulse «Aplicar». Al elegir una unidad, todo el tablero se limita a ella.
 * **Indicadores:** solicitudes recibidas, cotizaciones enviadas, servicios confirmados, realizados y cancelados, conversión comercial, ventas netas, ingresos cobrados, cuentas por cobrar, gastos directos, gastos fijos, nómina, depreciación, utilidad estimada, margen, flujo de efectivo y ticket promedio. Un guion «—» significa que el indicador no se puede calcular (p. ej. margen sin ventas), no que valga cero.
@@ -146,14 +156,14 @@ Después del cierre puede **agregar gastos** al servicio (si ya existe uno igual
 * **Resultados por unidad:** ingresos, costos de operación, depreciación, costos compartidos asignados y utilidad de cada camioneta. Los costos compartidos (gastos fijos y nómina no ligada a servicios) se reparten con el criterio de Configuración → General → Finanzas.
 * **Exportar:** «Excel» descarga indicadores, serie mensual, unidades y gastos por categoría; «Reporte PDF» abre una versión imprimible (use «Guardar como PDF» del navegador).
 
-## 6 decies. Si se pierde la conexión
+## 15. Si se pierde la conexión
 * **Al guardar un formulario:** si aparece «No se pudo comunicar con el servidor» o «No hay conexión con la base de datos», **no se guardó nada** y lo que capturó sigue en pantalla. Espere un momento y pulse de nuevo el botón de guardar.
 * **Al abrir una página:** si aparece «No se pudo cargar esta página», pulse **Reintentar** cuando se restablezca la conexión; no necesita volver a iniciar sesión.
 * Si el problema continúa, avise al administrador con la **Referencia** que muestra la pantalla (sirve para encontrar el detalle en el registro del servidor).
 
-## 7. Configuración (administrador)
+## 16. Configuración (administrador)
 * **General:** datos de la empresa, parámetros operativos (tiempos de preparación y regreso, vigencia de cotizaciones), alertas y parámetros financieros.
 * **Usuarios:** alta, edición, desactivación, restablecer contraseña y cerrar sesiones.
 * **Roles y permisos:** qué puede hacer el rol Administrativo; ajustes individuales por usuario.
 * **Auditoría:** quién hizo qué y cuándo.
-* **Respaldos:** descarga de una copia completa de la base de datos.
+* **Respaldos:** descarga de una copia completa de la base de datos (los archivos adjuntos se respaldan con el respaldo automático del servidor; ver `RESPALDOS.md`).

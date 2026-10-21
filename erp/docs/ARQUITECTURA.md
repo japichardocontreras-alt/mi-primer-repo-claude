@@ -11,7 +11,7 @@
 | Autenticación | **Sesiones propias en BD** + **bcrypt** | Cookie `httpOnly` con token aleatorio; en BD solo se guarda su hash SHA-256. Permite revocar sesiones y ver sesiones abiertas. |
 | Validación | **Zod** | Mismas reglas para formularios y servidor. |
 | Pruebas | **Vitest** contra una base `*_test` real + recorrido en navegador (Playwright) | Se prueban las reglas reales de BD (triggers, únicos, CHECK), no simulaciones. |
-| Gráficas / exportación | Recharts, ExcelJS y PDF (fases 2–8) | Se incorporan en las fases donde existen datos que graficar/exportar. |
+| Gráficas / exportación | Recharts, ExcelJS y vistas imprimibles (PDF desde el navegador) | Gráficas con tooltip y tabla de datos; Excel con formato de moneda y fechas de México. |
 
 Se descartó *localStorage* como almacenamiento: solo se usa una cookie para recordar si la barra lateral está contraída.
 
@@ -20,31 +20,37 @@ Se descartó *localStorage* como almacenamiento: solo se usa una cookie para rec
 ```
 erp/
 ├── prisma/
-│   ├── schema.prisma          # Modelo de datos completo (todas las fases)
-│   ├── migrations/            # Migraciones SQL versionadas
-│   └── seed.ts                # Catálogos del sistema (idempotente)
+│   ├── schema.prisma          # Modelo de datos (36 tablas)
+│   ├── migrations/            # Migraciones SQL versionadas (incluye CHECKs y triggers de inmutabilidad)
+│   └── seed.ts                # Catálogos, unidades iniciales y administrador inicial (idempotente)
 ├── src/
 │   ├── app/
 │   │   ├── login/             # Inicio de sesión
 │   │   ├── (erp)/             # Área autenticada (layout con barra lateral)
 │   │   │   ├── page.tsx       # Inicio
+│   │   │   ├── solicitudes/ clientes/ agenda/ servicios/ personal/ flotilla/ finanzas/ resultados/
 │   │   │   ├── configuracion/ # Parámetros, usuarios, roles, auditoría, respaldos
-│   │   │   └── …              # Módulos por fase
-│   │   └── api/               # buscar, health, respaldo
-│   ├── components/            # UI y layout
+│   │   │   └── error.tsx, not-found.tsx
+│   │   ├── imprimir/          # Cotización, recibo de nómina y reporte de resultados (PDF)
+│   │   └── api/               # buscar, health, respaldo, archivos, exportar/* (Excel)
+│   ├── components/            # UI, formularios, gráficas, layout
 │   ├── lib/
-│   │   ├── auth/              # core (sesiones), server (Next), permisos, contraseñas
-│   │   ├── db.ts              # Prisma + transacciones con reintento
+│   │   ├── domain/            # Reglas de negocio por módulo (transaccionales)
+│   │   ├── finance/           # Motor único de resultados y dashboard
+│   │   ├── auth/              # Sesiones, permisos, contraseñas
+│   │   ├── db.ts, db-errors.ts# Prisma, transacciones, reintento de lecturas
 │   │   ├── folios.ts          # Consecutivos atómicos
 │   │   ├── audit.ts           # Bitácora
 │   │   ├── settings.ts        # Parámetros configurables con validación
 │   │   ├── format.ts          # MXN, fechas es-MX, zona America/Mexico_City
-│   │   ├── pricing/engine.ts  # Punto de conexión del cotizador futuro
-│   │   └── queries/           # Consultas de indicadores
+│   │   └── pricing/engine.ts  # Punto de conexión del cotizador futuro
 │   └── middleware.ts          # Filtro rápido de sesión
-├── tests/                     # Pruebas automatizadas
-├── scripts/                   # backup.sh / restore.sh
-└── docs/
+├── tests/                     # Pruebas automatizadas (Vitest, PostgreSQL real)
+├── e2e/                       # Recorrido integral en navegador
+├── scripts/                   # backup.sh, restore.sh, start.mjs, postbuild.mjs
+├── deploy/                    # systemd, Caddy, Nginx
+├── Dockerfile, docker-compose.yml
+└── docs/                      # Arquitectura, manual, fórmulas, pruebas, despliegue, variables, respaldos
 ```
 
 ## 3. Flujo principal y cómo se conecta en la base de datos
@@ -88,7 +94,7 @@ Cliente ─┬─< Solicitud (SOL-AAAA-######) ─┬─< Quote (versiones de pr
 * **Concurrencia optimista**: columna `version` en registros editables; si otro usuario guardó antes, la edición se rechaza con un mensaje claro en lugar de sobrescribir.
 * **Transacciones** para toda operación que toca varios registros (`withTransaction`, con reintento ante conflictos).
 
-## 6. Reglas para evitar doble conteo (base para la Fase 8)
+## 6. Reglas para evitar doble conteo
 
 | Concepto | Fuente única | Dónde NO se vuelve a contar |
 |---|---|---|
@@ -109,7 +115,7 @@ Cliente ─┬─< Solicitud (SOL-AAAA-######) ─┬─< Quote (versiones de pr
 * Sesiones en BD (12 h configurables), revocables por usuario; al desactivar un usuario o restablecer su contraseña se cierran sus sesiones.
 * **Permisos validados en el servidor** en cada página, *server action* y API. El rol **Administrador** tiene todos los permisos; el administrador configura los del rol **Administrativo** y ajustes individuales por usuario.
 * Auditoría de inicios de sesión, intentos fallidos, bloqueos, altas, ediciones, permisos y respaldos.
-* Encabezados de seguridad (`X-Frame-Options`, `nosniff`, `Referrer-Policy`). Archivos adjuntos en carpeta privada (`STORAGE_DIR`), servidos solo con sesión (Fase 2).
+* Encabezados de seguridad (`X-Frame-Options`, `nosniff`, `Referrer-Policy`). Archivos adjuntos en carpeta privada (`STORAGE_DIR`), servidos solo con sesión.
 * Sin credenciales en el código: todo vía variables de entorno (`.env.example`).
 
 ## 7 bis. Fallas de conexión
