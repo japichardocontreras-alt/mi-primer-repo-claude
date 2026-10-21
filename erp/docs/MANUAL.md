@@ -1,6 +1,6 @@
 # Manual básico de uso — MUDANZAS METEPEC | ERP
 
-> Este manual crece con cada fase. Versión actual: Fases 1 a 6.
+> Este manual crece con cada fase. Versión actual: Fases 1 a 7.
 
 ## 1. Acceso
 1. Abra la dirección del sistema e ingrese su correo y contraseña.
@@ -127,6 +127,16 @@ Después del cierre puede **agregar gastos** al servicio (si ya existe uno igual
   * **Datos de la unidad:** marca, modelo, año, placas, serie, capacidad, adquisición, valor residual, vida útil (años y km), km inicial, rendimiento estimado, GPS y estado.
 * **Alertas:** mantenimientos próximos o vencidos (por fecha o por km) y documentos por vencer, con la anticipación definida en Configuración → Alertas. Aparecen en Flotilla, en Inicio y en las notificaciones.
 * **Depreciación mensual** (administrador): en Flotilla, «Calcular y registrar» guarda la depreciación del mes de todas las unidades; puede recalcularse sin duplicar. No es salida de efectivo y se reporta aparte de los gastos.
+
+## 6 octies. Finanzas y administración
+* **Resumen del mes:** ventas pactadas y netas (sin IVA), ingresos cobrados, cuentas por cobrar, utilidad y margen, gastos, nómina, depreciación y flujo de efectivo; estado de resultados, flujo de efectivo, gastos por categoría e IVA informativo. Elija el mes con el selector. Las fórmulas están en `docs/FORMULAS.md`.
+* **Cobros y cuentas por cobrar:** todos los cobros del mes (se registran en la ficha de cada servicio) y los servicios con saldo, con su antigüedad. Exportación a Excel.
+* **Gastos:** registre gastos no ligados a una mudanza (o ligados por folio MM-…), con IVA desglosado si aplica, proveedor, referencia y unidad. Si no está pagado, desmarque «Ya está pagado»: queda **por pagar** y se marca pagado después (cuenta en el flujo hasta que se paga). Gastos duplicados se detectan. Un gasto erróneo se cancela con motivo.
+  * Mantenimiento, documentos y combustible se registran en **Flotilla**; los de una mudanza, en su **cierre**. No los capture de nuevo aquí.
+  * «Sueldos fijos» es solo para sueldos que **no** se llevan en el módulo de nómina.
+* **Gastos recurrentes:** plantillas (renta, internet, telefonía, GPS, software…) con importe, día del mes y vigencia. «Generar» crea los gastos del mes como por pagar; si ya se generaron, no se duplican.
+* **Otros movimientos:** préstamos recibidos, aportaciones de capital, compras de activo, pagos de financiamiento (indicando la parte de intereses), ingresos y gastos extraordinarios y retiros de socios. No se consideran ventas ni gastos operativos; sí afectan el flujo de efectivo (los intereses sí son gasto).
+* **Categorías** (administrador): cree categorías propias indicando su grupo (directo, fijo, flotilla, extraordinario); las del sistema no se desactivan.
 
 ## 7. Configuración (administrador)
 * **General:** datos de la empresa, parámetros operativos (tiempos de preparación y regreso, vigencia de cotizaciones), alertas y parámetros financieros.

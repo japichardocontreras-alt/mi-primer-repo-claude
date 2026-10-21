@@ -268,42 +268,44 @@ export async function kmBetween(db: Db, vehicleId: string, initial: number, star
   return Math.max(0, to - from);
 }
 
+export type DepRow = { vehicleId: string; vehicleName: string; method: "LINEAL_TIEMPO" | "POR_KILOMETRO"; amount: number; km?: number; basis: Record<string, unknown> };
+
+/** Calcula (sin guardar) la depreciación del mes de cada unidad con parámetros completos. */
+export async function computeMonthlyDepreciation(db: Db, y: number, m: number): Promise<DepRow[]> {
+  const vehicles = await db.vehicle.findMany();
+  const start = mexicoLocalToUtc(y, m, 1);
+  const end = m === 12 ? mexicoLocalToUtc(y + 1, 1, 1) : mexicoLocalToUtc(y, m + 1, 1);
+  const rows: DepRow[] = [];
+  for (const v of vehicles) {
+    const p = depParams(v);
+    const lin = straightLine(p, y, m);
+    if (lin && lin.thisMonth > 0) rows.push({ vehicleId: v.id, vehicleName: v.name, method: "LINEAL_TIEMPO", amount: lin.thisMonth, basis: { ...p, mensual: lin.monthly } });
+    if (p.acquisitionPrice && p.usefulLifeKm) {
+      const kmToEnd = await kmBetween(db, v.id, v.initialOdometer, null, end);
+      const kmMonth = await kmBetween(db, v.id, v.initialOdometer, start, end);
+      const km = perKilometer(p, kmToEnd, kmMonth);
+      if (km && km.thisPeriod > 0) rows.push({ vehicleId: v.id, vehicleName: v.name, method: "POR_KILOMETRO", amount: km.thisPeriod, km: kmMonth, basis: { ...p, km: kmMonth, porKm: km.perKm } });
+    }
+  }
+  return rows;
+}
+
 /**
  * Registra (o recalcula) la depreciación del mes para todas las unidades con parámetros completos.
  * Idempotente: UNIQUE(vehículo, año, mes, método).
  */
 export async function generateMonthlyDepreciation(tx: Tx, actorId: string, y: number, m: number) {
-  const vehicles = await tx.vehicle.findMany();
-  const start = mexicoLocalToUtc(y, m, 1);
-  const end = m === 12 ? mexicoLocalToUtc(y + 1, 1, 1) : mexicoLocalToUtc(y, m + 1, 1);
-  let count = 0;
-  for (const v of vehicles) {
-    const p = depParams(v);
-    const lin = straightLine(p, y, m);
-    if (lin && lin.thisMonth > 0) {
-      await tx.depreciationEntry.upsert({
-        where: { vehicleId_year_month_method: { vehicleId: v.id, year: y, month: m, method: "LINEAL_TIEMPO" } },
-        create: { vehicleId: v.id, year: y, month: m, method: "LINEAL_TIEMPO", amount: lin.thisMonth, basis: { ...p, mensual: lin.monthly } },
-        update: { amount: lin.thisMonth, basis: { ...p, mensual: lin.monthly } },
-      });
-      count++;
-    }
-    if (p.acquisitionPrice && p.usefulLifeKm) {
-      const kmToEnd = await kmBetween(tx, v.id, v.initialOdometer, null, end);
-      const kmMonth = await kmBetween(tx, v.id, v.initialOdometer, start, end);
-      const km = perKilometer(p, kmToEnd, kmMonth);
-      if (km && km.thisPeriod > 0) {
-        await tx.depreciationEntry.upsert({
-          where: { vehicleId_year_month_method: { vehicleId: v.id, year: y, month: m, method: "POR_KILOMETRO" } },
-          create: { vehicleId: v.id, year: y, month: m, method: "POR_KILOMETRO", amount: km.thisPeriod, basis: { ...p, km: kmMonth, porKm: km.perKm } },
-          update: { amount: km.thisPeriod, basis: { ...p, km: kmMonth, porKm: km.perKm } },
-        });
-        count++;
-      }
-    }
+  const rows = await computeMonthlyDepreciation(tx, y, m);
+  for (const r of rows) {
+    const basis = JSON.parse(JSON.stringify(r.basis));
+    await tx.depreciationEntry.upsert({
+      where: { vehicleId_year_month_method: { vehicleId: r.vehicleId, year: y, month: m, method: r.method } },
+      create: { vehicleId: r.vehicleId, year: y, month: m, method: r.method, amount: r.amount, basis },
+      update: { amount: r.amount, basis },
+    });
   }
-  await audit(tx, { userId: actorId, action: "DEPRECIACION", entity: "Flotilla", summary: `${y}-${String(m).padStart(2, "0")}: ${count} registro(s)` });
-  return count;
+  await audit(tx, { userId: actorId, action: "DEPRECIACION", entity: "Flotilla", summary: `${y}-${String(m).padStart(2, "0")}: ${rows.length} registro(s)` });
+  return rows.length;
 }
 
 // ------------------------------------------------------------------ Alertas
