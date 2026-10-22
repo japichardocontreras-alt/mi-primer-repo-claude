@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body {
+  @apply bg-neutral-100 text-neutral-900 antialiased;
+}
+
+/* Números alineados en tablas e indicadores */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+@media print {
+  main { overflow: visible !important; }
+}

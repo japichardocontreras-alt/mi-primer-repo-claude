@@ -1,0 +1,8 @@
+# Caddy obtiene y renueva el certificado HTTPS automáticamente.
+erp.mudanzasmetepec.com {
+	encode gzip
+	request_body {
+		max_size 120MB
+	}
+	reverse_proxy 127.0.0.1:3000
+}
